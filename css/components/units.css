@@ -1,0 +1,45 @@
+.card-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.units-switch {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  background: #fff;
+}
+.units-switch .seg {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.units-switch .seg input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.units-switch .seg span {
+  position: relative;
+  z-index: 1;
+}
+.units-switch .seg input:checked + span {
+  background: #eef2ff;
+  border-radius: 9999px;
+  padding: 6px 10px;
+  color: #334155;
+  font-weight: 700;
+}
+@media (max-width: 360px) {
+  .units-switch .seg span {
+    padding: 6px 8px;
+  }
+}

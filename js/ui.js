@@ -278,6 +278,7 @@ const inputSummary = byId("inputSummary");
 const layRateEl = byId("layRate");
 const feedPerBirdEl = byId("feedPerBird");
 const costPerDozenEl = byId("costPerDozen");
+
 // tile wrappers (for hide/show and coloring)
 const tileCostPerEgg = byId("tileCostPerEgg");
 const tileCostPerDozen = byId("tileCostPerDozen");
@@ -397,6 +398,13 @@ function attachListeners() {
       altBox.hidden = !altEnabled.checked;
     });
   }
+  // Feed prices panel (closed by default)
+  if (pricesEnabled && pricesBox) {
+    pricesBox.hidden = !pricesEnabled.checked; // unchecked => hidden
+    pricesEnabled.addEventListener("change", () => {
+      pricesBox.hidden = !pricesEnabled.checked;
+    });
+  }
 }
 
 function onPrint(e) {
@@ -466,21 +474,28 @@ function showIssues(list) {
 }
 
 function buildInputSummary(units, birds, eggs) {
+  const unitEggW = units === "imperial" ? "oz" : "g";
   const unitFeed = units === "imperial" ? "lb" : "kg";
 
   const rows = [
-    ["Flock", inputs.flockName.value || "—"],
+    // Flock row only if provided
+    ...(inputs.flockName.value.trim()
+      ? [["Flock", inputs.flockName.value.trim()]]
+      : []),
+
+    ["Units", units === "imperial" ? "Imperial" : "Metric"],
     ["Birds", birds],
     ["Eggs", eggs],
+    ["Avg egg weight", `${inputs.avgEggWeight.value || "—"} ${unitEggW}`],
     ["Feed consumed", `${inputs.feedConsumed.value || "—"} ${unitFeed}`],
   ];
 
-  // Optional: show just the alt amount if enabled
-  if (altEnabled && altEnabled.checked) {
-    const amt = altAmount.value;
-    if (amt) rows.push(["Alt amount", `${amt} ${unitFeed}`]);
+  if ((+inputs.bagWeight.value || 0) > 0) {
+    rows.push(["Bag weight", `${inputs.bagWeight.value} ${unitFeed}`]);
   }
-
+  if ((+inputs.bagPrice.value || 0) > 0) {
+    rows.push(["Bag price", `$${(+inputs.bagPrice.value).toFixed(2)}`]);
+  }
   if ((inputs.notes.value || "").trim()) {
     rows.push(["Notes", inputs.notes.value.trim()]);
   }
@@ -493,10 +508,8 @@ function buildInputSummary(units, birds, eggs) {
         )}</span></div>`
     )
     .join("");
-  {
-    rows.push(["Notes", inputs.notes.value.trim()]);
-  }
 }
+
 function collectWarnings({ layRate, feedPerBird_g }) {
   const warns = [];
   if (feedPerBird_g != null) {

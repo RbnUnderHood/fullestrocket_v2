@@ -14,24 +14,43 @@
     <link rel="stylesheet" href="css/components/results.css" />
     <link rel="stylesheet" href="css/components/metric-bands.css" />
     <link rel="stylesheet" href="css/components/help.css" />
+    <link rel="stylesheet" href="css/components/ads.css" />
+    <link rel="stylesheet" href="css/components/density.css" />
+    <link rel="stylesheet" href="css/components/header.css" />
+    <link rel="stylesheet" href="css/components/layout.css" />
+    <link rel="stylesheet" href="css/components/forms.css" />
+    <link rel="stylesheet" href="css/components/units.css" />
   </head>
 
   <body>
     <header class="site-header">
-      <h1>🐔 FCR Calculator</h1>
-      <div class="unit-toggle">
-        <label
-          ><input type="radio" name="units" value="imperial" checked />
-          Imperial</label
-        >
-        <label><input type="radio" name="units" value="metric" /> Metric</label>
+      <div class="container">
+        <h1>🐔 FCR Calculator</h1>
+        <p class="slogan">
+          Free poultry feed conversion &amp; egg cost calculator
+          <span class="badge" aria-label="Daily logging available"
+            >DAILY LOGGING!</span
+          >
+        </p>
       </div>
     </header>
 
-    <main class="wrap">
+    <main class="container">
       <!-- Calculator card -->
       <section class="card">
-        <h2 class="card-title">Daily / Average Calculation</h2>
+        <div class="card-title-bar">
+          <h2 class="card-title">Daily / Average Calculation</h2>
+          <div class="units-switch" role="radiogroup" aria-label="Units">
+            <label class="seg">
+              <input type="radio" name="units" value="imperial" checked />
+              <span>Imperial</span>
+            </label>
+            <label class="seg">
+              <input type="radio" name="units" value="metric" />
+              <span>Metric</span>
+            </label>
+          </div>
+        </div>
 
         <form id="calcForm" novalidate>
           <div class="row">
@@ -44,33 +63,19 @@
               />
             </div>
 
-            <div class="row">
+            <div class="row row--compact">
               <div class="field">
                 <label for="birdCount">Bird count</label>
-                <input
-                  id="birdCount"
-                  type="number"
-                  min="1"
-                  step="1"
-                  value="100"
-                  required
-                />
+                <input id="birdCount" type="number" min="1" step="1" />
               </div>
 
               <div class="field">
                 <label for="eggCount">Eggs collected</label>
-                <input
-                  id="eggCount"
-                  type="number"
-                  min="0"
-                  step="1"
-                  value="85"
-                  required
-                />
+                <input id="eggCount" type="number" min="0" step="1" />
               </div>
             </div>
 
-            <div class="row">
+            <div class="row row--compact">
               <div class="field">
                 <label for="avgEggWeight">Average egg weight</label>
                 <input id="avgEggWeight" type="number" min="0" step="0.1" />
@@ -85,17 +90,18 @@
             <!-- FEED PRICES (toggle with nested Alternative feed) -->
             <section class="feed-prices">
               <div class="field">
-                <label>
-                  <input type="checkbox" id="pricesEnabled" checked />
+                <label class="toggle-label">
+                  <input type="checkbox" id="pricesEnabled" />
                   Feed prices
                 </label>
+
                 <small class="unit-note"
                   >Defaults use typical U.S. layer feed prices. You can edit
                   them anytime.</small
                 >
               </div>
 
-              <div id="pricesBox" class="alt-box">
+              <div id="pricesBox" class="alt-box" hidden>
                 <div class="row">
                   <div class="field">
                     <label for="bagWeight">Feed bag weight</label>
@@ -122,7 +128,7 @@
                 <!-- Nested Alternative feed module -->
                 <section class="alt-feed">
                   <div class="field">
-                    <label>
+                    <label class="toggle-label">
                       <input type="checkbox" id="altEnabled" />
                       Alternative feed (optional)
                     </label>
@@ -174,14 +180,12 @@
           </div>
 
           <section class="notes-block">
-            <div class="field">
-              <label
-                ><input type="checkbox" id="notesEnabled" /> Notes
-                (optional)</label
-              >
-            </div>
             <div id="notesBox" hidden>
-              <label for="notes" class="visually-hidden">Notes</label>
+              <label class="toggle-label">
+                <input type="checkbox" id="notesEnabled" />
+                Notes (optional)
+              </label>
+
               <textarea
                 id="notes"
                 rows="2"
@@ -198,6 +202,15 @@
             </button>
           </div>
         </form>
+        <!-- Reserved mobile ad slot (no CLS) -->
+        <div
+          class="ad ad--mobile"
+          id="adMobileTop"
+          role="region"
+          aria-label="Advertisement"
+        >
+          <div class="ad__placeholder">Ad (320×50)</div>
+        </div>
 
         <!-- Results -->
         <div id="results" class="results" data-help="on" hidden>
@@ -331,9 +344,12 @@
     </main>
 
     <footer class="site-footer">
-      <small>
-        Free tool. No login. Export any time. <span id="sessionCounter"></span>
-      </small>
+      <div class="container">
+        <small>
+          Free tool. No login. Export any time.
+          <span id="sessionCounter"></span>
+        </small>
+      </div>
     </footer>
 
     <script type="module" src="js/ui.js"></script>
