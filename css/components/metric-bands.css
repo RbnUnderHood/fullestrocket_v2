@@ -1,0 +1,51 @@
+/* ========== Component: Metric performance bands (full-tile tint) ========== */
+/* Base tile styling (applies even if no band class is set) */
+#results .metric {
+  --tile-bg: #ffffff;
+  --tile-border: #e5e7eb; /* neutral left border */
+  border-left: 4px solid var(--tile-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--tile-bg);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04) inset; /* subtle tile edge */
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* If a tile has no band, keep a gentle neutral tint so it doesn't look "missing" */
+#results
+  .metric:not(.band-good):not(.band-avg):not(.band-watch):not(.band-poor) {
+  background: #f7faf8; /* very light neutral */
+}
+
+/* Value color shifts for quick scanning */
+#results .metric.band-good .metric__value {
+  color: #0fd658;
+} /* Good */
+#results .metric.band-avg .metric__value {
+  color: #3b8144;
+} /* Average */
+#results .metric.band-watch .metric__value {
+  color: #b45309;
+} /* Watch (amber) */
+#results .metric.band-poor .metric__value {
+  color: #dc2626;
+} /* Poor (red) */
+
+/* Full-tile tint + left border per band */
+#results .metric.band-good {
+  background: rgba(15, 214, 88, 0.12);
+  border-left-color: #0fd658;
+}
+#results .metric.band-avg {
+  background: rgba(59, 129, 68, 0.12);
+  border-left-color: #3b8144;
+}
+#results .metric.band-watch {
+  background: rgba(180, 83, 9, 0.12);
+  border-left-color: #b45309;
+}
+#results .metric.band-poor {
+  background: rgba(220, 38, 38, 0.12);
+  border-left-color: #dc2626;
+}

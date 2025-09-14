@@ -1,0 +1,36 @@
+/* ========== Component: Feed prices ========== */
+.feed-prices {
+  --gap: 12px;
+  --min: 240px;
+}
+.feed-prices .alt-box {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+.feed-prices .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+.feed-prices .row .field {
+  flex: 1 1 var(--min);
+  min-width: var(--min);
+}
+.feed-prices input[type="number"] {
+  width: 100%;
+}
+@media (max-width: 640px) {
+  .feed-prices .row .field {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}
+/* spacing for nested alt-feed inside Feed prices */
+.feed-prices .alt-feed {
+  margin-top: 12px;
+}
+.feed-prices .alt-feed .alt-box {
+  background: #f6fff6;
+} /* subtle contrast */

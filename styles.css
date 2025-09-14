@@ -262,3 +262,75 @@ textarea:focus {
     flex-wrap: wrap;
   }
 }
+
+/* Nicer key/value layout + mobile */
+.kv .row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  align-items: baseline;
+}
+.kv .k {
+  color: var(--muted);
+}
+.kv .v {
+  font-weight: 600;
+}
+
+/* Stack on small screens */
+@media (max-width: 600px) {
+  #results .kv {
+    gap: 8px;
+  }
+  #results .kv .row {
+    grid-template-columns: 1fr;
+  }
+  #results .kv .v {
+    justify-self: start;
+  }
+}
+/* Post-results buttons */
+.post-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+.post-actions .btn {
+  min-width: 160px;
+}
+
+/* Full-width buttons on small screens */
+@media (max-width: 720px) {
+  .post-actions {
+    flex-direction: column;
+  }
+  .post-actions .btn.block,
+  #btnCalc {
+    width: 100%;
+  }
+}
+.visually-hidden {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+/* Put this at the end of styles.css */
+.grid > .metric[hidden] {
+  display: none;
+}
+/* end of styles.css */
+.more-metrics summary {
+  cursor: pointer;
+  padding: 8px 0;
+  color: #334155;
+  font-weight: 600;
+}
+.more-metrics[open] summary {
+  color: #111827;
+}
+.more-metrics .grid--more {
+  margin-top: 8px;
+}

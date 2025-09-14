@@ -1,0 +1,46 @@
+/* ========== Component: Results / Summary ========== */
+#results .kv {
+  display: grid;
+  gap: 8px;
+}
+#results .kv .row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  align-items: baseline;
+}
+#results .kv .k {
+  color: var(--muted, #6a6a6a);
+}
+#results .kv .v {
+  font-weight: 600;
+}
+
+/* stack on small screens */
+@media (max-width: 600px) {
+  #results .kv .row {
+    grid-template-columns: 1fr;
+  }
+  #results .kv .v {
+    justify-self: start;
+  }
+}
+
+/* post-results buttons */
+.post-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+.post-actions .btn {
+  min-width: 160px;
+}
+@media (max-width: 720px) {
+  .post-actions {
+    flex-direction: column;
+  }
+  .post-actions .btn.block,
+  #btnCalc {
+    width: 100%;
+  }
+}

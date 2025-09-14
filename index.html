@@ -9,6 +9,11 @@
       content="Free poultry FCR calculator. Compute feed conversion ratio, feed per egg, and cost per egg. Export your session as CSV. No login."
     />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="css/components/alt-feed.css" />
+    <link rel="stylesheet" href="css/components/feed-prices.css" />
+    <link rel="stylesheet" href="css/components/results.css" />
+    <link rel="stylesheet" href="css/components/metric-bands.css" />
+    <link rel="stylesheet" href="css/components/help.css" />
   </head>
 
   <body>
@@ -38,134 +43,278 @@
                 placeholder="e.g., ‘Layer Barn A’"
               />
             </div>
-            
-            <div class="row">
-            <div class="field">
-              <label for="birdCount">Bird count</label>
-              <input
-                id="birdCount"
-                type="number"
-                min="1"
-                step="1"
-                value="100"
-                required
-              />
-            </div>
 
-            <div class="field">
-              <label for="eggCount">Eggs collected</label>
-              <input
-                id="eggCount"
-                type="number"
-                min="0"
-                step="1"
-                value="85"
-                required
-              />
-            </div>
-          </div>
-
-                    <div class="row">
-            <div class="field">
-              <label for="avgEggWeight">Average egg weight</label>
-              <input id="avgEggWeight" type="number" min="0" step="0.1" />
-              <small class="unit-note" id="eggWeightUnit"
-                >oz (default 2.1)</small
-              >
-            </div>
-
-            <div class="field">
-              <label for="feedConsumed">Feed consumed (total)</label>
-              <input id="feedConsumed" type="number" min="0" step="0.01" />
-              <small class="unit-note" id="feedConsumedUnit">lb</small>
-            </div>
-          </div>
-
-          <details class="expando">
-            <summary>Optional: bag + price (for cost per egg)</summary>
             <div class="row">
               <div class="field">
-                <label for="bagWeight">Feed bag weight</label>
-                <input id="bagWeight" type="number" min="0" step="0.1" />
-                <small class="unit-note" id="bagWeightUnit">lb</small>
-              </div>
-              <div class="field">
-                <label for="bagPrice">Price per bag</label>
+                <label for="birdCount">Bird count</label>
                 <input
-                  id="bagPrice"
+                  id="birdCount"
+                  type="number"
+                  min="1"
+                  step="1"
+                  value="100"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="eggCount">Eggs collected</label>
+                <input
+                  id="eggCount"
                   type="number"
                   min="0"
-                  step="0.01"
-                  placeholder="$"
+                  step="1"
+                  value="85"
+                  required
                 />
               </div>
             </div>
-          </details>
 
-          <div class="field">
-            <label for="notes">Notes (exported to CSV)</label>
-            <textarea
-              id="notes"
-              rows="2"
-              placeholder="Short note for today…"
-            ></textarea>
+            <div class="row">
+              <div class="field">
+                <label for="avgEggWeight">Average egg weight</label>
+                <input id="avgEggWeight" type="number" min="0" step="0.1" />
+              </div>
+
+              <div class="field">
+                <label for="feedConsumed">Feed consumed (total)</label>
+                <input id="feedConsumed" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <!-- FEED PRICES (toggle with nested Alternative feed) -->
+            <section class="feed-prices">
+              <div class="field">
+                <label>
+                  <input type="checkbox" id="pricesEnabled" checked />
+                  Feed prices
+                </label>
+                <small class="unit-note"
+                  >Defaults use typical U.S. layer feed prices. You can edit
+                  them anytime.</small
+                >
+              </div>
+
+              <div id="pricesBox" class="alt-box">
+                <div class="row">
+                  <div class="field">
+                    <label for="bagWeight">Feed bag weight</label>
+                    <input
+                      id="bagWeight"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      placeholder="e.g., 50 lb"
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="bagPrice">Price per bag</label>
+                    <input
+                      id="bagPrice"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      placeholder="$ e.g., 22.50"
+                    />
+                  </div>
+                </div>
+
+                <!-- Nested Alternative feed module -->
+                <section class="alt-feed">
+                  <div class="field">
+                    <label>
+                      <input type="checkbox" id="altEnabled" />
+                      Alternative feed (optional)
+                    </label>
+                  </div>
+
+                  <div id="altBox" class="alt-box" hidden>
+                    <div class="row">
+                      <div class="field">
+                        <label for="altAmount">Alt feed amount</label>
+                        <input
+                          id="altAmount"
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          placeholder="e.g., 2.5 lb"
+                        />
+                      </div>
+                      <div class="field">
+                        <label for="altPricePerUnit"
+                          >Alt feed price (per unit)</label
+                        >
+                        <input
+                          id="altPricePerUnit"
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          placeholder="$ per lb"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="field">
+                      <label for="altName">Alt feed name</label>
+                      <input
+                        id="altName"
+                        type="text"
+                        placeholder="e.g., alfalfa meal / kitchen greens"
+                      />
+                      <small class="unit-note"
+                        >Tip: Keep the same alternative feed & dose for at least
+                        7 days to compare reliably.</small
+                      >
+                    </div>
+                  </div>
+                </section>
+                <!-- /Nested Alternative feed -->
+              </div>
+            </section>
           </div>
+
+          <section class="notes-block">
+            <div class="field">
+              <label
+                ><input type="checkbox" id="notesEnabled" /> Notes
+                (optional)</label
+              >
+            </div>
+            <div id="notesBox" hidden>
+              <label for="notes" class="visually-hidden">Notes</label>
+              <textarea
+                id="notes"
+                rows="2"
+                placeholder="Short note for today…"
+              ></textarea>
+            </div>
+          </section>
 
           <div id="issues" class="issues" hidden></div>
 
           <div class="actions">
             <button type="button" id="btnCalc" class="btn primary">
-              Calculate
+              Calculate Chick-n-ficiency
             </button>
-            <button type="button" id="btnExportSession" class="btn">
-              Export session CSV
-            </button>
-            <button type="button" id="btnPrint" class="btn">Print</button>
           </div>
         </form>
 
         <!-- Results -->
-        <div id="results" class="results" hidden>
+        <div id="results" class="results" data-help="on" hidden>
           <div id="printable" class="printable">
             <h3>Calculation Summary</h3>
             <div id="inputSummary" class="kv"></div>
           </div>
 
+          <!-- Default tiles (your 6 can live here; you can rearrange later) -->
+          <!-- Default tiles (exactly 6) -->
           <div class="grid">
-            <div class="metric">
+            <!-- 1) FCR -->
+            <div class="metric" id="tileFcr">
               <div class="metric__value" id="fcrValue">—</div>
-              <div class="metric__label">FCR (kg feed / kg eggs)</div>
-            </div>
-            <div class="metric">
-              <div class="metric__value" id="layRate">—</div>
-              <div class="metric__label">Lay rate (%)</div>
-            </div>
-            <div class="metric">
-              <div class="metric__value" id="feedPerBird">—</div>
-              <div class="metric__label">Feed per bird (g)</div>
-            </div>
-            <div class="metric">
-              <div class="metric__value" id="costPerDozen">—</div>
-              <div class="metric__label">Cost per dozen</div>
+              <div class="metric__label">
+                FCR (Feed conversion ratio)
+                <button
+                  type="button"
+                  class="info"
+                  data-help-key="fcr"
+                  aria-label="About FCR"
+                >
+                  i
+                </button>
+              </div>
             </div>
 
-            <div class="metric">
-              <div class="metric__value" id="feedPerEgg">—</div>
-              <div class="metric__label">Feed per egg (g)</div>
-            </div>
-            <div class="metric">
+            <!-- 2) Cost per egg (baseline) -->
+            <div class="metric" id="tileCostPerEgg">
               <div class="metric__value" id="costPerEgg">—</div>
-              <div class="metric__label">Cost per egg (if price provided)</div>
+              <div class="metric__label">
+                Cost per egg
+                <button
+                  type="button"
+                  class="info"
+                  data-help-key="costPerEgg"
+                  aria-label="About cost per egg"
+                >
+                  i
+                </button>
+              </div>
             </div>
-            <div class="metric">
+
+            <!-- 3) Feed savings (only meaningful if Alt feed is enabled) -->
+            <div class="metric" id="tileFeedSavings">
+              <div class="metric__value" id="feedSavings">—</div>
+              <div class="metric__label">
+                Feed savings (this period)
+                <button
+                  type="button"
+                  class="info"
+                  data-help-key="feedSavings"
+                  aria-label="About feed savings"
+                >
+                  i
+                </button>
+              </div>
+            </div>
+
+            <!-- 4) Cost per dozen -->
+            <div class="metric" id="tileCostPerDozen">
+              <div class="metric__value" id="costPerDozen">—</div>
+              <div class="metric__label">
+                Cost per dozen
+                <button
+                  type="button"
+                  class="info"
+                  data-help-key="costPerDozen"
+                  aria-label="About cost per dozen"
+                >
+                  i
+                </button>
+              </div>
+            </div>
+
+            <!-- 5) Lay rate -->
+            <div class="metric" id="tileLayRate">
+              <div class="metric__value" id="layRate">—</div>
+              <div class="metric__label">
+                Lay rate (%)
+                <button
+                  type="button"
+                  class="info"
+                  data-help-key="layRate"
+                  aria-label="About lay rate"
+                >
+                  i
+                </button>
+              </div>
+            </div>
+
+            <!-- 6) Performance (mirrors FCR band) -->
+            <div class="metric" id="tilePerformance">
               <div class="metric__value" id="rating">—</div>
-              <div class="metric__label">Performance</div>
+              <div class="metric__label">
+                Performance
+                <button
+                  type="button"
+                  class="info"
+                  data-help-key="fcr"
+                  aria-label="About performance"
+                >
+                  i
+                </button>
+              </div>
             </div>
           </div>
 
           <p class="session-note" id="sessionNote" hidden></p>
         </div>
       </section>
+      <div class="post-actions">
+        <button type="button" id="btnExportSession" class="btn block">
+          Export session CSV
+        </button>
+        <button type="button" id="btnPrint" class="btn block">Print</button>
+      </div>
 
       <!-- Simple ad placeholder spots (wire-ready for AdSense later) -->
       <aside class="ad">[Ad spot]</aside>
