@@ -1,15 +1,20 @@
-import { toMetricUnits, computeFcr, computeCostPerEgg } from "./compute.js";
+import {
+  toMetricUnits,
+  computeFcr,
+  computeCostPerEgg,
+  // the next three are optional; safe if you didn't add their tiles:
+  computeLayRate,
+  computeFeedPerBirdG,
+  costPerDozen,
+} from "./compute.js";
 import { performanceForFcr } from "./performance.js";
 
-// Session-only memory for return incentive
-const sessionData = {
-  startTime: Date.now(),
-  calcs: [], // push one object per calculation for this visit
-};
+/* ---------------- Session-only memory (no persistence) ---------------- */
+const sessionData = { startTime: Date.now(), calcs: [] };
 
+/* ---------------- Tiny helpers ---------------- */
 const $ = (sel) => document.querySelector(sel);
 const byId = (id) => document.getElementById(id);
-
 function esc(s) {
   return String(s ?? "")
     .replace(/&/g, "&amp;")
@@ -18,10 +23,16 @@ function esc(s) {
     .replace(/"/g, "&quot;");
 }
 
+/* ---------------- Units ---------------- */
 const unitRadios = document.querySelectorAll('input[name="units"]');
+function currentUnits() {
+  const r = Array.from(unitRadios).find((x) => x.checked);
+  return r ? r.value : "imperial";
+}
+
+/* ---------------- Inputs & UI refs ---------------- */
 const inputs = {
   flockName: byId("flockName"),
-  date: byId("date"),
   birdCount: byId("birdCount"),
   eggCount: byId("eggCount"),
   avgEggWeight: byId("avgEggWeight"),
@@ -30,8 +41,8 @@ const inputs = {
   bagPrice: byId("bagPrice"),
   notes: byId("notes"),
 };
-const issuesEl = byId("issues");
 
+const issuesEl = byId("issues");
 const resultsBox = byId("results");
 const fcrValue = byId("fcrValue");
 const feedPerEgg = byId("feedPerEgg");
@@ -41,33 +52,25 @@ const sessionNote = byId("sessionNote");
 const sessionCounter = byId("sessionCounter");
 const inputSummary = byId("inputSummary");
 
+// optional tiles (safe if missing)
+const layRateEl = byId("layRate");
+const feedPerBirdEl = byId("feedPerBird");
+const costPerDozenEl = byId("costPerDozen");
+
 const eggWeightUnit = byId("eggWeightUnit");
 const feedConsumedUnit = byId("feedConsumedUnit");
 const bagWeightUnit = byId("bagWeightUnit");
 
-byId("btnCalc").addEventListener("click", onCalculate);
-byId("btnExportSession").addEventListener("click", exportSessionCsv);
-unitRadios.forEach((r) => r.addEventListener("change", onUnitsChange));
-const printBtn = byId("btnPrint");
-if (printBtn) {
-  printBtn.addEventListener("click", onPrint);
-}
-
-// Defaults: US-first (imperial)
+/* ---------------- Startup ---------------- */
 setDefaultValues("imperial");
+attachListeners();
+refreshSessionCounter();
 
-function currentUnits() {
-  const checked = Array.from(unitRadios).find((r) => r.checked);
-  return checked ? checked.value : "imperial";
-}
-
+/* ---------------- Functions ---------------- */
 function setDefaultValues(units) {
-  const today = new Date().toISOString().slice(0, 10);
-  inputs.date.value = today;
-
   if (units === "imperial") {
     inputs.avgEggWeight.value = 2.1; // oz
-    inputs.feedConsumed.value = 26.5; // lb, example
+    inputs.feedConsumed.value = 26.5; // lb
     inputs.bagWeight.value = 50; // lb
   } else {
     inputs.avgEggWeight.value = 60; // g
@@ -75,14 +78,31 @@ function setDefaultValues(units) {
     inputs.bagWeight.value = 25; // kg
   }
   updateUnitLabels(units);
-  refreshSessionCounter();
+}
+
+function attachListeners() {
+  const calcBtn = byId("btnCalc");
+  const exportBtn = byId("btnExportSession");
+  const printBtn = byId("btnPrint");
+
+  if (calcBtn) calcBtn.addEventListener("click", onCalculate);
+  if (exportBtn) exportBtn.addEventListener("click", exportSessionCsv);
+  unitRadios.forEach((r) => r.addEventListener("change", onUnitsChange));
+  if (printBtn) printBtn.addEventListener("click", onPrint);
+}
+
+function onPrint(e) {
+  e?.preventDefault?.();
+  if (resultsBox.hidden) {
+    alert("Calculate first, then Print.");
+    return;
+  }
+  window.focus();
+  window.print();
 }
 
 function onUnitsChange() {
-  const u = currentUnits();
-  updateUnitLabels(u);
-  // Do not auto-convert user-entered values to avoid surprise.
-  // We keep what they typed; only labels change.
+  updateUnitLabels(currentUnits());
 }
 
 function updateUnitLabels(units) {
@@ -99,17 +119,6 @@ function validate() {
 
   if (birds < 1) issues.push("Bird count must be at least 1.");
   if (eggs < 0) issues.push("Egg count cannot be negative.");
-
-  // 130% spillover guidance
-  if (birds > 0 && eggs > birds * 1.3) {
-    issues.push(
-      "Eggs exceed 130% of flock size. If you collected across ~30 hours, that can happen; otherwise, double-check."
-    );
-  } else if (birds > 0 && eggs > birds) {
-    issues.push(
-      "Note: >100% suggests yesterday’s eggs were included (spillover)."
-    );
-  }
 
   const avgEggW = +inputs.avgEggWeight.value || 0;
   if (currentUnits() === "imperial") {
@@ -137,12 +146,12 @@ function showIssues(list) {
   issuesEl.innerHTML =
     "<ul>" + list.map((li) => `<li>${li}</li>`).join("") + "</ul>";
 }
+
 function buildInputSummary(units, birds, eggs) {
   const unitEggW = units === "imperial" ? "oz" : "g";
   const unitFeed = units === "imperial" ? "lb" : "kg";
 
   const rows = [
-    ["Date", inputs.date.value || "—"],
     ["Flock", inputs.flockName.value || "—"],
     ["Units", units === "imperial" ? "Imperial" : "Metric"],
     ["Birds", birds],
@@ -150,16 +159,12 @@ function buildInputSummary(units, birds, eggs) {
     ["Avg egg weight", `${inputs.avgEggWeight.value || "—"} ${unitEggW}`],
     ["Feed consumed", `${inputs.feedConsumed.value || "—"} ${unitFeed}`],
   ];
-
-  if ((+inputs.bagWeight.value || 0) > 0) {
+  if ((+inputs.bagWeight.value || 0) > 0)
     rows.push(["Bag weight", `${inputs.bagWeight.value} ${unitFeed}`]);
-  }
-  if ((+inputs.bagPrice.value || 0) > 0) {
+  if ((+inputs.bagPrice.value || 0) > 0)
     rows.push(["Bag price", `$${(+inputs.bagPrice.value).toFixed(2)}`]);
-  }
-  if ((inputs.notes.value || "").trim()) {
+  if ((inputs.notes.value || "").trim())
     rows.push(["Notes", inputs.notes.value.trim()]);
-  }
 
   inputSummary.innerHTML = rows
     .map(
@@ -177,6 +182,7 @@ function onCalculate() {
   const units = currentUnits();
   const birds = +inputs.birdCount.value || 0;
   const eggs = +inputs.eggCount.value || 0;
+
   buildInputSummary(units, birds, eggs);
 
   const metric = toMetricUnits(units, {
@@ -206,40 +212,62 @@ function onCalculate() {
   const perf = performanceForFcr(fcr);
   ratingEl.textContent = perf.label;
 
+  // Optional tiles (render only if present)
+  try {
+    if (typeof computeLayRate === "function" && layRateEl) {
+      const layRate = computeLayRate(eggs, birds);
+      layRateEl.textContent =
+        layRate || layRate === 0 ? `${layRate.toFixed(0)}%` : "—";
+    }
+    if (typeof computeFeedPerBirdG === "function" && feedPerBirdEl) {
+      const feedPerBird_g = computeFeedPerBirdG(metric.feedConsumedKg, birds);
+      feedPerBirdEl.textContent =
+        feedPerBird_g || feedPerBird_g === 0
+          ? `${feedPerBird_g.toFixed(0)} g`
+          : "—";
+    }
+    if (typeof costPerDozen === "function" && costPerDozenEl) {
+      const cpd = costPerDozen(cpe);
+      costPerDozenEl.textContent =
+        cpd || cpd === 0 ? `$${cpd.toFixed(2)}` : "—";
+    }
+  } catch {}
+
   resultsBox.hidden = false;
 
-  // Session hook: remember this calc for CSV export
+  // 130% / 100% guidance (non-blocking)
+  const ratio = birds > 0 ? eggs / birds : 0;
+  if (ratio > 1.3) {
+    alert(
+      "Heads up: eggs are more than 130% of bird count. Double-check values or split across multiple days."
+    );
+  } else if (ratio > 1.0) {
+    sessionNote.hidden = false;
+    sessionNote.textContent = `Saved calculation #${
+      sessionData.calcs.length + 1
+    } for this visit. Note: >100% can occur with multi-day collections.`;
+  }
+
+  // Session row
   const row = {
     timestamp: new Date().toISOString(),
-    date: inputs.date.value,
     flock: (inputs.flockName.value || "").trim(),
     units,
     birdCount: birds,
     eggCount: eggs,
     avgEggWeight_input: +inputs.avgEggWeight.value || 0,
     feedConsumed_input: +inputs.feedConsumed.value || 0,
-    // metric equivalents
     eggWeight_g: metric.avgEggWeightG,
     feedConsumed_kg: metric.feedConsumedKg,
-    // results
     eggMass_kg: eggMassKg || 0,
     fcr: fcr ?? "",
     feedPerEgg_g: feedPerEggG ?? "",
     costPerEgg_usd: cpe || cpe === 0 ? +cpe.toFixed(4) : "",
-    // bag context
     bagWeight_input: +inputs.bagWeight.value || "",
     bagPrice_usd: +inputs.bagPrice.value || "",
-    // notes
     notes: (inputs.notes.value || "").replace(/\s+/g, " ").trim(),
   };
-
   sessionData.calcs.push(row);
-  sessionNote.hidden = false;
-  sessionNote.textContent = `Saved calculation #${
-    sessionData.calcs.length
-  } for this visit${
-    row.flock ? ` (flock: ${row.flock})` : ""
-  }. Don’t forget to export before leaving.`;
   refreshSessionCounter();
 }
 
@@ -255,7 +283,6 @@ function exportSessionCsv() {
   }
   const header = [
     "timestamp",
-    "date",
     "flock",
     "units",
     "birdCount",
@@ -272,21 +299,16 @@ function exportSessionCsv() {
     "bagPrice_usd",
     "notes",
   ];
-
   const lines = [header.join(",")];
-
   sessionData.calcs.forEach((r) => {
     const vals = header.map((k) => {
       const v = r[k] ?? "";
-      // escape commas/quotes in notes etc.
-      if (typeof v === "string" && /[",\n]/.test(v)) {
-        return `"${v.replace(/"/g, '""')}"`;
-      }
-      return v;
+      return typeof v === "string" && /[",\n]/.test(v)
+        ? `"${v.replace(/"/g, '""')}"`
+        : v;
     });
     lines.push(vals.join(","));
   });
-
   const blob = new Blob([lines.join("\n")], {
     type: "text/csv;charset=utf-8;",
   });
@@ -300,23 +322,3 @@ function exportSessionCsv() {
   a.remove();
   URL.revokeObjectURL(url);
 }
-function onPrint(e) {
-  e?.preventDefault?.();
-
-  // Helpful guard: make sure user calculated first
-  if (resultsBox.hidden) {
-    alert("Calculate first, then Print.");
-    return;
-  }
-
-  // Focus the window and print
-  window.focus();
-  // Breadcrumb for debugging; you’ll see this in Console when you click Print
-  console.log("[FCR] print requested");
-  window.print();
-}
-
-// init
-(function init() {
-  // already defaulted to imperial in setDefaultValues()
-})();
