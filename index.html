@@ -1,145 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FCR Calculator – Poultry Feed Conversion Ratio</title>
-  <meta name="description" content="Free poultry FCR calculator. Compute feed conversion ratio, feed per egg, and cost per egg. Export your session as CSV. No login." />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="site-header">
-    <h1>🐔 FCR Calculator</h1>
-    <div class="unit-toggle">
-      <label><input type="radio" name="units" value="imperial" checked> Imperial</label>
-      <label><input type="radio" name="units" value="metric"> Metric</label>
-    </div>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>FCR Calculator – Poultry Feed Conversion Ratio</title>
+    <meta
+      name="description"
+      content="Free poultry FCR calculator. Compute feed conversion ratio, feed per egg, and cost per egg. Export your session as CSV. No login."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-  <main class="wrap">
-    <!-- Calculator card -->
-    <section class="card">
-      <h2 class="card-title">Daily / Average Calculation</h2>
+  <body>
+    <header class="site-header">
+      <h1>🐔 FCR Calculator</h1>
+      <div class="unit-toggle">
+        <label
+          ><input type="radio" name="units" value="imperial" checked />
+          Imperial</label
+        >
+        <label><input type="radio" name="units" value="metric" /> Metric</label>
+      </div>
+    </header>
 
-      <form id="calcForm" novalidate>
-        <div class="row">
-          <div class="field">
-            <label for="flockName">Flock name (optional)</label>
-            <input id="flockName" type="text" placeholder="e.g., ‘Layer Barn A’" />
-          </div>
-          <div class="field">
-            <label for="date">Date</label>
-            <input id="date" type="date" />
-          </div>
-        </div>
+    <main class="wrap">
+      <!-- Calculator card -->
+      <section class="card">
+        <h2 class="card-title">Daily / Average Calculation</h2>
 
-        <div class="row">
-          <div class="field">
-            <label for="birdCount">Bird count</label>
-            <input id="birdCount" type="number" min="1" step="1" value="100" required />
-          </div>
-
-          <div class="field">
-            <label for="eggCount">Eggs collected (today or average)</label>
-            <input id="eggCount" type="number" min="0" step="1" value="85" required />
-          </div>
-        </div>
-
-        <div class="hint">
-          <strong>Average vs Daily logging:</strong>
-          <ul>
-            <li>For overall flock FCR, enter your <em>average daily</em> egg count.</li>
-            <li>For daily tracking, enter <em>today’s eggs</em>. Up to <strong>130%</strong> of flock size can be normal when a collection spans ~30 hours.</li>
-          </ul>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label for="avgEggWeight">Average egg weight</label>
-            <input id="avgEggWeight" type="number" min="0" step="0.1" />
-            <small class="unit-note" id="eggWeightUnit">oz (default 2.1)</small>
-          </div>
-
-          <div class="field">
-            <label for="feedConsumed">Feed consumed (total)</label>
-            <input id="feedConsumed" type="number" min="0" step="0.01" />
-            <small class="unit-note" id="feedConsumedUnit">lb</small>
-          </div>
-        </div>
-
-        <details class="expando">
-          <summary>Optional: bag + price (for cost per egg)</summary>
+        <form id="calcForm" novalidate>
           <div class="row">
             <div class="field">
-              <label for="bagWeight">Feed bag weight</label>
-              <input id="bagWeight" type="number" min="0" step="0.1" />
-              <small class="unit-note" id="bagWeightUnit">lb</small>
+              <label for="flockName">Flock name (optional)</label>
+              <input
+                id="flockName"
+                type="text"
+                placeholder="e.g., ‘Layer Barn A’"
+              />
             </div>
             <div class="field">
-              <label for="bagPrice">Price per bag</label>
-              <input id="bagPrice" type="number" min="0" step="0.01" placeholder="$" />
+              <label for="date">Date</label>
+              <input id="date" type="date" />
             </div>
           </div>
-        </details>
 
-        <div class="field">
-          <label for="notes">Notes (exported to CSV)</label>
-          <textarea id="notes" rows="2" placeholder="Short note for today…"></textarea>
+          <div class="row">
+            <div class="field">
+              <label for="birdCount">Bird count</label>
+              <input
+                id="birdCount"
+                type="number"
+                min="1"
+                step="1"
+                value="100"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="eggCount">Eggs collected (today or average)</label>
+              <input
+                id="eggCount"
+                type="number"
+                min="0"
+                step="1"
+                value="85"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="hint">
+            <strong>Average vs Daily logging:</strong>
+            <ul>
+              <li>
+                For overall flock FCR, enter your <em>average daily</em> egg
+                count.
+              </li>
+              <li>
+                For daily tracking, enter <em>today’s eggs</em>. Up to
+                <strong>130%</strong> of flock size can be normal when a
+                collection spans ~30 hours.
+              </li>
+            </ul>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="avgEggWeight">Average egg weight</label>
+              <input id="avgEggWeight" type="number" min="0" step="0.1" />
+              <small class="unit-note" id="eggWeightUnit"
+                >oz (default 2.1)</small
+              >
+            </div>
+
+            <div class="field">
+              <label for="feedConsumed">Feed consumed (total)</label>
+              <input id="feedConsumed" type="number" min="0" step="0.01" />
+              <small class="unit-note" id="feedConsumedUnit">lb</small>
+            </div>
+          </div>
+
+          <details class="expando">
+            <summary>Optional: bag + price (for cost per egg)</summary>
+            <div class="row">
+              <div class="field">
+                <label for="bagWeight">Feed bag weight</label>
+                <input id="bagWeight" type="number" min="0" step="0.1" />
+                <small class="unit-note" id="bagWeightUnit">lb</small>
+              </div>
+              <div class="field">
+                <label for="bagPrice">Price per bag</label>
+                <input
+                  id="bagPrice"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="$"
+                />
+              </div>
+            </div>
+          </details>
+
+          <div class="field">
+            <label for="notes">Notes (exported to CSV)</label>
+            <textarea
+              id="notes"
+              rows="2"
+              placeholder="Short note for today…"
+            ></textarea>
+          </div>
+
+          <div id="issues" class="issues" hidden></div>
+
+          <div class="actions">
+            <button type="button" id="btnCalc" class="btn primary">
+              Calculate
+            </button>
+            <button type="button" id="btnExportSession" class="btn">
+              Export session CSV
+            </button>
+            <button type="button" id="btnPrint" class="btn">Print</button>
+          </div>
+        </form>
+
+        <!-- Results -->
+        <div id="results" class="results" hidden>
+          <div id="printable" class="printable">
+            <h3>Calculation Summary</h3>
+            <div id="inputSummary" class="kv"></div>
+          </div>
+
+          <div class="grid">
+            <div class="metric">
+              <div class="metric__value" id="fcrValue">—</div>
+              <div class="metric__label">FCR (kg feed / kg eggs)</div>
+            </div>
+            <div class="metric">
+              <div class="metric__value" id="feedPerEgg">—</div>
+              <div class="metric__label">Feed per egg (g)</div>
+            </div>
+            <div class="metric">
+              <div class="metric__value" id="costPerEgg">—</div>
+              <div class="metric__label">Cost per egg (if price provided)</div>
+            </div>
+            <div class="metric">
+              <div class="metric__value" id="rating">—</div>
+              <div class="metric__label">Performance</div>
+            </div>
+          </div>
+
+          <p class="session-note" id="sessionNote" hidden></p>
         </div>
+      </section>
 
-        <div id="issues" class="issues" hidden></div>
+      <!-- Simple ad placeholder spots (wire-ready for AdSense later) -->
+      <aside class="ad">[Ad spot]</aside>
 
-        <div class="actions">
-          <button type="button" id="btnCalc" class="btn primary">Calculate</button>
-          <button type="button" id="btnExportSession" class="btn">Export session CSV</button>
-        </div>
-      </form>
+      <!-- SEO/Education block (stub you can expand later) -->
+      <section class="card">
+        <h2 class="card-title">What is FCR?</h2>
+        <p>
+          Feed Conversion Ratio (FCR) for layers is typically expressed as
+          <em>kg feed per kg of egg mass</em>. Lower is better. Seasonal
+          conditions, breed, and feed quality all affect FCR.
+        </p>
+      </section>
+    </main>
 
-      <!-- Results -->
-      <div id="results" class="results" hidden>
-        <div class="grid">
-          <div class="metric">
-            <div class="metric__value" id="fcrValue">—</div>
-            <div class="metric__label">FCR (kg feed / kg eggs)</div>
-          </div>
-          <div class="metric">
-            <div class="metric__value" id="feedPerEgg">—</div>
-            <div class="metric__label">Feed per egg (g)</div>
-          </div>
-          <div class="metric">
-            <div class="metric__value" id="costPerEgg">—</div>
-            <div class="metric__label">Cost per egg (if price provided)</div>
-          </div>
-          <div class="metric">
-            <div class="metric__value" id="rating">—</div>
-            <div class="metric__label">Performance</div>
-          </div>
-        </div>
+    <footer class="site-footer">
+      <small>
+        Free tool. No login. Export any time. <span id="sessionCounter"></span>
+      </small>
+    </footer>
 
-        <p class="session-note" id="sessionNote" hidden></p>
-      </div>
-    </section>
-
-    <!-- Simple ad placeholder spots (wire-ready for AdSense later) -->
-    <aside class="ad">[Ad spot]</aside>
-
-    <!-- SEO/Education block (stub you can expand later) -->
-    <section class="card">
-      <h2 class="card-title">What is FCR?</h2>
-      <p>
-        Feed Conversion Ratio (FCR) for layers is typically expressed as <em>kg feed per kg of egg mass</em>.
-        Lower is better. Seasonal conditions, breed, and feed quality all affect FCR.
-      </p>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <small>
-      Free tool. No login. Export any time. <span id="sessionCounter"></span>
-    </small>
-  </footer>
-
-<script type="module" src="js/ui.js"></script>
-
-</body>
+    <script type="module" src="js/ui.js"></script>
+  </body>
 </html>
