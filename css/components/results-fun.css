@@ -1,0 +1,139 @@
+/* ==========================================================================
+   FILE: css/components/results-fun.css
+   ROLE: Optional fun tile theme (tilted cards)
+   OWNS: .fun-grid, #metricsGrid.metric-grid-scope
+   NO-GO: No forms or header
+   ========================================================================== */
+
+/* Only affects results when the parent has .fun-grid */
+#metricsGrid.metric-grid-scope .metric {
+  position: relative;
+  background: var(--tile-bg);
+  border: 1px solid var(--tile-border);
+  border-left: 6px solid var(--band-color, #e2e8f0);
+  border-radius: 14px;
+  box-shadow: var(--tile-shadow);
+  transform: rotate(-0.8deg);
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    background-color 0.18s ease;
+  /* soft band tint */
+  background-image: linear-gradient(
+    to bottom right,
+    color-mix(in srgb, var(--band-color, #e2e8f0) 12%, #fff),
+    #fff
+  );
+}
+
+.fun-grid .metric__value {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+.fun-grid .metric__label {
+  opacity: 0.9;
+}
+
+/* Hover polish (desktop only) */
+@media (hover: hover) {
+  .fun-grid .metric:hover {
+    transform: rotate(0deg) scale(1.015);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.06), 0 10px 24px rgba(15, 23, 42, 0.09);
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fun-grid .metric {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Performance bands → palette mapping */
+.fun-grid .metric.band-excellent {
+  --band-color: var(--sky-blue);
+}
+.fun-grid .metric.band-good {
+  --band-color: var(--field-green);
+}
+.fun-grid .metric.band-average {
+  --band-color: var(--hay-gold);
+}
+.fun-grid .metric.band-poor {
+  --band-color: var(--rooster-red);
+}
+
+/* Results subtitle spacing */
+.results-sub {
+  margin: 4px 0 10px;
+  color: #334155;
+  font-size: 13px;
+}
+#metricsGrid {
+  outline: 2px dashed hotpink;
+}
+/* === FUN TILE TAKEOVER (high-specificity override) ===================== */
+
+/* Base card look (tilt + soft tint + left band) */
+#metricsGrid.metric-grid-scope .metric {
+  position: relative;
+  background: var(--tile-bg, #fff);
+  border: 1px solid var(--tile-border, #e5e7eb);
+  border-left: 6px solid var(--band-color, #e2e8f0);
+  border-radius: 14px;
+  box-shadow: var(
+    --tile-shadow,
+    0 1px 0 rgba(0, 0, 0, 0.06),
+    0 6px 16px rgba(15, 23, 42, 0.06)
+  );
+  transform: rotate(-0.8deg);
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    background-color 0.18s ease;
+
+  /* subtle band tint: keep text readable on white */
+  background-image: linear-gradient(
+    to bottom right,
+    color-mix(in srgb, var(--band-color, #e2e8f0) 12%, #ffffff),
+    #ffffff
+  );
+}
+
+/* Value/label sizing inside the fun cards */
+#metricsGrid.metric-grid-scope .metric .metric__value {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+#metricsGrid.metric-grid-scope .metric .metric__label {
+  opacity: 0.9;
+}
+
+/* Hover polish (desktop only) */
+@media (hover: hover) {
+  #metricsGrid.metric-grid-scope .metric:hover {
+    transform: rotate(0deg) scale(1.015);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.06), 0 10px 24px rgba(15, 23, 42, 0.09);
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #metricsGrid.metric-grid-scope .metric {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Map performance bands to the farm palette tokens */
+#metricsGrid.metric-grid-scope .metric.band-excellent {
+  --band-color: var(--sky-blue, #87ceeb);
+}
+#metricsGrid.metric-grid-scope .metric.band-good {
+  --band-color: var(--field-green, #556b2f);
+}
+#metricsGrid.metric-grid-scope .metric.band-average {
+  --band-color: var(--hay-gold, #daa520);
+}
+#metricsGrid.metric-grid-scope .metric.band-poor {
+  --band-color: var(--rooster-red, #c41e3a);
+}
+
+/* ===================================================================== */

@@ -1,0 +1,1179 @@
+/* build: dist/app.css */
+
+/* === styles.css === */
+/* ==========================================================================
+   FILE: styles.css
+   ROLE: Component styles
+   OWNS: (unspecified)
+   NO-GO: Keep scope tight
+   ========================================================================== */
+
+:root {
+  --bg: #f7fbf7;
+  --card: #fff;
+  --ink: #223;
+  --muted: #666;
+  --brand: #2e7d32;
+  --brand-ink: #fff;
+  --border: #e6ece6;
+  --warn: #b45309;
+  --ok: #0b7a0b;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, Arial, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.site-header,
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+.site-footer {
+  border-top: 1px solid var(--border);
+  border-bottom: 0;
+}
+
+.unit-toggle label {
+  margin-left: 12px;
+  font-size: 14px;
+}
+.unit-toggle input {
+  margin-right: 6px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.03);
+}
+.card-title {
+  margin: 0 0 8px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 720px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+label {
+  font-weight: 600;
+}
+input,
+textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 16px;
+  background: #fff;
+}
+input:focus,
+textarea:focus {
+  outline: 2px solid #cde8cd;
+  border-color: #cde8cd;
+}
+
+.hint {
+  background: #fff8e6;
+  border-left: 4px solid #f0a000;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #4a3510;
+  margin: 8px 0 6px;
+}
+.unit-note {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.expando {
+  margin: 6px 0 8px;
+}
+.expando summary {
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.btn {
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn.primary {
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: var(--brand);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+.issues {
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #fff3f1;
+  border: 1px solid #ffd6cf;
+  color: #7a2314;
+}
+
+.results {
+  margin-top: 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.metric {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--brand);
+  background: #f8fdf8;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+.metric__value {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--brand);
+}
+.metric__label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.session-note {
+  color: var(--ok);
+  margin-top: 8px;
+}
+
+.ad {
+  border: 2px dashed var(--border);
+  color: var(--muted);
+  text-align: center;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+/* Summary key/value layout */
+.kv {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+}
+.kv .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px dotted var(--border);
+}
+.kv .k {
+  color: var(--muted);
+}
+.kv .v {
+  font-weight: 600;
+}
+
+/* Print ONLY the results area (which now includes the input summary) */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #results,
+  #results * {
+    visibility: visible !important;
+  }
+  #results {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .site-header,
+  .site-footer,
+  .ad,
+  .actions,
+  .issues,
+  .expando {
+    display: none !important;
+  }
+}
+.seg {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.seg label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+}
+/* Stop the button column from stretching to the height of the results */
+.actions {
+  align-self: start;
+  align-items: center;
+} /* keep buttons at content height */
+.actions .btn {
+  align-self: center;
+} /* prevent per-button vertical stretch */
+
+@media (max-width: 720px) {
+  .actions {
+    flex-wrap: wrap;
+  }
+}
+
+/* Nicer key/value layout + mobile */
+.kv .row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  align-items: baseline;
+}
+.kv .k {
+  color: var(--muted);
+}
+.kv .v {
+  font-weight: 600;
+}
+
+/* Stack on small screens */
+@media (max-width: 600px) {
+  #results .kv {
+    gap: 8px;
+  }
+  #results .kv .row {
+    grid-template-columns: 1fr;
+  }
+  #results .kv .v {
+    justify-self: start;
+  }
+}
+/* Post-results buttons */
+.post-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+.post-actions .btn {
+  min-width: 160px;
+}
+
+/* Full-width buttons on small screens */
+@media (max-width: 720px) {
+  .post-actions {
+    flex-direction: column;
+  }
+  .post-actions .btn.block,
+  #btnCalc {
+    width: 100%;
+  }
+}
+.visually-hidden {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+/* Put this at the end of styles.css */
+.grid > .metric[hidden] {
+  display: none;
+}
+/* end of styles.css */
+.more-metrics summary {
+  cursor: pointer;
+  padding: 8px 0;
+  color: #334155;
+  font-weight: 600;
+}
+.more-metrics[open] summary {
+  color: #111827;
+}
+.more-metrics .grid--more {
+  margin-top: 8px;
+}
+
+/* === css/theme.css === */
+/* ==========================================================================
+   FILE: css/theme.css
+   ROLE: Global design tokens (colors, spacing, radii, shadows, type scale)
+   OWNS: CSS variables in :root
+   NO-GO: No component styling here
+   ========================================================================== */
+
+:root {
+  /* Chicken colors */
+  --rooster-red: #c41e3a;
+  --hen-brown: #8b4513;
+  --chick-yellow: #ffd700;
+  --feather-black: #2f1b14;
+  --egg-cream: #f5f5dc;
+  --copper-orange: #cd7f32;
+
+  /* Farmstead accents */
+  --barn-red: #b22222;
+  --weathered-wood: #8b7355;
+  --hay-gold: #daa520;
+  --field-green: #556b2f;
+  --sky-blue: #87ceeb;
+  --milk-white: #fffdd0;
+  --earth-brown: #964b00;
+  --sunset-orange: #ff8c69;
+  --corn-yellow: #ffde00;
+
+  /* Neutral + UI */
+  --tile-bg: #ffffff;
+  --tile-border: #e5e7eb; /* slate-200 */
+  --tile-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 6px 16px rgba(15, 23, 42, 0.06);
+}
+
+/* === css/components/layout.css === */
+/* ==========================================================================
+   FILE: css/components/layout.css
+   ROLE: Page shell and container widths/padding
+   OWNS: .container, .wrap
+   NO-GO: No forms or tiles
+   ========================================================================== */
+
+/* Center column hard-cap + sane page padding (apply to both .container and legacy .wrap) */
+.container,
+.wrap {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  box-sizing: border-box;
+}
+
+/* Keep header/footer background full-width but cap their inner content */
+.site-header,
+.site-footer {
+  padding: 8px 0; /* remove side padding here; container will handle it */
+}
+
+/* === css/components/header.css === */
+/* ==========================================================================
+   FILE: css/components/header.css
+   ROLE: Site header styles (title, slogan, badge)
+   OWNS: .site-header, .slogan, .badge
+   NO-GO: No forms or tiles
+   ========================================================================== */
+
+/* Slogan + badge styles */
+.slogan {
+  margin: 4px 0 0;
+  color: #334155; /* slate-700 */
+}
+
+.badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #fff7ed; /* warm */
+  color: #b45309; /* amber-700 */
+  border: 1px solid #fdba74; /* amber-300 */
+  vertical-align: middle;
+}
+
+@media (max-width: 360px) {
+  .badge {
+    display: none;
+  } /* hide on ultra-narrow if it crowds */
+}
+.site-header {
+  padding: 6px 0;
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.site-header h1 {
+  margin: 0;
+  line-height: 1.2;
+}
+.slogan {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.2;
+}
+@media (max-width: 480px) {
+  .slogan {
+    font-size: 11px;
+  }
+}
+
+/* === css/components/forms.css === */
+/* ==========================================================================
+   FILE: css/components/forms.css
+   ROLE: Form controls and grids
+   OWNS: .row (form grid), .field, inputs/selects/areas
+   NO-GO: No result tiles or header
+   ========================================================================== */
+
+/* Form layout that never overflows the 700px container */
+
+/* 1) Responsive rows: auto-fit as many columns as fit, then wrap */
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3, 12px);
+}
+
+/* 2) Inputs/selects/areas always fill their column */
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* 3) Don’t let inner blocks force the card wider */
+.card,
+.grid,
+.kv,
+.field {
+  min-width: 0;
+}
+.field input,
+.field textarea {
+  min-width: 0;
+}
+
+/* 4) Make sure the card itself can’t bleed */
+.card {
+  overflow: hidden;
+}
+
+/* 5) Global box-sizing for sanity (safe to add once) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/* Compact checkbox rows so they don't create big empty spaces */
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600; /* keep label readable */
+  margin: 4px 0;
+}
+
+/* Small, tidy checkboxes */
+.toggle-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  accent-color: #16a34a; /* native green check */
+}
+
+/* Indent the hint that follows a toggle label (but only that case) */
+.toggle-label + .unit-note {
+  margin-left: 24px;
+  display: block; /* ensure it wraps under the label line */
+  margin-top: 2px;
+}
+/* Two-up layout even on smaller phones for key rows */
+.row.row--compact {
+  grid-template-columns: 1fr 1fr; /* exactly two columns */
+  gap: 10px;
+}
+.row.row--compact .field input {
+  width: 100%;
+}
+@media (max-width: 360px) {
+  .row.row--compact {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+}
+
+/* === css/components/density.css === */
+/* ==========================================================================
+   FILE: css/components/density.css
+   ROLE: Compact scale + actions/post-actions layout (results area)
+   OWNS: .actions, .post-actions, compact font/spacing scale
+   NO-GO: Do not style form controls
+   ========================================================================== */
+
+/* Global compact scale: ~12% smaller fonts, ~20% tighter gaps */
+:root {
+  --font-base: 14px; /* was 16 */
+  --font-label: 13px;
+  --font-metric: 18px; /* values */
+  --space-1: 6px;
+  --space-2: 10px;
+  --space-3: 12px;
+  --space-4: 16px;
+}
+
+html,
+body {
+  font-size: var(--font-base);
+}
+
+/* Labels and small text */
+label,
+.metric__label,
+.issues,
+small,
+.unit-note,
+.slogan {
+  font-size: var(--font-label);
+}
+
+/* Inputs: keep tap target ≥44px, reduce inner padding */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+select,
+textarea {
+  padding: 8px 10px;
+  min-height: 44px;
+}
+
+/* Rows & grids tighter */
+.row {
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+.grid {
+  gap: var(--space-3);
+}
+
+/* Metric tiles: compact but readable */
+.metric {
+  padding: var(--space-2) var(--space-3);
+}
+.metric__value {
+  font-size: var(--font-metric);
+}
+
+/* Headings slightly smaller */
+h1 {
+  font-size: 1.6rem;
+} /* ~22–24px */
+h2 {
+  font-size: 1.25rem;
+}
+h3 {
+  font-size: 1.05rem;
+}
+
+/* Actions row: grid at all widths so buttons don't shrink/left-align */
+
+/* Actions row: Calculate lives alone → always full width */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr; /* one column = full width */
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.actions .btn {
+  width: 100%;
+} /* make each button fill its grid cell */
+
+/* Export/Print row under results */
+.post-actions {
+  display: grid;
+  gap: var(--space-2);
+  grid-template-columns: repeat(2, 1fr); /* desktop/tablet: 2 equal buttons */
+}
+.post-actions .btn {
+  width: 100%;
+}
+
+/* Mobile: full-width, stacked */
+@media (max-width: 768px) {
+  .actions {
+    grid-template-columns: 1fr;
+  } /* Calc/Export/Print stacked full width */
+  .post-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Small vertical rhythm tweaks */
+.card-title {
+  margin-bottom: var(--space-3);
+}
+.issues {
+  margin-top: var(--space-2);
+}
+.printable {
+  margin-bottom: var(--space-3);
+}
+/* keep grids tight when tiles are hidden */
+.grid > .metric[hidden] {
+  display: none;
+}
+
+/* === css/components/units.css === */
+/* ==========================================================================
+   FILE: css/components/units.css
+   ROLE: Units switch control
+   OWNS: .units-switch*
+   NO-GO: No forms grid or tiles
+   ========================================================================== */
+
+.card-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.units-switch {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  background: #fff;
+}
+.units-switch .seg {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.units-switch .seg input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.units-switch .seg span {
+  position: relative;
+  z-index: 1;
+}
+.units-switch .seg input:checked + span {
+  background: #eef2ff;
+  border-radius: 9999px;
+  padding: 6px 10px;
+  color: #334155;
+  font-weight: 700;
+}
+@media (max-width: 360px) {
+  .units-switch .seg span {
+    padding: 6px 8px;
+  }
+}
+
+/* === css/components/help.css === */
+/* ==========================================================================
+   FILE: css/components/help.css
+   ROLE: Help/info button and popover
+   OWNS: .info, #helpPopover, results scoping
+   NO-GO: No base tile visuals
+   ========================================================================== */
+
+/* ========== Component: Help / info buttons ========== */
+.info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
+  border-radius: 9999px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: #64748b; /* slate */
+}
+
+/* red ring when a metric deserves attention */
+.info--alert {
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+/* Global toggle: hide ALL info buttons when the results wrapper says data-help="off" */
+.results[data-help="off"] .info {
+  display: none;
+}
+
+/* Optional: per-tile toggle (add data-help="off" on a .metric to hide only that tile's button) */
+.metric[data-help="off"] .info {
+  display: none;
+}
+
+/* Popover */
+#helpPopover {
+  position: absolute;
+  z-index: 1000;
+  max-width: 280px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+}
+#helpPopover.hidden {
+  display: none;
+}
+#helpPopover h4 {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #111827;
+}
+#helpPopover p {
+  margin: 0;
+  font-size: 13px;
+  color: #374151;
+}
+/* Pin the info button to the top-right of each metric tile */
+#results .metric {
+  position: relative;
+  padding-right: 36px;
+} /* room for the button */
+
+#results .metric .info {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  margin-left: 0; /* was inline; not needed now */
+  width: 18px;
+  height: 18px; /* keep your size */
+  z-index: 2;
+  background: #fff; /* subtle chip so it’s visible on tinted tiles */
+  border: 1px solid currentColor;
+  border-radius: 9999px;
+}
+
+/* Alert state keeps the red ring/color you already set */
+#results .metric .info.info--alert {
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+/* Optional: slightly bigger tap target on small screens */
+@media (max-width: 480px) {
+  #results .metric {
+    padding-right: 42px;
+  }
+  #results .metric .info {
+    width: 15px;
+    height: 15px;
+    top: 6px;
+    right: 6px;
+  }
+}
+
+/* === css/components/feed-prices.css === */
+/* ==========================================================================
+   FILE: css/components/feed-prices.css
+   ROLE: Feed prices sub-form layout
+   OWNS: .feed-prices*
+   NO-GO: No global grids/tiles
+   ========================================================================== */
+
+/* ========== Component: Feed prices ========== */
+.feed-prices {
+  --gap: 12px;
+  --min: 240px;
+}
+.feed-prices .alt-box {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+.feed-prices .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+.feed-prices .row .field {
+  flex: 1 1 var(--min);
+  min-width: var(--min);
+}
+.feed-prices input[type="number"] {
+  width: 100%;
+}
+@media (max-width: 640px) {
+  .feed-prices .row .field {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}
+/* spacing for nested alt-feed inside Feed prices */
+.feed-prices .alt-feed {
+  margin-top: 12px;
+}
+.feed-prices .alt-feed .alt-box {
+  background: #f6fff6;
+} /* subtle contrast */
+
+/* === css/components/alt-feed.css === */
+/* ==========================================================================
+   FILE: css/components/alt-feed.css
+   ROLE: Alternative feed nested form
+   OWNS: .alt-feed*
+   NO-GO: No global grids/tiles
+   ========================================================================== */
+
+/* ========== Component: Alt feed ===========================================
+Knobs:
+  --alt-gap: spacing between fields
+  --alt-min: minimum width of a field before wrapping
+=========================================================================== */
+.alt-feed {
+  --alt-gap: 12px;
+  --alt-min: 240px;
+}
+
+.alt-feed .alt-box {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+
+.alt-feed .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--alt-gap);
+}
+
+.alt-feed .row .field {
+  flex: 1 1 var(--alt-min);
+  min-width: var(--alt-min);
+}
+
+.alt-feed input[type="number"],
+.alt-feed input[type="text"] {
+  width: 100%;
+}
+
+/* Stack fields on smaller screens */
+@media (max-width: 640px) {
+  .alt-feed .row .field {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}
+
+/* === css/components/results.css === */
+/* ==========================================================================
+   FILE: css/components/results.css
+   ROLE: Results summary key/value layout
+   OWNS: #results .kv, .post-actions (legacy helpers)
+   NO-GO: No tile visuals
+   ========================================================================== */
+
+/* ========== Component: Results / Summary ========== */
+#results .kv {
+  display: grid;
+  gap: 8px;
+}
+#results .kv .row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  align-items: baseline;
+}
+#results .kv .k {
+  color: var(--muted, #6a6a6a);
+}
+#results .kv .v {
+  font-weight: 600;
+}
+
+/* stack on small screens */
+@media (max-width: 600px) {
+  #results .kv .row {
+    grid-template-columns: 1fr;
+  }
+  #results .kv .v {
+    justify-self: start;
+  }
+}
+
+/* post-results buttons */
+.post-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+.post-actions .btn {
+  min-width: 160px;
+}
+@media (max-width: 720px) {
+  .post-actions {
+    flex-direction: column;
+  }
+  .post-actions .btn.block,
+  #btnCalc {
+    width: 100%;
+  }
+}
+
+/* === css/components/results-clean.css === */
+/* ==========================================================================
+   FILE: css/components/results-clean.css
+   ROLE: KPI tiles grid + tile internals
+   OWNS: #metricsGrid, #moreMetrics, .metric, .metric__value, .metric__label, .info pin
+   NO-GO: No form or header styles
+   ========================================================================== */
+
+/* === Clean, conflict-free styling scoped to the results grid ============== */
+
+/* Base grid (2-up on mobile by design; your grid HTML is #metricsGrid) */
+#results .grid,
+#metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* Card */
+#metricsGrid .metric {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e5e7eb; /* slate-200 */
+  border-left: 8px solid var(--band-color, #e2e8f0);
+  border-radius: 14px;
+  padding: 12px 12px 10px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+/* Value + label */
+#metricsGrid .metric .metric__value {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  color: var(--band-color, #334155); /* band color accents the number */
+}
+#metricsGrid .metric .metric__label {
+  margin-top: 4px;
+  color: #475569; /* slate-600 */
+  font-size: 12px;
+  line-height: 1.2;
+  padding-right: 26px; /* room for the info button */
+  position: relative;
+}
+
+/* Info button pinned top-right */
+#metricsGrid .metric .info {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid currentColor;
+  background: #fff;
+  color: #64748b; /* slate-500 */
+}
+
+/* Hide tiles when JS sets [hidden] (keeps grid tight) */
+#metricsGrid > .metric[hidden] {
+  display: none;
+}
+
+/* Slightly tighter gaps on very small screens */
+@media (max-width: 420px) {
+  #metricsGrid {
+    gap: 10px;
+  }
+}
+
+/* --- Performance bands (replace/own these; no dependency on old CSS) --- */
+#metricsGrid .metric.band-excellent {
+  --band-color: #87ceeb;
+} /* sky blue */
+#metricsGrid .metric.band-good {
+  --band-color: #0fd658;
+} /* bright green */
+#metricsGrid .metric.band-average {
+  --band-color: #3b8144;
+} /* deep green  */
+#metricsGrid .metric.band-poor {
+  --band-color: #c41e3a;
+} /* rooster red */
+
+/* Pin the ⓘ to the top-right of the entire tile (not the label) */
+#metricsGrid .metric {
+  position: relative;
+} /* anchor */
+#metricsGrid .metric .metric__label {
+  position: static;
+  padding-right: 0;
+}
+#metricsGrid .metric .info {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 1;
+}
+/* More tiles grid uses same look */
+#moreMetrics.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 6px;
+}
+#moreMetrics .metric {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-left: 8px solid var(--band-color, #e2e8f0);
+  border-radius: 14px;
+  padding: 12px 12px 10px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+#moreMetrics .metric .metric__value {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  color: var(--band-color, #334155);
+}
+#moreMetrics .metric .metric__label {
+  margin-top: 4px;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.2;
+  position: static;
+  padding-right: 0;
+}
+#moreMetrics .metric .info {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 1;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid currentColor;
+  background: #fff;
+  color: #64748b;
+}
+#moreMetrics > .metric[hidden] {
+  display: none;
+}
+.btn.linklike.small {
+  background: transparent;
+  border: none;
+  color: #2563eb;
+  padding: 6px 0;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.btn.linklike.small:hover {
+  color: #1d4ed8;
+}
+
+/* ======================================================================== */
+
+/* === css/components/ads.css === */
+/* ==========================================================================
+   FILE: css/components/ads.css
+   ROLE: Ad slot placeholders
+   OWNS: .ad*
+   NO-GO: No layout or tiles
+   ========================================================================== */
+
+/* Mobile ad slot reserved height (prevents layout shift) */
+.ad.ad--mobile {
+  display: block;
+  width: 100%;
+  min-height: 50px; /* 320x50 */
+  margin: 10px 0 8px;
+}
+.ad.ad--mobile .ad__placeholder {
+  height: 50px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #64748b;
+  background: #f8fafc;
+}
+
+/* Hide the mobile slot on wider screens (you’ll use side placements later) */
+@media (min-width: 768px) {
+  .ad.ad--mobile {
+    display: none;
+  }
+}

@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="css/components/alt-feed.css" />
     <link rel="stylesheet" href="css/components/feed-prices.css" />
     <link rel="stylesheet" href="css/components/results.css" />
-    <link rel="stylesheet" href="css/components/metric-bands.css" />
     <link rel="stylesheet" href="css/components/help.css" />
     <link rel="stylesheet" href="css/components/ads.css" />
     <link rel="stylesheet" href="css/components/density.css" />
@@ -20,6 +19,10 @@
     <link rel="stylesheet" href="css/components/layout.css" />
     <link rel="stylesheet" href="css/components/forms.css" />
     <link rel="stylesheet" href="css/components/units.css" />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/components/results-clean.css" />
+
+    >
   </head>
 
   <body>
@@ -198,7 +201,7 @@
 
           <div class="actions">
             <button type="button" id="btnCalc" class="btn primary">
-              Calculate Chick-n-ficiency
+              Cluckulate Chick 'n ficiency
             </button>
           </div>
         </form>
@@ -215,13 +218,14 @@
         <!-- Results -->
         <div id="results" class="results" data-help="on" hidden>
           <div id="printable" class="printable">
-            <h3>Calculation Summary</h3>
+            <h3>Cluck-ulation Evaluation</h3>
+            <p class="results-sub">Your flock’s performance breakdown</p>
             <div id="inputSummary" class="kv"></div>
           </div>
 
-          <!-- Default tiles (your 6 can live here; you can rearrange later) -->
           <!-- Default tiles (exactly 6) -->
-          <div class="grid">
+          <!-- Core tiles (4) -->
+          <div class="grid" id="metricsGrid">
             <!-- 1) FCR -->
             <div class="metric" id="tileFcr">
               <div class="metric__value" id="fcrValue">—</div>
@@ -238,7 +242,7 @@
               </div>
             </div>
 
-            <!-- 2) Cost per egg (baseline) -->
+            <!-- 2) Cost per egg -->
             <div class="metric" id="tileCostPerEgg">
               <div class="metric__value" id="costPerEgg">—</div>
               <div class="metric__label">
@@ -254,7 +258,7 @@
               </div>
             </div>
 
-            <!-- 3) Feed savings (only meaningful if Alt feed is enabled) -->
+            <!-- 3) Feed savings (shown only if alt feed is on) -->
             <div class="metric" id="tileFeedSavings">
               <div class="metric__value" id="feedSavings">—</div>
               <div class="metric__label">
@@ -270,7 +274,30 @@
               </div>
             </div>
 
-            <!-- 4) Cost per dozen -->
+            <!-- 4) Performance -->
+            <div class="metric" id="tilePerf">
+              <div class="metric__value" id="rating">—</div>
+              <div class="metric__label">
+                Performance
+                <button
+                  type="button"
+                  class="info"
+                  data-help-key="performance"
+                  aria-label="About performance"
+                >
+                  i
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Toggle + More tiles -->
+          <button type="button" id="toggleMore" class="btn linklike small">
+            More details ▾
+          </button>
+
+          <div id="moreMetrics" class="grid" hidden>
+            <!-- Cost per dozen -->
             <div class="metric" id="tileCostPerDozen">
               <div class="metric__value" id="costPerDozen">—</div>
               <div class="metric__label">
@@ -286,7 +313,7 @@
               </div>
             </div>
 
-            <!-- 5) Lay rate -->
+            <!-- Lay rate -->
             <div class="metric" id="tileLayRate">
               <div class="metric__value" id="layRate">—</div>
               <div class="metric__label">
@@ -302,21 +329,7 @@
               </div>
             </div>
 
-            <!-- 6) Performance (mirrors FCR band) -->
-            <div class="metric" id="tilePerformance">
-              <div class="metric__value" id="rating">—</div>
-              <div class="metric__label">
-                Performance
-                <button
-                  type="button"
-                  class="info"
-                  data-help-key="fcr"
-                  aria-label="About performance"
-                >
-                  i
-                </button>
-              </div>
-            </div>
+            <!-- (Paste any other extra tiles you had here) -->
           </div>
 
           <p class="session-note" id="sessionNote" hidden></p>
