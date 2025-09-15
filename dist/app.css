@@ -1,24 +1,7 @@
-/* build: dist/app.css */
+/* build: dist/app.css (Color Batch 0) */
 
 /* === styles.css === */
-/* ==========================================================================
-   FILE: styles.css
-   ROLE: Component styles
-   OWNS: (unspecified)
-   NO-GO: Keep scope tight
-   ========================================================================== */
 
-:root {
-  --bg: #f7fbf7;
-  --card: #fff;
-  --ink: #223;
-  --muted: #666;
-  --brand: #2e7d32;
-  --brand-ink: #fff;
-  --border: #e6ece6;
-  --warn: #b45309;
-  --ok: #0b7a0b;
-}
 
 * {
   box-sizing: border-box;
@@ -346,23 +329,22 @@ textarea:focus {
 }
 
 /* === css/theme.css === */
-/* ==========================================================================
-   FILE: css/theme.css
-   ROLE: Global design tokens (colors, spacing, radii, shadows, type scale)
-   OWNS: CSS variables in :root
-   NO-GO: No component styling here
-   ========================================================================== */
-
 :root {
-  /* Chicken colors */
+  --bg: #FFFCF7;
+  --card: #FFFFFF;
+  --ink: #1F2937;
+  --muted: #64748B;
+  --brand: #2E7D32;
+  --brand-ink: #FFFFFF;
+  --border: #E7E2D9;
+  --warn: #B45309;
+  --ok: #15803D;
   --rooster-red: #c41e3a;
   --hen-brown: #8b4513;
   --chick-yellow: #ffd700;
   --feather-black: #2f1b14;
   --egg-cream: #f5f5dc;
   --copper-orange: #cd7f32;
-
-  /* Farmstead accents */
   --barn-red: #b22222;
   --weathered-wood: #8b7355;
   --hay-gold: #daa520;
@@ -372,21 +354,19 @@ textarea:focus {
   --earth-brown: #964b00;
   --sunset-orange: #ff8c69;
   --corn-yellow: #ffde00;
-
-  /* Neutral + UI */
   --tile-bg: #ffffff;
-  --tile-border: #e5e7eb; /* slate-200 */
+  --tile-border: #e5e7eb;
   --tile-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 6px 16px rgba(15, 23, 42, 0.06);
+  --space-1: 6px;
+  --space-2: 10px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --font-base: 14px;
+  --font-label: 13px;
+  --font-metric: 18px;
 }
 
 /* === css/components/layout.css === */
-/* ==========================================================================
-   FILE: css/components/layout.css
-   ROLE: Page shell and container widths/padding
-   OWNS: .container, .wrap
-   NO-GO: No forms or tiles
-   ========================================================================== */
-
 /* Center column hard-cap + sane page padding (apply to both .container and legacy .wrap) */
 .container,
 .wrap {
@@ -404,13 +384,6 @@ textarea:focus {
 }
 
 /* === css/components/header.css === */
-/* ==========================================================================
-   FILE: css/components/header.css
-   ROLE: Site header styles (title, slogan, badge)
-   OWNS: .site-header, .slogan, .badge
-   NO-GO: No forms or tiles
-   ========================================================================== */
-
 /* Slogan + badge styles */
 .slogan {
   margin: 4px 0 0;
@@ -460,13 +433,6 @@ textarea:focus {
 }
 
 /* === css/components/forms.css === */
-/* ==========================================================================
-   FILE: css/components/forms.css
-   ROLE: Form controls and grids
-   OWNS: .row (form grid), .field, inputs/selects/areas
-   NO-GO: No result tiles or header
-   ========================================================================== */
-
 /* Form layout that never overflows the 700px container */
 
 /* 1) Responsive rows: auto-fit as many columns as fit, then wrap */
@@ -548,23 +514,8 @@ textarea:focus {
 }
 
 /* === css/components/density.css === */
-/* ==========================================================================
-   FILE: css/components/density.css
-   ROLE: Compact scale + actions/post-actions layout (results area)
-   OWNS: .actions, .post-actions, compact font/spacing scale
-   NO-GO: Do not style form controls
-   ========================================================================== */
-
 /* Global compact scale: ~12% smaller fonts, ~20% tighter gaps */
-:root {
-  --font-base: 14px; /* was 16 */
-  --font-label: 13px;
-  --font-metric: 18px; /* values */
-  --space-1: 6px;
-  --space-2: 10px;
-  --space-3: 12px;
-  --space-4: 16px;
-}
+:root {}
 
 html,
 body {
@@ -644,6 +595,7 @@ h3 {
 .post-actions {
   display: grid;
   gap: var(--space-2);
+  margin-top: var(--space-3);
   grid-template-columns: repeat(2, 1fr); /* desktop/tablet: 2 equal buttons */
 }
 .post-actions .btn {
@@ -676,13 +628,6 @@ h3 {
 }
 
 /* === css/components/units.css === */
-/* ==========================================================================
-   FILE: css/components/units.css
-   ROLE: Units switch control
-   OWNS: .units-switch*
-   NO-GO: No forms grid or tiles
-   ========================================================================== */
-
 .card-title-bar {
   display: flex;
   align-items: center;
@@ -730,13 +675,6 @@ h3 {
 }
 
 /* === css/components/help.css === */
-/* ==========================================================================
-   FILE: css/components/help.css
-   ROLE: Help/info button and popover
-   OWNS: .info, #helpPopover, results scoping
-   NO-GO: No base tile visuals
-   ========================================================================== */
-
 /* ========== Component: Help / info buttons ========== */
 .info {
   display: inline-flex;
@@ -834,13 +772,6 @@ h3 {
 }
 
 /* === css/components/feed-prices.css === */
-/* ==========================================================================
-   FILE: css/components/feed-prices.css
-   ROLE: Feed prices sub-form layout
-   OWNS: .feed-prices*
-   NO-GO: No global grids/tiles
-   ========================================================================== */
-
 /* ========== Component: Feed prices ========== */
 .feed-prices {
   --gap: 12px;
@@ -879,13 +810,6 @@ h3 {
 } /* subtle contrast */
 
 /* === css/components/alt-feed.css === */
-/* ==========================================================================
-   FILE: css/components/alt-feed.css
-   ROLE: Alternative feed nested form
-   OWNS: .alt-feed*
-   NO-GO: No global grids/tiles
-   ========================================================================== */
-
 /* ========== Component: Alt feed ===========================================
 Knobs:
   --alt-gap: spacing between fields
@@ -928,13 +852,6 @@ Knobs:
 }
 
 /* === css/components/results.css === */
-/* ==========================================================================
-   FILE: css/components/results.css
-   ROLE: Results summary key/value layout
-   OWNS: #results .kv, .post-actions (legacy helpers)
-   NO-GO: No tile visuals
-   ========================================================================== */
-
 /* ========== Component: Results / Summary ========== */
 #results .kv {
   display: grid;
@@ -963,33 +880,9 @@ Knobs:
   }
 }
 
-/* post-results buttons */
-.post-actions {
-  margin-top: 12px;
-  display: flex;
-  gap: 10px;
-}
-.post-actions .btn {
-  min-width: 160px;
-}
-@media (max-width: 720px) {
-  .post-actions {
-    flex-direction: column;
-  }
-  .post-actions .btn.block,
-  #btnCalc {
-    width: 100%;
-  }
-}
+/* post-results buttons moved to css/components/density.css (owner) */
 
 /* === css/components/results-clean.css === */
-/* ==========================================================================
-   FILE: css/components/results-clean.css
-   ROLE: KPI tiles grid + tile internals
-   OWNS: #metricsGrid, #moreMetrics, .metric, .metric__value, .metric__label, .info pin
-   NO-GO: No form or header styles
-   ========================================================================== */
-
 /* === Clean, conflict-free styling scoped to the results grid ============== */
 
 /* Base grid (2-up on mobile by design; your grid HTML is #metricsGrid) */
@@ -1145,13 +1038,6 @@ Knobs:
 /* ======================================================================== */
 
 /* === css/components/ads.css === */
-/* ==========================================================================
-   FILE: css/components/ads.css
-   ROLE: Ad slot placeholders
-   OWNS: .ad*
-   NO-GO: No layout or tiles
-   ========================================================================== */
-
 /* Mobile ad slot reserved height (prevents layout shift) */
 .ad.ad--mobile {
   display: block;

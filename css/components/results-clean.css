@@ -1,10 +1,3 @@
-/* ==========================================================================
-   FILE: css/components/results-clean.css
-   ROLE: KPI tiles grid + tile internals
-   OWNS: #metricsGrid, #moreMetrics, .metric, .metric__value, .metric__label, .info pin
-   NO-GO: No form or header styles
-   ========================================================================== */
-
 /* === Clean, conflict-free styling scoped to the results grid ============== */
 
 /* Base grid (2-up on mobile by design; your grid HTML is #metricsGrid) */

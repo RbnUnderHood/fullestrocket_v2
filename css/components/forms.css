@@ -1,10 +1,3 @@
-/* ==========================================================================
-   FILE: css/components/forms.css
-   ROLE: Form controls and grids
-   OWNS: .row (form grid), .field, inputs/selects/areas
-   NO-GO: No result tiles or header
-   ========================================================================== */
-
 /* Form layout that never overflows the 700px container */
 
 /* 1) Responsive rows: auto-fit as many columns as fit, then wrap */

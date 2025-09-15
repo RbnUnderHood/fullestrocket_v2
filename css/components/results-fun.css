@@ -1,10 +1,3 @@
-/* ==========================================================================
-   FILE: css/components/results-fun.css
-   ROLE: Optional fun tile theme (tilted cards)
-   OWNS: .fun-grid, #metricsGrid.metric-grid-scope
-   NO-GO: No forms or header
-   ========================================================================== */
-
 /* Only affects results when the parent has .fun-grid */
 #metricsGrid.metric-grid-scope .metric {
   position: relative;
@@ -48,7 +41,7 @@
   }
 }
 
-/* Performance bands → palette mapping */
+/* Performance bands — palette mapping */
 .fun-grid .metric.band-excellent {
   --band-color: var(--sky-blue);
 }
@@ -137,3 +130,4 @@
 }
 
 /* ===================================================================== */
+

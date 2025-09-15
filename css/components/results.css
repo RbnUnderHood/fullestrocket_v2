@@ -1,10 +1,3 @@
-/* ==========================================================================
-   FILE: css/components/results.css
-   ROLE: Results summary key/value layout
-   OWNS: #results .kv, .post-actions (legacy helpers)
-   NO-GO: No tile visuals
-   ========================================================================== */
-
 /* ========== Component: Results / Summary ========== */
 #results .kv {
   display: grid;
@@ -33,21 +26,4 @@
   }
 }
 
-/* post-results buttons */
-.post-actions {
-  margin-top: 12px;
-  display: flex;
-  gap: 10px;
-}
-.post-actions .btn {
-  min-width: 160px;
-}
-@media (max-width: 720px) {
-  .post-actions {
-    flex-direction: column;
-  }
-  .post-actions .btn.block,
-  #btnCalc {
-    width: 100%;
-  }
-}
+/* post-results buttons moved to css/components/density.css (owner) */

@@ -1,21 +1,4 @@
-/* ==========================================================================
-   FILE: styles.css
-   ROLE: Component styles
-   OWNS: (unspecified)
-   NO-GO: Keep scope tight
-   ========================================================================== */
 
-:root {
-  --bg: #f7fbf7;
-  --card: #fff;
-  --ink: #223;
-  --muted: #666;
-  --brand: #2e7d32;
-  --brand-ink: #fff;
-  --border: #e6ece6;
-  --warn: #b45309;
-  --ok: #0b7a0b;
-}
 
 * {
   box-sizing: border-box;

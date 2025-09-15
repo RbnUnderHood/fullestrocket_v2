@@ -1,13 +1,5 @@
 /* build: dist/app.css */
-
 /* === styles.css === */
-/* ==========================================================================
-   FILE: styles.css
-   ROLE: Component styles
-   OWNS: (unspecified)
-   NO-GO: Keep scope tight
-   ========================================================================== */
-
 :root {
   --bg: #f7fbf7;
   --card: #fff;
@@ -344,15 +336,8 @@ textarea:focus {
 .more-metrics .grid--more {
   margin-top: 8px;
 }
-
-/* === css/theme.css === */
-/* ==========================================================================
-   FILE: css/theme.css
-   ROLE: Global design tokens (colors, spacing, radii, shadows, type scale)
-   OWNS: CSS variables in :root
-   NO-GO: No component styling here
-   ========================================================================== */
-
+ 
+/* === css/theme.css === */ 
 :root {
   /* Chicken colors */
   --rooster-red: #c41e3a;
@@ -377,16 +362,20 @@ textarea:focus {
   --tile-bg: #ffffff;
   --tile-border: #e5e7eb; /* slate-200 */
   --tile-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 6px 16px rgba(15, 23, 42, 0.06);
+
+  /* Spacing scale (centralized) */
+  --space-1: 6px;
+  --space-2: 10px;
+  --space-3: 12px;
+  --space-4: 16px;
+
+  /* Type scale (centralized) */
+  --font-base: 14px; /* base HTML/body font size */
+  --font-label: 13px; /* labels, small text */
+  --font-metric: 18px; /* metric values */
 }
-
-/* === css/components/layout.css === */
-/* ==========================================================================
-   FILE: css/components/layout.css
-   ROLE: Page shell and container widths/padding
-   OWNS: .container, .wrap
-   NO-GO: No forms or tiles
-   ========================================================================== */
-
+ 
+/* === css/components/layout.css === */ 
 /* Center column hard-cap + sane page padding (apply to both .container and legacy .wrap) */
 .container,
 .wrap {
@@ -402,15 +391,8 @@ textarea:focus {
 .site-footer {
   padding: 8px 0; /* remove side padding here; container will handle it */
 }
-
-/* === css/components/header.css === */
-/* ==========================================================================
-   FILE: css/components/header.css
-   ROLE: Site header styles (title, slogan, badge)
-   OWNS: .site-header, .slogan, .badge
-   NO-GO: No forms or tiles
-   ========================================================================== */
-
+ 
+/* === css/components/header.css === */ 
 /* Slogan + badge styles */
 .slogan {
   margin: 4px 0 0;
@@ -458,15 +440,8 @@ textarea:focus {
     font-size: 11px;
   }
 }
-
-/* === css/components/forms.css === */
-/* ==========================================================================
-   FILE: css/components/forms.css
-   ROLE: Form controls and grids
-   OWNS: .row (form grid), .field, inputs/selects/areas
-   NO-GO: No result tiles or header
-   ========================================================================== */
-
+ 
+/* === css/components/forms.css === */ 
 /* Form layout that never overflows the 700px container */
 
 /* 1) Responsive rows: auto-fit as many columns as fit, then wrap */
@@ -546,25 +521,10 @@ textarea:focus {
     gap: 8px;
   }
 }
-
-/* === css/components/density.css === */
-/* ==========================================================================
-   FILE: css/components/density.css
-   ROLE: Compact scale + actions/post-actions layout (results area)
-   OWNS: .actions, .post-actions, compact font/spacing scale
-   NO-GO: Do not style form controls
-   ========================================================================== */
-
+ 
+/* === css/components/density.css === */ 
 /* Global compact scale: ~12% smaller fonts, ~20% tighter gaps */
-:root {
-  --font-base: 14px; /* was 16 */
-  --font-label: 13px;
-  --font-metric: 18px; /* values */
-  --space-1: 6px;
-  --space-2: 10px;
-  --space-3: 12px;
-  --space-4: 16px;
-}
+:root {}
 
 html,
 body {
@@ -644,6 +604,7 @@ h3 {
 .post-actions {
   display: grid;
   gap: var(--space-2);
+  margin-top: var(--space-3);
   grid-template-columns: repeat(2, 1fr); /* desktop/tablet: 2 equal buttons */
 }
 .post-actions .btn {
@@ -674,15 +635,8 @@ h3 {
 .grid > .metric[hidden] {
   display: none;
 }
-
-/* === css/components/units.css === */
-/* ==========================================================================
-   FILE: css/components/units.css
-   ROLE: Units switch control
-   OWNS: .units-switch*
-   NO-GO: No forms grid or tiles
-   ========================================================================== */
-
+ 
+/* === css/components/units.css === */ 
 .card-title-bar {
   display: flex;
   align-items: center;
@@ -728,15 +682,8 @@ h3 {
     padding: 6px 8px;
   }
 }
-
-/* === css/components/help.css === */
-/* ==========================================================================
-   FILE: css/components/help.css
-   ROLE: Help/info button and popover
-   OWNS: .info, #helpPopover, results scoping
-   NO-GO: No base tile visuals
-   ========================================================================== */
-
+ 
+/* === css/components/help.css === */ 
 /* ========== Component: Help / info buttons ========== */
 .info {
   display: inline-flex;
@@ -832,15 +779,8 @@ h3 {
     right: 6px;
   }
 }
-
-/* === css/components/feed-prices.css === */
-/* ==========================================================================
-   FILE: css/components/feed-prices.css
-   ROLE: Feed prices sub-form layout
-   OWNS: .feed-prices*
-   NO-GO: No global grids/tiles
-   ========================================================================== */
-
+ 
+/* === css/components/feed-prices.css === */ 
 /* ========== Component: Feed prices ========== */
 .feed-prices {
   --gap: 12px;
@@ -877,15 +817,8 @@ h3 {
 .feed-prices .alt-feed .alt-box {
   background: #f6fff6;
 } /* subtle contrast */
-
-/* === css/components/alt-feed.css === */
-/* ==========================================================================
-   FILE: css/components/alt-feed.css
-   ROLE: Alternative feed nested form
-   OWNS: .alt-feed*
-   NO-GO: No global grids/tiles
-   ========================================================================== */
-
+ 
+/* === css/components/alt-feed.css === */ 
 /* ========== Component: Alt feed ===========================================
 Knobs:
   --alt-gap: spacing between fields
@@ -926,15 +859,8 @@ Knobs:
     min-width: 0;
   }
 }
-
-/* === css/components/results.css === */
-/* ==========================================================================
-   FILE: css/components/results.css
-   ROLE: Results summary key/value layout
-   OWNS: #results .kv, .post-actions (legacy helpers)
-   NO-GO: No tile visuals
-   ========================================================================== */
-
+ 
+/* === css/components/results.css === */ 
 /* ========== Component: Results / Summary ========== */
 #results .kv {
   display: grid;
@@ -963,33 +889,9 @@ Knobs:
   }
 }
 
-/* post-results buttons */
-.post-actions {
-  margin-top: 12px;
-  display: flex;
-  gap: 10px;
-}
-.post-actions .btn {
-  min-width: 160px;
-}
-@media (max-width: 720px) {
-  .post-actions {
-    flex-direction: column;
-  }
-  .post-actions .btn.block,
-  #btnCalc {
-    width: 100%;
-  }
-}
-
-/* === css/components/results-clean.css === */
-/* ==========================================================================
-   FILE: css/components/results-clean.css
-   ROLE: KPI tiles grid + tile internals
-   OWNS: #metricsGrid, #moreMetrics, .metric, .metric__value, .metric__label, .info pin
-   NO-GO: No form or header styles
-   ========================================================================== */
-
+/* post-results buttons moved to css/components/density.css (owner) */
+ 
+/* === css/components/results-clean.css === */ 
 /* === Clean, conflict-free styling scoped to the results grid ============== */
 
 /* Base grid (2-up on mobile by design; your grid HTML is #metricsGrid) */
@@ -1143,15 +1045,8 @@ Knobs:
 }
 
 /* ======================================================================== */
-
-/* === css/components/ads.css === */
-/* ==========================================================================
-   FILE: css/components/ads.css
-   ROLE: Ad slot placeholders
-   OWNS: .ad*
-   NO-GO: No layout or tiles
-   ========================================================================== */
-
+ 
+/* === css/components/ads.css === */ 
 /* Mobile ad slot reserved height (prevents layout shift) */
 .ad.ad--mobile {
   display: block;
