@@ -1,0 +1,8 @@
+--- forms.css (before)+++ forms.css (after)@@ -54,7 +54,7 @@   height: 16px;
+   min-width: 16px;
+   min-height: 16px;
+-  accent-color: #16a34a; /* native green check */
++  accent-color: var(--brand); /* native green check */
+ }
+ 
+ /* Indent the hint that follows a toggle label (but only that case) */

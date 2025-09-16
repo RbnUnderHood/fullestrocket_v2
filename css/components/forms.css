@@ -54,7 +54,7 @@
   height: 16px;
   min-width: 16px;
   min-height: 16px;
-  accent-color: #16a34a; /* native green check */
+  accent-color: var(--ok); /* native green check */
 }
 
 /* Indent the hint that follows a toggle label (but only that case) */
@@ -76,4 +76,63 @@
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
+}
+/* Settings button + panel */
+.settings {
+  display: flex;
+  justify-content: flex-end;
+  margin: var(--space-3) 0 var(--space-2);
+}
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--ink);
+}
+.icon-btn:hover {
+  box-shadow: 0 1px 0 var(--border);
+}
+.settings-panel {
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+}
+
+/* Inline Alt feed toggle under avgEggWeight */
+#altInline {
+  display: block;
+  margin-top: 6px;
+}
+.toggle-label.small {
+  font-size: var(--font-label, 13px);
+  color: var(--muted);
+}
+/* Prices + Alt feed layout */
+#pricesBox .row {
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+@media (max-width: 560px) {
+  #pricesBox .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+#altBox {
+  margin-top: var(--space-2);
+}
+
+/* Small subhead inside forms */
+.form-subhead {
+  margin: var(--space-2) 0 var(--space-1);
+  font-weight: 600;
+  color: var(--muted);
+  font-size: var(--font-label, 13px);
 }

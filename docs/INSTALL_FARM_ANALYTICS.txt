@@ -1,0 +1,63 @@
+FARM ANALYTICS PATCH — INSTALL STEPS (tiny!)
+
+1) Copy files into your project (keep these paths):
+   - css/components/analytics.css
+   - js/analytics.js
+
+2) Link CSS (dev mode):
+   Open index.html, press Ctrl+F and search for:
+     css/components/results.css
+   Add this line directly beneath the other component links:
+     <link rel="stylesheet" href="css/components/analytics.css" />
+
+3) Add the Farm Analytics HTML block:
+   In index.html, press Ctrl+F and search for the text:
+     Cluck-ulation Evaluation
+   Place the following block *ABOVE* that heading:
+
+   <!-- Farm Analytics (compact summary at-a-glance) -->
+   <section id="farmAnalytics" class="analytics">
+     <div class="a-card a-feed">
+       <div class="a-label">🐔 FEED EFFICIENCY</div>
+       <div class="a-value" id="aFcr">—</div>
+       <div class="a-thermo" aria-hidden="true"><span></span></div>
+       <div class="a-note" id="aFcrNote">—</div>
+     </div>
+     <div class="a-card a-laying">
+       <div class="a-label">🥚 LAYING POWER</div>
+       <div class="a-value" id="aLay">—</div>
+       <div class="a-egg" aria-hidden="true"></div>
+       <div class="a-note" id="aLayNote">—</div>
+     </div>
+     <div class="a-card a-econ">
+       <div class="a-label">💰 EGG ECONOMICS</div>
+       <div class="a-value" id="aCostEgg">—</div>
+       <div class="a-coins" aria-hidden="true"></div>
+       <div class="a-note" id="aCostNote">—</div>
+     </div>
+   </section>
+
+4) Collapse the big inputs/breakdown area:
+   Still in index.html:
+   - Find this marker:
+       <h2>Cluck-ulation Evaluation</h2>  (or very similar)
+   - Insert this line *ABOVE* that heading:
+       <details class="eval" id="evalSummary"><summary>Cluck-ulation Evaluation (inputs)</summary>
+   - Now press Ctrl+F and search for:
+       id="metricsGrid"
+     Insert this single line *ABOVE* the element that has id="metricsGrid":
+       </details>
+
+   Result: the entire inputs/breakdown sits inside a click-to-open <details> element,
+   collapsed by default.
+
+5) Load the JavaScript:
+   In index.html, press Ctrl+F and search for:
+     js/ui.js
+   Add this line directly *under* it:
+     <script src="js/analytics.js" defer></script>
+
+6) Test:
+   - Hard refresh the browser (Ctrl/Cmd+Shift+R).
+   - Click "Cluckulate ..." once; the analytics cards should show live numbers.
+   - The long inputs/breakdown is now collapsed under a summary line.

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -8,19 +8,19 @@
       name="description"
       content="Free poultry FCR calculator. Compute feed conversion ratio, feed per egg, and cost per egg. Export your session as CSV. No login."
     />
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="css/components/alt-feed.css" />
-    <link rel="stylesheet" href="css/components/feed-prices.css" />
-    <link rel="stylesheet" href="css/components/results.css" />
-    <link rel="stylesheet" href="css/components/help.css" />
-    <link rel="stylesheet" href="css/components/ads.css" />
-    <link rel="stylesheet" href="css/components/density.css" />
+    <!-- Single-path CSS (simple, no bundle) -->
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="css/components/header.css" />
     <link rel="stylesheet" href="css/components/layout.css" />
     <link rel="stylesheet" href="css/components/forms.css" />
+    <link rel="stylesheet" href="css/components/results.css" />
     <link rel="stylesheet" href="css/components/units.css" />
-    <link rel="stylesheet" href="css/theme.css" />
-    <link rel="stylesheet" href="css/components/results-clean.css" />
+    <link rel="stylesheet" href="css/components/help.css" />
+    <link rel="stylesheet" href="css/components/ads.css" />
+    <link rel="stylesheet" href="css/components/alt-feed.css" />
+    <link rel="stylesheet" href="css/components/density.css" />
+    <link rel="stylesheet" href="css/components/analytics.css" />
   </head>
 
   <body>
@@ -41,16 +41,6 @@
       <section class="card">
         <div class="card-title-bar">
           <h2 class="card-title">Daily / Average Calculation</h2>
-          <div class="units-switch" role="radiogroup" aria-label="Units">
-            <label class="seg">
-              <input type="radio" name="units" value="imperial" checked />
-              <span>Imperial</span>
-            </label>
-            <label class="seg">
-              <input type="radio" name="units" value="metric" />
-              <span>Metric</span>
-            </label>
-          </div>
         </div>
 
         <form id="calcForm" novalidate>
@@ -114,6 +104,7 @@
                       placeholder="e.g., 50 lb"
                     />
                   </div>
+
                   <div class="field">
                     <label for="bagPrice">Price per bag</label>
                     <input
@@ -126,56 +117,41 @@
                   </div>
                 </div>
 
-                <!-- Nested Alternative feed module -->
-                <section class="alt-feed">
-                  <div class="field">
-                    <label class="toggle-label">
-                      <input type="checkbox" id="altEnabled" />
-                      Alternative feed (optional)
-                    </label>
-                  </div>
+                <!-- Alt feed (always part of Prices; no toggle) -->
+                <p class="form-subhead">Alternative feed (optional)</p>
 
-                  <div id="altBox" class="alt-box" hidden>
-                    <div class="row">
-                      <div class="field">
-                        <label for="altAmount">Alt feed amount</label>
-                        <input
-                          id="altAmount"
-                          type="number"
-                          min="0"
-                          step="0.01"
-                          placeholder="e.g., 2.5 lb"
-                        />
-                      </div>
-                      <div class="field">
-                        <label for="altPricePerUnit"
-                          >Alt feed price (per unit)</label
-                        >
-                        <input
-                          id="altPricePerUnit"
-                          type="number"
-                          min="0"
-                          step="0.01"
-                          placeholder="$ per lb"
-                        />
-                      </div>
-                    </div>
-
+                <div id="altBox" class="alt-box">
+                  <div class="row">
                     <div class="field">
-                      <label for="altName">Alt feed name</label>
-                      <input
-                        id="altName"
-                        type="text"
-                        placeholder="e.g., alfalfa meal / kitchen greens"
-                      />
-                      <small class="unit-note"
-                        >Tip: Keep the same alternative feed & dose for at least
-                        7 days to compare reliably.</small
+                      <label for="altAmount">Alt feed amount</label>
+                      <input id="altAmount" type="number" min="0" step="0.01" />
+                    </div>
+                    <div class="field">
+                      <label for="altPricePerUnit"
+                        >Alt feed price (per unit)</label
                       >
+                      <input
+                        id="altPricePerUnit"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                      />
                     </div>
                   </div>
-                </section>
-                <!-- /Nested Alternative feed -->
+
+                  <div class="field">
+                    <label for="altName">Alt feed name</label>
+                    <input
+                      id="altName"
+                      type="text"
+                      placeholder="e.g., alfalfa meal / kitchen greens"
+                    />
+                    <small class="unit-note">
+                      Tip: Keep the same alternative feed &amp; dose for at
+                      least 7 days to compare reliably.
+                    </small>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
@@ -216,123 +192,153 @@
         <!-- Results -->
         <div id="results" class="results" data-help="on" hidden>
           <div id="printable" class="printable">
-            <h3>Cluck-ulation Evaluation</h3>
-            <p class="results-sub">Your flock’s performance breakdown</p>
-            <div id="inputSummary" class="kv"></div>
+            <!-- Farm Analytics (compact summary at-a-glance) -->
+            <section id="farmAnalytics" class="analytics">
+              <div class="a-card a-feed">
+                <div class="a-label">🐔 HENNPUT vs. EGGPUT</div>
+                <div class="a-value" id="aFcr">—</div>
+                <div class="a-thermo" aria-hidden="true"><span></span></div>
+                <div class="a-note" id="aFcrNote">—</div>
+              </div>
+
+              <div class="a-card a-laying">
+                <div class="a-label">🥚 LAYING POWER</div>
+                <div class="a-value" id="aLay">—</div>
+                <div class="a-egg" aria-hidden="true"></div>
+                <div class="a-note" id="aLayNote">—</div>
+              </div>
+
+              <div class="a-card a-econ">
+                <div class="a-label">💰 EGG-O-NOMICS</div>
+                <div class="a-value" id="aCostEgg">—</div>
+                <div class="a-coins" aria-hidden="true"></div>
+                <div class="a-note" id="aCostNote">—</div>
+              </div>
+            </section>
+            <details class="eval" id="evalSummary">
+              <summary>Cluck-ulation Evaluation (inputs)</summary>
+
+              <h3>Cluck-ulation Evaluation</h3>
+              <p class="results-sub">Your flock’s performance breakdown</p>
+              <div id="inputSummary" class="kv"></div>
+            </details>
+
+            <!-- Default tiles (exactly 6) -->
+            <!-- Core tiles (4) -->
+            <div class="grid" id="metricsGrid">
+              <!-- 1) FCR -->
+              <div class="metric" id="tileFcr">
+                <div class="metric__value" id="fcrValue">—</div>
+                <div class="metric__label">
+                  FCR (Feed conversion ratio)
+                  <button
+                    type="button"
+                    class="info"
+                    data-help-key="fcr"
+                    aria-label="About FCR"
+                  >
+                    i
+                  </button>
+                </div>
+              </div>
+
+              <!-- 2) Cost per egg -->
+              <div class="metric" id="tileCostPerEgg">
+                <div class="metric__value" id="costPerEgg">—</div>
+                <div class="metric__label">
+                  Cost per egg
+                  <button
+                    type="button"
+                    class="info"
+                    data-help-key="costPerEgg"
+                    aria-label="About cost per egg"
+                  >
+                    i
+                  </button>
+                </div>
+              </div>
+
+              <!-- 3) Feed savings (shown only if alt feed is on) -->
+              <div class="metric" id="tileFeedSavings">
+                <div class="metric__value" id="feedSavings">—</div>
+                <div class="metric__label">
+                  Feed savings (this period)
+                  <button
+                    type="button"
+                    class="info"
+                    data-help-key="feedSavings"
+                    aria-label="About feed savings"
+                  >
+                    i
+                  </button>
+                </div>
+              </div>
+
+              <!-- 4) Performance -->
+              <div class="metric" id="tilePerf">
+                <div class="metric__value" id="rating">—</div>
+                <div class="metric__label">
+                  Performance
+                  <button
+                    type="button"
+                    class="info"
+                    data-help-key="performance"
+                    aria-label="About performance"
+                  >
+                    i
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Toggle + More tiles -->
+            <button type="button" id="toggleMore" class="btn linklike small">
+              More details ▾
+            </button>
+
+            <div id="moreMetrics" class="grid" hidden>
+              <!-- Cost per dozen -->
+              <div class="metric" id="tileCostPerDozen">
+                <div class="metric__value" id="costPerDozen">—</div>
+                <div class="metric__label">
+                  Cost per dozen
+                  <button
+                    type="button"
+                    class="info"
+                    data-help-key="costPerDozen"
+                    aria-label="About cost per dozen"
+                  >
+                    i
+                  </button>
+                </div>
+              </div>
+
+              <!-- Lay rate -->
+              <div class="metric" id="tileLayRate">
+                <div class="metric__value" id="layRate">—</div>
+                <div class="metric__label">
+                  Lay rate (%)
+                  <button
+                    type="button"
+                    class="info"
+                    data-help-key="layRate"
+                    aria-label="About lay rate"
+                  >
+                    i
+                  </button>
+                </div>
+              </div>
+
+              <!-- (Paste any other extra tiles you had here) -->
+            </div>
+
+            <p class="session-note" id="sessionNote" hidden></p>
           </div>
-
-          <!-- Default tiles (exactly 6) -->
-          <!-- Core tiles (4) -->
-          <div class="grid" id="metricsGrid">
-            <!-- 1) FCR -->
-            <div class="metric" id="tileFcr">
-              <div class="metric__value" id="fcrValue">—</div>
-              <div class="metric__label">
-                FCR (Feed conversion ratio)
-                <button
-                  type="button"
-                  class="info"
-                  data-help-key="fcr"
-                  aria-label="About FCR"
-                >
-                  i
-                </button>
-              </div>
-            </div>
-
-            <!-- 2) Cost per egg -->
-            <div class="metric" id="tileCostPerEgg">
-              <div class="metric__value" id="costPerEgg">—</div>
-              <div class="metric__label">
-                Cost per egg
-                <button
-                  type="button"
-                  class="info"
-                  data-help-key="costPerEgg"
-                  aria-label="About cost per egg"
-                >
-                  i
-                </button>
-              </div>
-            </div>
-
-            <!-- 3) Feed savings (shown only if alt feed is on) -->
-            <div class="metric" id="tileFeedSavings">
-              <div class="metric__value" id="feedSavings">—</div>
-              <div class="metric__label">
-                Feed savings (this period)
-                <button
-                  type="button"
-                  class="info"
-                  data-help-key="feedSavings"
-                  aria-label="About feed savings"
-                >
-                  i
-                </button>
-              </div>
-            </div>
-
-            <!-- 4) Performance -->
-            <div class="metric" id="tilePerf">
-              <div class="metric__value" id="rating">—</div>
-              <div class="metric__label">
-                Performance
-                <button
-                  type="button"
-                  class="info"
-                  data-help-key="performance"
-                  aria-label="About performance"
-                >
-                  i
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Toggle + More tiles -->
-          <button type="button" id="toggleMore" class="btn linklike small">
-            More details ▾
-          </button>
-
-          <div id="moreMetrics" class="grid" hidden>
-            <!-- Cost per dozen -->
-            <div class="metric" id="tileCostPerDozen">
-              <div class="metric__value" id="costPerDozen">—</div>
-              <div class="metric__label">
-                Cost per dozen
-                <button
-                  type="button"
-                  class="info"
-                  data-help-key="costPerDozen"
-                  aria-label="About cost per dozen"
-                >
-                  i
-                </button>
-              </div>
-            </div>
-
-            <!-- Lay rate -->
-            <div class="metric" id="tileLayRate">
-              <div class="metric__value" id="layRate">—</div>
-              <div class="metric__label">
-                Lay rate (%)
-                <button
-                  type="button"
-                  class="info"
-                  data-help-key="layRate"
-                  aria-label="About lay rate"
-                >
-                  i
-                </button>
-              </div>
-            </div>
-
-            <!-- (Paste any other extra tiles you had here) -->
-          </div>
-
-          <p class="session-note" id="sessionNote" hidden></p>
+          <!-- /#printable -->
         </div>
+        <!-- /#results -->
       </section>
+
       <div class="post-actions">
         <button type="button" id="btnExportSession" class="btn block">
           Export session CSV
@@ -354,15 +360,92 @@
       </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <small>
-          Free tool. No login. Export any time.
-          <span id="sessionCounter"></span>
-        </small>
+    <div class="container footerbar">
+      <small>
+        Free tool. No login. Export any time.
+        <span id="sessionCounter"></span>
+      </small>
+
+      <!-- Footer settings trigger -->
+      <button
+        type="button"
+        id="btnSettings"
+        class="icon-btn"
+        aria-expanded="false"
+        aria-controls="settingsPanel"
+        aria-label="Open settings"
+      >
+        ⚙️
+      </button>
+    </div>
+
+    <!-- Settings panel lives just below the footer bar -->
+    <div id="settingsPanel" class="settings-panel" hidden>
+      <div class="field">
+        <label class="seg-group-label">Units</label>
+        <div class="units-switch" role="radiogroup" aria-label="Units">
+          <label class="seg">
+            <input type="radio" name="units" value="imperial" />
+            <span>Imperial</span>
+          </label>
+          <label class="seg">
+            <input type="radio" name="units" value="metric" />
+            <span>Metric</span>
+          </label>
+        </div>
       </div>
-    </footer>
+    </div>
 
     <script type="module" src="js/ui.js"></script>
+    <script src="js/analytics.js" defer></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // --- Prefill demo values ---
+        const presets = {
+          flockName: "barn E",
+          birdCount: 22,
+          eggCount: 21,
+          avgEggWeight: 2,
+          feedConsumed: 33,
+          bagWeight: 50,
+          bagPrice: 22.5,
+          altAmount: 2.5,
+          altPricePerUnit: 1.2,
+          altName: "Alfalfa meal",
+        };
+        for (const [k, v] of Object.entries(presets)) {
+          const el = document.getElementById(k);
+          if (el) el.value = v;
+        }
+
+        // Elements
+        const pricesToggle = document.getElementById("pricesEnabled");
+        const pricesBox = document.getElementById("pricesBox");
+
+        // Footer settings (⚙️)
+        const btnSettings = document.getElementById("btnSettings");
+        const settingsPanel = document.getElementById("settingsPanel");
+        function toggleSettings() {
+          const opening = settingsPanel.hasAttribute("hidden");
+          if (opening) settingsPanel.removeAttribute("hidden");
+          else settingsPanel.setAttribute("hidden", "");
+          btnSettings?.setAttribute("aria-expanded", String(opening));
+        }
+        btnSettings?.addEventListener("click", toggleSettings);
+
+        // Prices visibility (Alt feed rides inside it)
+        function refreshPricesUI() {
+          const pricesOn = !!pricesToggle?.checked;
+          if (pricesBox) pricesBox.hidden = !pricesOn;
+        }
+
+        pricesToggle?.addEventListener("change", refreshPricesUI);
+
+        // Defaults for quick testing
+        if (pricesToggle) pricesToggle.checked = true;
+        refreshPricesUI();
+      });
+    </script>
   </body>
 </html>

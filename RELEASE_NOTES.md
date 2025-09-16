@@ -63,3 +63,9 @@ Notes: Manual verification pending; expected no change.
   - Final palette (Farm Fresh vs Field Green) and token values.
   - Export formats (CSV only vs CSV+JSON+pretty text).
   - Whether to ship a desktop sidebar ad container in MVP.
+
+
+## 2025-09-15 21:12:17 — Batch A: Component Colorization (rebuild)
+- Scope: css/components/results-clean.css, css/components/forms.css
+- Replaced hex colors with theme tokens; fixed prior stray suffix issue.
+- Rebuilt dist/app.css.

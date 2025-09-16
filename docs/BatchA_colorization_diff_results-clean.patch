@@ -1,0 +1,106 @@
+--- results-clean.css (before)+++ results-clean.css (after)@@ -11,9 +11,9 @@ /* Card */
+ #metricsGrid .metric {
+   position: relative;
+-  background: #fff;
+-  border: 1px solid #e5e7eb; /* slate-200 */
+-  border-left: 8px solid var(--band-color, #e2e8f0);
++  background: var(--card);
++  border: 1px solid var(--border); /* slate-200 */
++  border-left: 8px solid var(--band-color, var(--border));
+   border-radius: 14px;
+   padding: 12px 12px 10px;
+   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 8px 18px rgba(15, 23, 42, 0.08);
+@@ -23,11 +23,11 @@ #metricsGrid .metric .metric__value {
+   font-weight: 800;
+   letter-spacing: 0.2px;
+-  color: var(--band-color, #334155); /* band color accents the number */
++  color: var(--band-color, var(--muted)); /* band color accents the number */
+ }
+ #metricsGrid .metric .metric__label {
+   margin-top: 4px;
+-  color: #475569; /* slate-600 */
++  color: var(--muted); /* slate-600 */
+   font-size: 12px;
+   line-height: 1.2;
+   padding-right: 26px; /* room for the info button */
+@@ -46,8 +46,8 @@   justify-content: center;
+   border-radius: 9999px;
+   border: 1px solid currentColor;
+-  background: #fff;
+-  color: #64748b; /* slate-500 */
++  background: var(--card);
++  color: var(--muted); /* slate-500 */
+ }
+ 
+ /* Hide tiles when JS sets [hidden] (keeps grid tight) */
+@@ -64,16 +64,16 @@ 
+ /* --- Performance bands (replace/own these; no dependency on old CSS) --- */
+ #metricsGrid .metric.band-excellent {
+-  --band-color: #87ceeb;
++  --band-color: var(--ok);
+ } /* sky blue */
+ #metricsGrid .metric.band-good {
+-  --band-color: #0fd658;
++  --band-color: var(--ok);
+ } /* bright green */
+ #metricsGrid .metric.band-average {
+-  --band-color: #3b8144;
++  --band-color: var(--brand);
+ } /* deep green  */
+ #metricsGrid .metric.band-poor {
+-  --band-color: #c41e3a;
++  --band-color: var(--warn);
+ } /* rooster red */
+ 
+ /* Pin the ⓘ to the top-right of the entire tile (not the label) */
+@@ -99,9 +99,9 @@ }
+ #moreMetrics .metric {
+   position: relative;
+-  background: #fff;
+-  border: 1px solid #e5e7eb;
+-  border-left: 8px solid var(--band-color, #e2e8f0);
++  background: var(--card);
++  border: 1px solid var(--border);
++  border-left: 8px solid var(--band-color, var(--border));
+   border-radius: 14px;
+   padding: 12px 12px 10px;
+   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 8px 18px rgba(15, 23, 42, 0.08);
+@@ -109,11 +109,11 @@ #moreMetrics .metric .metric__value {
+   font-weight: 800;
+   letter-spacing: 0.2px;
+-  color: var(--band-color, #334155);
++  color: var(--band-color, var(--muted));
+ }
+ #moreMetrics .metric .metric__label {
+   margin-top: 4px;
+-  color: #475569;
++  color: var(--muted);
+   font-size: 12px;
+   line-height: 1.2;
+   position: static;
+@@ -131,8 +131,8 @@   justify-content: center;
+   border-radius: 9999px;
+   border: 1px solid currentColor;
+-  background: #fff;
+-  color: #64748b;
++  background: var(--card);
++  color: var(--muted);
+ }
+ #moreMetrics > .metric[hidden] {
+   display: none;
+@@ -140,14 +140,14 @@ .btn.linklike.small {
+   background: transparent;
+   border: none;
+-  color: #2563eb;
++  color: var(--brand);
+   padding: 6px 0;
+   font-size: 13px;
+   text-decoration: underline;
+   cursor: pointer;
+ }
+ .btn.linklike.small:hover {
+-  color: #1d4ed8;
++  color: var(--brand);
+ }
+ 
+ /* ======================================================================== */

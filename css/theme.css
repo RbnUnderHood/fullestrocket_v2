@@ -1,13 +1,17 @@
 :root {
-  --bg: #FFFCF7;
-  --card: #FFFFFF;
-  --ink: #1F2937;
-  --muted: #64748B;
-  --brand: #2E7D32;
-  --brand-ink: #FFFFFF;
-  --border: #E7E2D9;
-  --warn: #B45309;
-  --ok: #15803D;
+  /* Typography (Batch B preview) */
+  --font-base: 16px;
+  --font-label: 13px;
+
+  --bg: #fffcf7;
+  --card: #ffffff;
+  --ink: #1f2937;
+  --muted: #64748b;
+  --brand: #2e7d32;
+  --brand-ink: #ffffff;
+  --border: #e7e2d9;
+  --warn: #b45309;
+  --ok: #15803d;
   --rooster-red: #c41e3a;
   --hen-brown: #8b4513;
   --chick-yellow: #ffd700;
@@ -33,4 +37,13 @@
   --font-base: 14px;
   --font-label: 13px;
   --font-metric: 18px;
+}
+/* === DEBUG BADGE — remove later === */
+:is(header, #appHeader, .site-header) { position: relative; }
+:is(header, #appHeader, .site-header)::after {
+  content: "✅ CSS OK";
+  position: absolute; top: 8px; right: 8px;
+  padding: 4px 8px; font: 700 12px/1 system-ui, sans-serif;
+  background: var(--card); color: var(--ok);
+  border: 1px solid var(--ok); border-radius: 999px; z-index: 9999;
 }

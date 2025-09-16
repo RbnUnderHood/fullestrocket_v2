@@ -1,5 +1,4 @@
-/* build: dist/app.css (Color Batch 0) */
-
+/* build: dist/app.css */
 /* === styles.css === */
 
 
@@ -327,18 +326,18 @@ textarea:focus {
 .more-metrics .grid--more {
   margin-top: 8px;
 }
-
-/* === css/theme.css === */
+ 
+/* === css/theme.css === */ 
 :root {
-  --bg: #FFFCF7;
-  --card: #FFFFFF;
-  --ink: #1F2937;
-  --muted: #64748B;
-  --brand: #2E7D32;
-  --brand-ink: #FFFFFF;
-  --border: #E7E2D9;
-  --warn: #B45309;
-  --ok: #15803D;
+  --bg: #fffcf7;
+  --card: #ffffff;
+  --ink: #1f2937;
+  --muted: #64748b;
+  --brand: #2e7d32;
+  --brand-ink: #ffffff;
+  --border: #e7e2d9;
+  --warn: #b45309;
+  --ok: #15803d;
   --rooster-red: #c41e3a;
   --hen-brown: #8b4513;
   --chick-yellow: #ffd700;
@@ -365,8 +364,25 @@ textarea:focus {
   --font-label: 13px;
   --font-metric: 18px;
 }
-
-/* === css/components/layout.css === */
+/* === DEBUG: remove after test === */
+:is(header, #appHeader, .site-header) {
+  position: relative;
+}
+:is(header, #appHeader, .site-header)::after {
+  content: "✅ CSS OK";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font: 700 14px/1.2 system-ui, sans-serif;
+  background: var(--card);
+  color: var(--ok);
+  border: 1px solid var(--ok);
+  border-radius: 999px;
+  z-index: 9999;
+}
+ 
+/* === css/components/layout.css === */ 
 /* Center column hard-cap + sane page padding (apply to both .container and legacy .wrap) */
 .container,
 .wrap {
@@ -382,8 +398,8 @@ textarea:focus {
 .site-footer {
   padding: 8px 0; /* remove side padding here; container will handle it */
 }
-
-/* === css/components/header.css === */
+ 
+/* === css/components/header.css === */ 
 /* Slogan + badge styles */
 .slogan {
   margin: 4px 0 0;
@@ -431,8 +447,8 @@ textarea:focus {
     font-size: 11px;
   }
 }
-
-/* === css/components/forms.css === */
+ 
+/* === css/components/forms.css === */ 
 /* Form layout that never overflows the 700px container */
 
 /* 1) Responsive rows: auto-fit as many columns as fit, then wrap */
@@ -489,7 +505,7 @@ textarea:focus {
   height: 16px;
   min-width: 16px;
   min-height: 16px;
-  accent-color: #16a34a; /* native green check */
+  accent-color: var(--ok); /* native green check */
 }
 
 /* Indent the hint that follows a toggle label (but only that case) */
@@ -512,8 +528,8 @@ textarea:focus {
     gap: 8px;
   }
 }
-
-/* === css/components/density.css === */
+ 
+/* === css/components/density.css === */ 
 /* Global compact scale: ~12% smaller fonts, ~20% tighter gaps */
 :root {}
 
@@ -626,8 +642,8 @@ h3 {
 .grid > .metric[hidden] {
   display: none;
 }
-
-/* === css/components/units.css === */
+ 
+/* === css/components/units.css === */ 
 .card-title-bar {
   display: flex;
   align-items: center;
@@ -673,8 +689,8 @@ h3 {
     padding: 6px 8px;
   }
 }
-
-/* === css/components/help.css === */
+ 
+/* === css/components/help.css === */ 
 /* ========== Component: Help / info buttons ========== */
 .info {
   display: inline-flex;
@@ -770,8 +786,8 @@ h3 {
     right: 6px;
   }
 }
-
-/* === css/components/feed-prices.css === */
+ 
+/* === css/components/feed-prices.css === */ 
 /* ========== Component: Feed prices ========== */
 .feed-prices {
   --gap: 12px;
@@ -808,8 +824,8 @@ h3 {
 .feed-prices .alt-feed .alt-box {
   background: #f6fff6;
 } /* subtle contrast */
-
-/* === css/components/alt-feed.css === */
+ 
+/* === css/components/alt-feed.css === */ 
 /* ========== Component: Alt feed ===========================================
 Knobs:
   --alt-gap: spacing between fields
@@ -850,8 +866,8 @@ Knobs:
     min-width: 0;
   }
 }
-
-/* === css/components/results.css === */
+ 
+/* === css/components/results.css === */ 
 /* ========== Component: Results / Summary ========== */
 #results .kv {
   display: grid;
@@ -881,8 +897,6 @@ Knobs:
 }
 
 /* post-results buttons moved to css/components/density.css (owner) */
-
-/* === css/components/results-clean.css === */
 /* === Clean, conflict-free styling scoped to the results grid ============== */
 
 /* Base grid (2-up on mobile by design; your grid HTML is #metricsGrid) */
@@ -896,9 +910,9 @@ Knobs:
 /* Card */
 #metricsGrid .metric {
   position: relative;
-  background: #fff;
-  border: 1px solid #e5e7eb; /* slate-200 */
-  border-left: 8px solid var(--band-color, #e2e8f0);
+  background: var(--card);
+  border: 1px solid var(--border); /* slate-200 */
+  border-left: 8px solid var(--band-color, var(--border));
   border-radius: 14px;
   padding: 12px 12px 10px;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 8px 18px rgba(15, 23, 42, 0.08);
@@ -908,11 +922,11 @@ Knobs:
 #metricsGrid .metric .metric__value {
   font-weight: 800;
   letter-spacing: 0.2px;
-  color: var(--band-color, #334155); /* band color accents the number */
+  color: var(--band-color, var(--ink)); /* band color accents the number */
 }
 #metricsGrid .metric .metric__label {
   margin-top: 4px;
-  color: #475569; /* slate-600 */
+  color: var(--muted); /* slate-600 */
   font-size: 12px;
   line-height: 1.2;
   padding-right: 26px; /* room for the info button */
@@ -931,8 +945,8 @@ Knobs:
   justify-content: center;
   border-radius: 9999px;
   border: 1px solid currentColor;
-  background: #fff;
-  color: #64748b; /* slate-500 */
+  background: var(--card);
+  color: var(--muted); /* slate-500 */
 }
 
 /* Hide tiles when JS sets [hidden] (keeps grid tight) */
@@ -949,16 +963,16 @@ Knobs:
 
 /* --- Performance bands (replace/own these; no dependency on old CSS) --- */
 #metricsGrid .metric.band-excellent {
-  --band-color: #87ceeb;
+  --band-color: var(--border);
 } /* sky blue */
 #metricsGrid .metric.band-good {
-  --band-color: #0fd658;
+  --band-color: var(--ok);
 } /* bright green */
 #metricsGrid .metric.band-average {
-  --band-color: #3b8144;
+  --band-color: var(--brand);
 } /* deep green  */
 #metricsGrid .metric.band-poor {
-  --band-color: #c41e3a;
+  --band-color: var(--warn);
 } /* rooster red */
 
 /* Pin the ⓘ to the top-right of the entire tile (not the label) */
@@ -984,9 +998,9 @@ Knobs:
 }
 #moreMetrics .metric {
   position: relative;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-left: 8px solid var(--band-color, #e2e8f0);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 8px solid var(--band-color, var(--border));
   border-radius: 14px;
   padding: 12px 12px 10px;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 8px 18px rgba(15, 23, 42, 0.08);
@@ -994,11 +1008,11 @@ Knobs:
 #moreMetrics .metric .metric__value {
   font-weight: 800;
   letter-spacing: 0.2px;
-  color: var(--band-color, #334155);
+  color: var(--band-color, var(--ink));
 }
 #moreMetrics .metric .metric__label {
   margin-top: 4px;
-  color: #475569;
+  color: var(--muted);
   font-size: 12px;
   line-height: 1.2;
   position: static;
@@ -1016,8 +1030,8 @@ Knobs:
   justify-content: center;
   border-radius: 9999px;
   border: 1px solid currentColor;
-  background: #fff;
-  color: #64748b;
+  background: var(--card);
+  color: var(--muted);
 }
 #moreMetrics > .metric[hidden] {
   display: none;
@@ -1025,19 +1039,21 @@ Knobs:
 .btn.linklike.small {
   background: transparent;
   border: none;
-  color: #2563eb;
+  color: var(--muted);
   padding: 6px 0;
   font-size: 13px;
   text-decoration: underline;
   cursor: pointer;
 }
 .btn.linklike.small:hover {
-  color: #1d4ed8;
+  color: var(--muted);
 }
 
 /* ======================================================================== */
-
-/* === css/components/ads.css === */
+ 
+/* === css/components/results-clean.css === */ 
+ 
+/* === css/components/ads.css === */ 
 /* Mobile ad slot reserved height (prevents layout shift) */
 .ad.ad--mobile {
   display: block;

@@ -1,9 +1,7 @@
 /* Global compact scale: ~12% smaller fonts, ~20% tighter gaps */
-:root {}
-
 html,
 body {
-  font-size: var(--font-base);
+  font-size: var(--font-base, 16px);
 }
 
 /* Labels and small text */
@@ -13,7 +11,7 @@ label,
 small,
 .unit-note,
 .slogan {
-  font-size: var(--font-label);
+  font-size: var(--font-label, 13px);
 }
 
 /* Inputs: keep tap target ≥44px, reduce inner padding */
