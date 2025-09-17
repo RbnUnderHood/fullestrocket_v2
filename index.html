@@ -358,43 +358,45 @@
           conditions, breed, and feed quality all affect FCR.
         </p>
       </section>
-    </main>
+      <!-- Settings card -->
+      <section id="settingsCard" class="card" hidden>
+        <h2 class="card-title">Settings</h2>
 
-    <div class="container footerbar">
-      <small>
-        Free tool. No login. Export any time.
-        <span id="sessionCounter"></span>
-      </small>
-
-      <!-- Footer settings trigger -->
-      <button
-        type="button"
-        id="btnSettings"
-        class="icon-btn"
-        aria-expanded="false"
-        aria-controls="settingsPanel"
-        aria-label="Open settings"
-      >
-        ⚙️
-      </button>
-    </div>
-
-    <!-- Settings panel lives just below the footer bar -->
-    <div id="settingsPanel" class="settings-panel" hidden>
-      <div class="field">
-        <label class="seg-group-label">Units</label>
-        <div class="units-switch" role="radiogroup" aria-label="Units">
-          <label class="seg">
-            <input type="radio" name="units" value="imperial" />
-            <span>Imperial</span>
-          </label>
-          <label class="seg">
-            <input type="radio" name="units" value="metric" />
-            <span>Metric</span>
-          </label>
+        <div class="field">
+          <label class="seg-group-label">Units</label>
+          <div class="units-switch" role="radiogroup" aria-label="Units">
+            <label class="seg">
+              <input type="radio" name="units" value="imperial" />
+              <span>Imperial</span>
+            </label>
+            <label class="seg">
+              <input type="radio" name="units" value="metric" />
+              <span>Metric</span>
+            </label>
+          </div>
         </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footerbar">
+        <small>
+          Free tool. No login. Export any time.
+          <span id="sessionCounter"></span>
+        </small>
+
+        <!-- Footer settings trigger -->
+        <button
+          type="button"
+          id="btnSettings"
+          class="icon-btn"
+          aria-expanded="false"
+          aria-controls="settingsPanel"
+          aria-label="Open settings"
+        >
+          ⚙️
+        </button>
       </div>
-    </div>
+    </footer>
 
     <script type="module" src="js/ui.js"></script>
     <script src="js/analytics.js" defer></script>
@@ -423,16 +425,31 @@
         const pricesToggle = document.getElementById("pricesEnabled");
         const pricesBox = document.getElementById("pricesBox");
 
-        // Footer settings (⚙️)
+        // Footer cog: toggle Settings card visibility, scroll when opening
         const btnSettings = document.getElementById("btnSettings");
-        const settingsPanel = document.getElementById("settingsPanel");
-        function toggleSettings() {
-          const opening = settingsPanel.hasAttribute("hidden");
-          if (opening) settingsPanel.removeAttribute("hidden");
-          else settingsPanel.setAttribute("hidden", "");
-          btnSettings?.setAttribute("aria-expanded", String(opening));
+        const settingsCard = document.getElementById("settingsCard");
+
+        if (btnSettings && settingsCard) {
+          btnSettings.addEventListener("click", () => {
+            const opening = settingsCard.hidden; // true if currently hidden
+            settingsCard.hidden = !opening; // flip visibility
+            btnSettings.setAttribute("aria-expanded", String(opening));
+            if (opening) {
+              settingsCard.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }
+          });
         }
-        btnSettings?.addEventListener("click", toggleSettings);
+
+        // Ensure a default selection for units
+        const unitRadios = document.querySelectorAll('input[name="units"]');
+        if (unitRadios.length && ![...unitRadios].some((r) => r.checked)) {
+          (
+            [...unitRadios].find((r) => r.value === "imperial") || unitRadios[0]
+          ).checked = true;
+        }
 
         // Prices visibility (Alt feed rides inside it)
         function refreshPricesUI() {
@@ -446,6 +463,21 @@
         if (pricesToggle) pricesToggle.checked = true;
         refreshPricesUI();
       });
+      // Smooth-scroll to results/analytics after calculation
+      const btnCalc = document.getElementById("btnCalc");
+      const results = document.getElementById("results");
+      const analytics = document.getElementById("farmAnalytics");
+
+      function scrollToResultsSoon() {
+        // let ui.js update DOM, then scroll
+        setTimeout(() => {
+          const target = analytics || results;
+          if (target)
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 150);
+      }
+
+      btnCalc && btnCalc.addEventListener("click", scrollToResultsSoon);
     </script>
   </body>
 </html>

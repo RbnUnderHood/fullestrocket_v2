@@ -1,4 +1,3 @@
-/* build: dist/app.css */
 /* === styles.css === */
 :root {
   --bg: #f7fbf7;
@@ -336,8 +335,8 @@ textarea:focus {
 .more-metrics .grid--more {
   margin-top: 8px;
 }
- 
-/* === css/theme.css === */ 
+
+/* === css/theme.css === */
 :root {
   /* Chicken colors */
   --rooster-red: #c41e3a;
@@ -374,8 +373,8 @@ textarea:focus {
   --font-label: 13px; /* labels, small text */
   --font-metric: 18px; /* metric values */
 }
- 
-/* === css/components/layout.css === */ 
+
+/* === css/components/layout.css === */
 /* Center column hard-cap + sane page padding (apply to both .container and legacy .wrap) */
 .container,
 .wrap {
@@ -391,8 +390,8 @@ textarea:focus {
 .site-footer {
   padding: 8px 0; /* remove side padding here; container will handle it */
 }
- 
-/* === css/components/header.css === */ 
+
+/* === css/components/header.css === */
 /* Slogan + badge styles */
 .slogan {
   margin: 4px 0 0;
@@ -440,8 +439,8 @@ textarea:focus {
     font-size: 11px;
   }
 }
- 
-/* === css/components/forms.css === */ 
+
+/* === css/components/forms.css === */
 /* Form layout that never overflows the 700px container */
 
 /* 1) Responsive rows: auto-fit as many columns as fit, then wrap */
@@ -521,10 +520,11 @@ textarea:focus {
     gap: 8px;
   }
 }
- 
-/* === css/components/density.css === */ 
+
+/* === css/components/density.css === */
 /* Global compact scale: ~12% smaller fonts, ~20% tighter gaps */
-:root {}
+:root {
+}
 
 html,
 body {
@@ -635,8 +635,8 @@ h3 {
 .grid > .metric[hidden] {
   display: none;
 }
- 
-/* === css/components/units.css === */ 
+
+/* === css/components/units.css === */
 .card-title-bar {
   display: flex;
   align-items: center;
@@ -682,8 +682,8 @@ h3 {
     padding: 6px 8px;
   }
 }
- 
-/* === css/components/help.css === */ 
+
+/* === css/components/help.css === */
 /* ========== Component: Help / info buttons ========== */
 .info {
   display: inline-flex;
@@ -779,8 +779,8 @@ h3 {
     right: 6px;
   }
 }
- 
-/* === css/components/feed-prices.css === */ 
+
+/* === css/components/feed-prices.css === */
 /* ========== Component: Feed prices ========== */
 .feed-prices {
   --gap: 12px;
@@ -817,8 +817,8 @@ h3 {
 .feed-prices .alt-feed .alt-box {
   background: #f6fff6;
 } /* subtle contrast */
- 
-/* === css/components/alt-feed.css === */ 
+
+/* === css/components/alt-feed.css === */
 /* ========== Component: Alt feed ===========================================
 Knobs:
   --alt-gap: spacing between fields
@@ -859,8 +859,8 @@ Knobs:
     min-width: 0;
   }
 }
- 
-/* === css/components/results.css === */ 
+
+/* === css/components/results.css === */
 /* ========== Component: Results / Summary ========== */
 #results .kv {
   display: grid;
@@ -890,8 +890,8 @@ Knobs:
 }
 
 /* post-results buttons moved to css/components/density.css (owner) */
- 
-/* === css/components/results-clean.css === */ 
+
+/* === css/components/results-clean.css === */
 /* === Clean, conflict-free styling scoped to the results grid ============== */
 
 /* Base grid (2-up on mobile by design; your grid HTML is #metricsGrid) */
@@ -1045,8 +1045,8 @@ Knobs:
 }
 
 /* ======================================================================== */
- 
-/* === css/components/ads.css === */ 
+
+/* === css/components/ads.css === */
 /* Mobile ad slot reserved height (prevents layout shift) */
 .ad.ad--mobile {
   display: block;

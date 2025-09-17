@@ -4,42 +4,55 @@
   justify-content: space-between;
   gap: 12px;
 }
+/* === Units chips (hug text) === */
 .units-switch {
-  display: inline-flex;
-  padding: 2px;
-  border: 1px solid #cbd5e1;
-  border-radius: 9999px;
-  background: #fff;
-}
-.units-switch .seg {
-  position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  line-height: 1;
-  padding: 6px 10px;
-  cursor: pointer;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  /* kill the big group pill */
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
+
+.units-switch .seg {
+  display: inline-flex;
+  margin: 0;
+  flex: 0 0 auto; /* <-- don't stretch */
+  position: relative;
+}
+
 .units-switch .seg input {
   position: absolute;
-  inset: 0;
   opacity: 0;
-  cursor: pointer;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: 0;
+  padding: 0;
 }
+
 .units-switch .seg span {
-  position: relative;
-  z-index: 1;
+  display: inline-block;
+  line-height: 0.2;
+  font-weight: 600;
+  font-size: var(--font-label, 16px);
+  padding: 0.35em 0.75em;
+  border: 5px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
 }
+
 .units-switch .seg input:checked + span {
-  background: #eef2ff;
-  border-radius: 9999px;
-  padding: 6px 10px;
-  color: #334155;
-  font-weight: 700;
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: var(--brand);
 }
-@media (max-width: 360px) {
-  .units-switch .seg span {
-    padding: 6px 8px;
-  }
+
+.units-switch .seg input:focus-visible + span {
+  outline: 4px solid color-mix(in srgb, var(--brand) 40%, rgb(255, 255, 255));
+  outline-offset: 2px;
 }

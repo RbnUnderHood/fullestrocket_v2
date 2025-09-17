@@ -1,4 +1,3 @@
-
 /* Farm Analytics strip */
 #farmAnalytics.analytics {
   display: grid;
@@ -7,70 +6,105 @@
   margin: 8px 0 12px;
 }
 @media (min-width: 560px) {
-  #farmAnalytics.analytics { grid-template-columns: repeat(3, 1fr); }
+  #farmAnalytics.analytics {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
-#farmAnalytics .a-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px 12px;
+#farmAnalytics .resultCard {
+  text-align: center;
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: 0 8px 20px rgba(31, 41, 55, 0.06), 0 1px 0 rgba(0, 0, 0, 0.02);
+  margin-bottom: var(--space-2);
+}
+#farmAnalytics .resultCard .a-label {
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.2px;
+  font-size: 1.1em;
+}
+#farmAnalytics .resultCard .a-value {
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 800;
+}
+#farmAnalytics .resultCard .a-note {
+  color: var(--muted);
+  font-size: var(--font-label, 13px);
+}
+#farmAnalytics .resultCard .a-list {
+  margin-top: var(--space-1);
+  display: grid;
   gap: 6px;
 }
-#farmAnalytics .a-label {
-  font-size: 12px;
-  letter-spacing: .05em;
+#farmAnalytics .resultCard .a-list .metricRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+#farmAnalytics .resultCard .a-list .k {
   color: var(--muted);
-  text-transform: uppercase;
+  font-size: var(--font-label, 13px);
+  margin-bottom: 2px;
 }
-#farmAnalytics .a-value {
+#farmAnalytics .resultCard .a-list .v {
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--ink);
-}
-#farmAnalytics .a-note { font-size: 12px; color: var(--muted); }
-
-/* Thermometer (FCR: lower is better) */
-#farmAnalytics .a-thermo {
-  position: relative;
-  height: 40px;
-  background: linear-gradient(to top, var(--border), transparent 60%);
-  border-radius: 8px;
-  overflow: hidden;
-}
-#farmAnalytics .a-thermo > span {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: var(--thermo, 50%);
-  background: var(--brand);
 }
 
-/* Egg ring (lay %: higher is better) */
-#farmAnalytics .a-egg {
-  --pct: .75;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: conic-gradient(var(--ok) calc(var(--pct) * 360deg), var(--border) 0);
-  box-shadow: inset 0 0 0 6px var(--card), inset 0 0 0 1px var(--border);
-}
-
-/* Coins bar (cost score: more green = better/cheaper) */
-#farmAnalytics .a-coins {
-  position: relative;
-  height: 14px;
+/* Compact feed bar */
+#farmAnalytics .resultCard .a-thermo {
+  height: 10px;
   border-radius: 999px;
   background: var(--border);
+  position: relative;
   overflow: hidden;
 }
-#farmAnalytics .a-coins::after {
-  content: "";
+#farmAnalytics .resultCard .a-thermo > span {
   position: absolute;
   inset: 0;
-  width: var(--score, 60%);
+  width: var(--thermo, 0%);
   background: var(--brand);
+}
+
+/* Gradient savings bar */
+#farmAnalytics .resultCard .a-coins {
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(
+      90deg,
+      var(--grad-red) 0%,
+      var(--grad-orange) 35%,
+      var(--grad-yellow) 65%,
+      var(--grad-green) 100%
+    ),
+    var(--border);
+  background-size: var(--score, 0%) 100%, 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* Laying ring */
+#farmAnalytics .resultCard .a-egg {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  margin: 0 auto;
+  background: conic-gradient(
+    var(--brand) calc(var(--pct, 0) * 1turn),
+    var(--border) 0
+  );
+  -webkit-mask: radial-gradient(
+    circle 54% at 50% 50%,
+    transparent 52%,
+    black 53%
+  );
+  mask: radial-gradient(circle 54% at 50% 50%, transparent 52%, black 53%);
 }
 
 /* Collapsible inputs (shrinks the big table) */
@@ -93,7 +127,221 @@ details.eval summary {
 details.eval summary::before {
   content: "▸";
   transform: rotate(0deg);
-  transition: .2s;
+  transition: 0.2s;
 }
-details.eval[open] summary::before { transform: rotate(90deg); }
-details.eval > *:not(summary) { margin-top: 8px; }
+details.eval[open] summary::before {
+  transform: rotate(90deg);
+}
+details.eval > *:not(summary) {
+  margin-top: 8px;
+}
+
+/* Premium look + compact sub-stat grid */
+.analytics {
+  margin-bottom: var(--space-3);
+  --grad-red: #dc2626;
+  --grad-orange: #f97316;
+  --grad-yellow: #facc15;
+  --grad-green: var(--ok, #16a34a);
+}
+.analytics .resultCard {
+  text-align: center;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: 0 8px 20px rgba(31, 41, 55, 0.06), 0 1px 0 rgba(0, 0, 0, 0.02);
+  margin-bottom: var(--space-2);
+}
+.analytics .resultCard .a-label {
+  font-weight: 700;
+  color: var(--ink);
+}
+.analytics .resultCard .a-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+.analytics .resultCard .a-note {
+  color: var(--muted);
+  font-size: var(--font-label, 13px);
+}
+.analytics .resultCard .a-list {
+  margin-top: var(--space-1);
+  display: grid;
+  gap: 6px;
+}
+.analytics .resultCard .a-list .metricRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.analytics .resultCard .a-list .k {
+  color: var(--muted);
+  font-size: var(--font-label, 13px);
+  margin-bottom: 2px;
+}
+.analytics .resultCard .a-list .v {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Compact feed bar */
+.analytics .resultCard .a-thermo {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.analytics .resultCard .a-thermo > span {
+  position: absolute;
+  inset: 0;
+  width: var(--thermo, 0%);
+  background: var(--brand);
+}
+
+/* Gradient savings bar */
+.analytics .resultCard .a-coins {
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(
+      90deg,
+      var(--grad-red) 0%,
+      var(--grad-orange) 35%,
+      var(--grad-yellow) 65%,
+      var(--grad-green) 100%
+    ),
+    var(--border);
+  background-size: var(--score, 0%) 100%, 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* Laying ring */
+.analytics .resultCard .a-egg {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  margin: 0 auto;
+  background: conic-gradient(
+    var(--brand) calc(var(--pct, 0) * 1turn),
+    var(--border) 0
+  );
+  -webkit-mask: radial-gradient(
+    circle 54% at 50% 50%,
+    transparent 52%,
+    black 53%
+  );
+  mask: radial-gradient(circle 54% at 50% 50%, transparent 52%, black 53%);
+}
+
+/* Collapsible inputs (shrinks the big table) */
+details.eval {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 12px;
+  padding: 6px 10px;
+  margin: 8px 0 12px;
+}
+details.eval summary {
+  list-style: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+details.eval summary::before {
+  content: "▸";
+  transform: rotate(0deg);
+  transition: 0.2s;
+}
+details.eval[open] summary::before {
+  transform: rotate(90deg);
+}
+details.eval > *:not(summary) {
+  margin-top: 8px;
+}
+details.eval[open] summary::before {
+  transform: rotate(90deg);
+}
+details.eval > *:not(summary) {
+  margin-top: 8px;
+}
+/* === Mobile density for result cards (≤480px) === */
+@media (max-width: 480px) {
+  .analytics .resultCard {
+    padding: var(--space-1);
+    gap: var(--space-1);
+    text-align: center;
+  }
+
+  /* Title + big number a bit tighter */
+  .analytics .resultCard .a-label {
+    font-size: 0.95rem;
+  }
+  .analytics .resultCard .a-value {
+    font-size: clamp(18px, 7vw, 24px);
+    line-height: 1.1;
+  }
+
+  /* Compact visuals */
+  .analytics .resultCard .a-thermo,
+  .analytics .resultCard .a-coins {
+    height: 8px;
+  }
+  .analytics .resultCard .a-egg {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Notes smaller */
+  .analytics .resultCard .a-note {
+    font-size: 0.85rem;
+  }
+
+  /* Show more data: 2-up metric rows (auto-wrap) */
+  .analytics .resultCard .a-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  /* Keep each pill compact */
+  .analytics .resultCard .a-list .metricRow {
+    padding: 8px 10px;
+    border-radius: 10px;
+  }
+
+  /* Labels/value sizing inside pills */
+  .analytics .resultCard .a-list .k {
+    font-size: 0.8rem;
+    margin-bottom: 2px;
+  }
+  .analytics .resultCard .a-list .v {
+    font-size: 0.9rem;
+  }
+}
+
+/* Safety for very narrow phones (≤360px): fallback to single column */
+@media (max-width: 360px) {
+  .analytics .resultCard .a-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section banner heading above analytics cards */
+.section-heading {
+  margin: var(--space-2) 0 var(--space-1);
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--muted);
+  font-weight: 700;
+  text-align: center;
+}

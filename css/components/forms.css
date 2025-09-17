@@ -93,10 +93,25 @@
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--ink);
+  cursor: pointer; /* ← add */
+  transition: transform 120ms ease, /* ← add */ box-shadow 120ms ease; /* ← add */
 }
 .icon-btn:hover {
   box-shadow: 0 1px 0 var(--border);
 }
+
+/* rotate a touch when open (aria-expanded flips in JS) */
+.icon-btn[aria-expanded="true"] {
+  /* ← add */
+  transform: rotate(45deg);
+}
+
+/* make sure [hidden] actually hides even if other CSS conflicts */
+.settings-panel[hidden] {
+  /* ← add */
+  display: none !important;
+}
+
 .settings-panel {
   margin-top: var(--space-2);
   padding: var(--space-2);
@@ -135,4 +150,74 @@
   font-weight: 600;
   color: var(--muted);
   font-size: var(--font-label, 13px);
+}
+/* ----- Prices + Alt feed tidy layout ----- */
+#pricesBox .row {
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+@media (max-width: 560px) {
+  #pricesBox .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Subhead inside forms */
+.form-subhead {
+  margin: var(--space-2) 0 var(--space-1);
+  font-weight: 600;
+  color: var(--muted);
+  font-size: var(--font-label, 13px);
+}
+
+/* Alt feed visual segregation (tokens only) */
+#altBox {
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  /* subtle tint from tokens (fallback to card) */
+  background: color-mix(in srgb, var(--brand) 8%, var(--card));
+}
+.site-footer .footerbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.site-footer + .settings-panel {
+  margin: var(--space-2) auto 0;
+  max-width: min(720px, 96%);
+}
+/* Make [hidden] always hide, and default display when visible */
+.settings-panel[hidden] {
+  display: none !important;
+}
+.settings-panel {
+  display: block;
+}
+
+/* Optional: keep the button feeling clickable + open state */
+.icon-btn {
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.icon-btn[aria-expanded="true"] {
+  transform: rotate(45deg);
+}
+/* Settings card spacing */
+#settingsCard .field {
+  margin-top: var(--space-1);
+}
+.icon-btn[aria-expanded="true"] {
+  transform: rotate(45deg) scale(0.98);
+}
+/* Settings card visibility */
+#settingsCard {
+  display: block;
+}
+#settingsCard[hidden] {
+  display: none !important;
 }

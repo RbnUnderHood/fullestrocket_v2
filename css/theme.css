@@ -39,11 +39,19 @@
   --font-metric: 18px;
 }
 /* === DEBUG BADGE — remove later === */
-:is(header, #appHeader, .site-header) { position: relative; }
+:is(header, #appHeader, .site-header) {
+  position: relative;
+}
 :is(header, #appHeader, .site-header)::after {
   content: "✅ CSS OK";
-  position: absolute; top: 8px; right: 8px;
-  padding: 4px 8px; font: 700 12px/1 system-ui, sans-serif;
-  background: var(--card); color: var(--ok);
-  border: 1px solid var(--ok); border-radius: 999px; z-index: 9999;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font: 700 12px/1 system-ui, sans-serif;
+  background: var(--card);
+  color: var(--ok);
+  border: 1px solid var(--ok);
+  border-radius: 999px;
+  z-index: 9999;
 }
