@@ -13,3 +13,9 @@
 .site-footer {
   padding: 8px 0; /* remove side padding here; container will handle it */
 }
+
+:where(main, #app, .page, .app, .container) {
+  inline-size: clamp(var(--app-min), 100%, var(--app-max));
+  margin-inline: auto;
+  padding-inline: clamp(12px, 4vw, var(--app-gutter));
+}

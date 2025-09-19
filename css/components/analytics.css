@@ -44,9 +44,23 @@
   display: grid;
   grid-template-columns: 1fr;
   justify-items: center;
+  max-width: 320px;
+  margin-inline: auto;
   padding: 6px 10px;
   border: 1px solid var(--border);
   border-radius: 10px;
+  background: var(--card);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--border) 60%, #fff);
+  transition: background 0.2s;
+}
+#farmAnalytics .resultCard .a-list .metricRow--ok {
+  background: color-mix(in srgb, var(--ok) 6%, #fff);
+}
+#farmAnalytics .resultCard .a-list .metricRow--warn {
+  background: color-mix(in srgb, var(--warn) 6%, #fff);
+}
+#farmAnalytics .resultCard .a-list .metricRow--neutral {
+  background: var(--card);
 }
 #farmAnalytics .resultCard .a-list .k {
   color: var(--muted);
@@ -175,9 +189,23 @@ details.eval > *:not(summary) {
   display: grid;
   grid-template-columns: 1fr;
   justify-items: center;
+  max-width: 320px;
+  margin-inline: auto;
   padding: 6px 10px;
   border: 1px solid var(--border);
   border-radius: 10px;
+  background: var(--card);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--border) 60%, #fff);
+  transition: background 0.2s;
+}
+.analytics .resultCard .a-list .metricRow--ok {
+  background: color-mix(in srgb, var(--ok) 6%, #fff);
+}
+.analytics .resultCard .a-list .metricRow--warn {
+  background: color-mix(in srgb, var(--warn) 6%, #fff);
+}
+.analytics .resultCard .a-list .metricRow--neutral {
+  background: var(--card);
 }
 .analytics .resultCard .a-list .k {
   color: var(--muted);
@@ -344,4 +372,126 @@ details.eval > *:not(summary) {
   color: var(--muted);
   font-weight: 700;
   text-align: center;
+}
+
+/* === Responsive substats grid for result cards === */
+.resultCard .substats:where(*) {
+  display: grid;
+  gap: 8px;
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+  grid-template-columns: repeat(
+    3,
+    minmax(0, 1fr)
+  ); /* default: 3 across when card ≤ --app-max */
+}
+
+/* Make pills fill their cell; stack label over value; compact */
+.resultCard .substats .metricRow:where(*) {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  text-align: center;
+  padding: 6px 8px;
+  min-height: 64px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  box-shadow: 0 1px 6px color-mix(in srgb, var(--ink) 8%, transparent);
+  /* override earlier vertical-stack sizing */
+  max-width: none;
+  margin: 0;
+  width: 100%;
+}
+
+/* --- Center the LAYING POWER header (label + % together) --- */
+.resultCard .a-head { display:flex; align-items:baseline; justify-content:center; gap:8px; }
+.resultCard .a-head .a-label { font-weight:700; color:var(--ink); }
+.resultCard .a-head .a-value { font-variant-numeric: tabular-nums; font-weight:800; }
+
+/* --- Visual chip: use ledger body size, no top strip --- */
+.resultCard .substats > .chip--visual { padding-top: 6px; }
+.resultCard .substats > .chip--visual::before { display:none; }
+
+/* Pie chart visual: conic ring + mask, sized like a chip’s inner content */
+.resultCard .substats .chip--visual .pieChart {
+  inline-size: 28px;
+  block-size: 28px;
+  border-radius: 50%;
+  margin-inline: auto;
+  background: conic-gradient(var(--brand) calc(var(--pct, 0) * 1turn), var(--border) 0);
+  -webkit-mask: radial-gradient(circle 54% at 50% 50%, transparent 52%, black 53%);
+  mask: radial-gradient(circle 54% at 50% 50%, transparent 52%, black 53%);
+}
+
+/* Performance tints for ledger chips inside the grid */
+.resultCard .substats > .metricRow.metricRow--ok {
+  background: color-mix(in srgb, var(--ok) 6%, var(--card));
+}
+.resultCard .substats > .metricRow.metricRow--warn {
+  background: color-mix(in srgb, var(--warn) 6%, var(--card));
+}
+.resultCard .substats > .metricRow.metricRow--neutral {
+  background: var(--card);
+}
+}
+
+/* Ledger variant (fix strip overlap; ensure text is above the strip) */
+.resultCard .substats > .chip--ledger {
+  padding-top: 24px;
+}
+.resultCard .substats > .chip--ledger::before {
+  content: "";
+  position: absolute;
+  inset: 1px 1px auto 1px;
+  height: 22px;
+  border-radius: 8px 8px 0 0;
+  background: color-mix(in srgb, var(--card) 88%, var(--muted) 12%);
+  border-bottom: 1px solid var(--border);
+  z-index: 0;
+}
+.resultCard .substats > .chip .label:where(*),
+.resultCard .substats > .chip .value:where(*) {
+  position: relative;
+  z-index: 1;
+}
+.resultCard .substats > .chip .label:where(*) {
+  margin-top: 4px;
+  font-size: clamp(11px, 2.9vw, 12.5px);
+  color: var(--muted);
+  line-height: 1.1;
+}
+.resultCard .substats > .chip .value:where(*) {
+  align-self: end;
+  margin-bottom: 8px;
+  font-size: clamp(13px, 3.3vw, 15px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+/* Compact card head (label + percent on one line) */
+.resultCard .a-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.resultCard .a-head .a-label {
+  font-weight: 700;
+  color: var(--ink);
+}
+.resultCard .a-head .a-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+/* Pie chart visual: rename and resize */
+.egg.pieChart {
+  inline-size: 28px;
+  block-size: 28px;
+}
+
+/* Visual margin */
+.resultCard :where(.a-thermo, .a-coins, .egg.pieChart) {
+  margin-block: 6px;
 }

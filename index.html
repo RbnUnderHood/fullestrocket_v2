@@ -192,149 +192,77 @@
         <!-- Results -->
         <div id="results" class="results" data-help="on" hidden>
           <div id="printable" class="printable">
-            <!-- Farm Analytics (compact summary at-a-glance) -->
+            <h3 class="section-heading">Cluckulation Evaluation</h3>
             <section id="farmAnalytics" class="analytics">
-              <div class="a-card a-feed">
-                <div class="a-label">🐔 HENNPUT vs. EGGPUT</div>
+              <div class="resultCard a-feed">
+                <div class="a-label">HENNPUT vs. EGGPUT</div>
                 <div class="a-value" id="aFcr">—</div>
                 <div class="a-thermo" aria-hidden="true"><span></span></div>
                 <div class="a-note" id="aFcrNote">—</div>
+                <div class="substats">
+                  <div class="metricRow chip chip--ledger">
+                    <span class="k label">Feed / egg</span
+                    ><span class="v value" id="aFeedPerEgg">—</span>
+                  </div>
+                  <div class="metricRow chip chip--ledger">
+                    <span class="k label">Feed / dozen</span
+                    ><span class="v value" id="aFeedPerDozen">—</span>
+                  </div>
+                  <div class="metricRow chip chip--ledger">
+                    <span class="k label">Feed / bird</span
+                    ><span class="v value" id="aFeedPerBird">—</span>
+                  </div>
+                </div>
               </div>
 
-              <div class="a-card a-laying">
-                <div class="a-label">🥚 LAYING POWER</div>
-                <div class="a-value" id="aLay">—</div>
-                <div class="a-egg" aria-hidden="true"></div>
+              <div class="resultCard a-laying">
+                <div class="a-head">
+                  <div class="a-label">LAYING POWER</div>
+                  <div class="a-value" id="aLay">—</div>
+                </div>
                 <div class="a-note" id="aLayNote">—</div>
+                <div class="substats">
+                  <div class="metricRow chip chip--ledger">
+                    <span class="k label">Eggs / bird</span
+                    ><span class="v value" id="aEggsPerBird">—</span>
+                  </div>
+                  <div class="metricRow chip chip--ledger chip--visual">
+                    <div class="egg pieChart" aria-hidden="true"></div>
+                  </div>
+                  <div class="metricRow chip chip--ledger">
+                    <span class="k label">Avg egg weight</span
+                    ><span class="v value" id="aAvgEggW">—</span>
+                  </div>
+                  <div class="metricRow chip chip--ledger">
+                    <span class="k label">Eggs collected</span
+                    ><span class="v value" id="aEggsCount">—</span>
+                  </div>
+                </div>
               </div>
 
-              <div class="a-card a-econ">
-                <div class="a-label">💰 EGG-O-NOMICS</div>
+              <div class="resultCard a-econ">
+                <div class="a-label">EGG-O-NOMICS</div>
                 <div class="a-value" id="aCostEgg">—</div>
                 <div class="a-coins" aria-hidden="true"></div>
                 <div class="a-note" id="aCostNote">—</div>
+                <div class="substats">
+                  <div class="metricRow chip chip--ledger">
+                    <span class="k label">Cost / dozen</span
+                    ><span class="v value" id="aCostPerDozen">—</span>
+                  </div>
+                  <div class="metricRow chip chip--ledger">
+                    <span class="k label">Feed unit cost</span
+                    ><span class="v value" id="aUnitFeedCost">—</span>
+                  </div>
+                  <div class="metricRow chip chip--ledger">
+                    <span class="k label">Savings (period)</span
+                    ><span class="v value" id="aSavings">—</span>
+                  </div>
+                </div>
               </div>
             </section>
-            <details class="eval" id="evalSummary">
-              <summary>Cluck-ulation Evaluation (inputs)</summary>
-
-              <h3>Cluck-ulation Evaluation</h3>
-              <p class="results-sub">Your flock’s performance breakdown</p>
-              <div id="inputSummary" class="kv"></div>
-            </details>
-
-            <!-- Default tiles (exactly 6) -->
-            <!-- Core tiles (4) -->
-            <div class="grid" id="metricsGrid">
-              <!-- 1) FCR -->
-              <div class="metric" id="tileFcr">
-                <div class="metric__value" id="fcrValue">—</div>
-                <div class="metric__label">
-                  FCR (Feed conversion ratio)
-                  <button
-                    type="button"
-                    class="info"
-                    data-help-key="fcr"
-                    aria-label="About FCR"
-                  >
-                    i
-                  </button>
-                </div>
-              </div>
-
-              <!-- 2) Cost per egg -->
-              <div class="metric" id="tileCostPerEgg">
-                <div class="metric__value" id="costPerEgg">—</div>
-                <div class="metric__label">
-                  Cost per egg
-                  <button
-                    type="button"
-                    class="info"
-                    data-help-key="costPerEgg"
-                    aria-label="About cost per egg"
-                  >
-                    i
-                  </button>
-                </div>
-              </div>
-
-              <!-- 3) Feed savings (shown only if alt feed is on) -->
-              <div class="metric" id="tileFeedSavings">
-                <div class="metric__value" id="feedSavings">—</div>
-                <div class="metric__label">
-                  Feed savings (this period)
-                  <button
-                    type="button"
-                    class="info"
-                    data-help-key="feedSavings"
-                    aria-label="About feed savings"
-                  >
-                    i
-                  </button>
-                </div>
-              </div>
-
-              <!-- 4) Performance -->
-              <div class="metric" id="tilePerf">
-                <div class="metric__value" id="rating">—</div>
-                <div class="metric__label">
-                  Performance
-                  <button
-                    type="button"
-                    class="info"
-                    data-help-key="performance"
-                    aria-label="About performance"
-                  >
-                    i
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Toggle + More tiles -->
-            <button type="button" id="toggleMore" class="btn linklike small">
-              More details ▾
-            </button>
-
-            <div id="moreMetrics" class="grid" hidden>
-              <!-- Cost per dozen -->
-              <div class="metric" id="tileCostPerDozen">
-                <div class="metric__value" id="costPerDozen">—</div>
-                <div class="metric__label">
-                  Cost per dozen
-                  <button
-                    type="button"
-                    class="info"
-                    data-help-key="costPerDozen"
-                    aria-label="About cost per dozen"
-                  >
-                    i
-                  </button>
-                </div>
-              </div>
-
-              <!-- Lay rate -->
-              <div class="metric" id="tileLayRate">
-                <div class="metric__value" id="layRate">—</div>
-                <div class="metric__label">
-                  Lay rate (%)
-                  <button
-                    type="button"
-                    class="info"
-                    data-help-key="layRate"
-                    aria-label="About lay rate"
-                  >
-                    i
-                  </button>
-                </div>
-              </div>
-
-              <!-- (Paste any other extra tiles you had here) -->
-            </div>
-
             <p class="session-note" id="sessionNote" hidden></p>
           </div>
-          <!-- /#printable -->
         </div>
         <!-- /#results -->
       </section>
@@ -389,8 +317,8 @@
           type="button"
           id="btnSettings"
           class="icon-btn"
-          aria-expanded="false"
-          aria-controls="settingsPanel"
+          data-action="toggle-settings"
+          aria-controls="settingsCard"
           aria-label="Open settings"
         >
           ⚙️
@@ -400,70 +328,7 @@
 
     <script type="module" src="js/ui.js"></script>
     <script src="js/analytics.js" defer></script>
-
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // --- Prefill demo values ---
-        const presets = {
-          flockName: "barn E",
-          birdCount: 22,
-          eggCount: 21,
-          avgEggWeight: 2,
-          feedConsumed: 33,
-          bagWeight: 50,
-          bagPrice: 22.5,
-          altAmount: 2.5,
-          altPricePerUnit: 1.2,
-          altName: "Alfalfa meal",
-        };
-        for (const [k, v] of Object.entries(presets)) {
-          const el = document.getElementById(k);
-          if (el) el.value = v;
-        }
-
-        // Elements
-        const pricesToggle = document.getElementById("pricesEnabled");
-        const pricesBox = document.getElementById("pricesBox");
-
-        // Footer cog: toggle Settings card visibility, scroll when opening
-        const btnSettings = document.getElementById("btnSettings");
-        const settingsCard = document.getElementById("settingsCard");
-
-        if (btnSettings && settingsCard) {
-          btnSettings.addEventListener("click", () => {
-            const opening = settingsCard.hidden; // true if currently hidden
-            settingsCard.hidden = !opening; // flip visibility
-            btnSettings.setAttribute("aria-expanded", String(opening));
-            if (opening) {
-              settingsCard.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }
-          });
-        }
-
-        // Ensure a default selection for units
-        const unitRadios = document.querySelectorAll('input[name="units"]');
-        if (unitRadios.length && ![...unitRadios].some((r) => r.checked)) {
-          (
-            [...unitRadios].find((r) => r.value === "imperial") || unitRadios[0]
-          ).checked = true;
-        }
-
-        // Prices visibility (Alt feed rides inside it)
-        function refreshPricesUI() {
-          const pricesOn = !!pricesToggle?.checked;
-          if (pricesBox) pricesBox.hidden = !pricesOn;
-        }
-
-        pricesToggle?.addEventListener("change", refreshPricesUI);
-
-        // Defaults for quick testing
-        if (pricesToggle) pricesToggle.checked = true;
-        refreshPricesUI();
-      });
-      // Smooth-scroll to results/analytics after calculation
       const btnCalc = document.getElementById("btnCalc");
       const results = document.getElementById("results");
       const analytics = document.getElementById("farmAnalytics");

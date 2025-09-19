@@ -556,6 +556,7 @@ function buildInputSummary(units, birds, eggs) {
     rows.push(["Notes", inputs.notes.value.trim()]);
   }
 
+  if (!inputSummary) return; // Add this guard
   inputSummary.innerHTML = rows
     .map(
       ([k, v]) =>
@@ -702,6 +703,44 @@ function onCalculate() {
       feedPerBird: bandFeedPerBird(feedPerBird_g),
     },
   };
+  // Broadcast metrics for the analytics cards
+  try {
+    window.dispatchEvent(
+      new CustomEvent("metrics:updated", {
+        detail: {
+          units, // "metric" | "imperial"
+          eggs, // total eggs in the session if available
+          avgEggWeightG: (metric && metric.avgEggWeightG) ?? null,
+          feedConsumedKg: (metric && metric.feedConsumedKg) ?? null,
+          bagWeightKg: (metric && metric.bagWeightKg) ?? null,
+          bagPrice: Number(
+            (inputs && inputs.bagPrice && inputs.bagPrice.value) || 0
+          ),
+          // core computed outputs (already in scope above)
+          fcr,
+          feedPerEggG: typeof feedPerEggG !== "undefined" ? feedPerEggG : null,
+          layRate,
+          feedPerBird_g,
+          cpe, // $/egg
+          cpd, // $/dozen
+          // optional alt-scenario if present in this file
+          alt:
+            typeof costPerEggAlt !== "undefined" ||
+            typeof savingsTotal !== "undefined" ||
+            typeof altSharePct !== "undefined"
+              ? {
+                  costPerEggAlt:
+                    typeof costPerEggAlt !== "undefined" ? costPerEggAlt : null,
+                  savingsTotal:
+                    typeof savingsTotal !== "undefined" ? savingsTotal : null,
+                  altSharePct:
+                    typeof altSharePct !== "undefined" ? altSharePct : null,
+                }
+              : null,
+        },
+      })
+    );
+  } catch {}
 
   // Tint "i" buttons red if attention warranted
   const infoFcr = tileFcr?.querySelector(".info");
@@ -835,6 +874,13 @@ function exportSessionCsv() {
   a.remove();
   URL.revokeObjectURL(url);
 }
+// SETTINGS TOGGLE (footer cog)
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest('[data-action="toggle-settings"]');
+  if (!btn) return;
+  const card = document.querySelector("#settingsCard");
+  if (card) card.toggleAttribute("hidden");
+});
 /* boot once DOM is ready */
 function boot() {
   setDefaultValues(currentUnits()); // sets labels + placeholders

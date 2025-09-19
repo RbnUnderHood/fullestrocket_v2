@@ -37,6 +37,9 @@
   --font-base: 14px;
   --font-label: 13px;
   --font-metric: 18px;
+  --app-min: 320px;
+  --app-max: 430px; /* comfortable modern-phone cap */
+  --app-gutter: 16px; /* side padding/gutters */
 }
 /* === DEBUG BADGE — remove later === */
 :is(header, #appHeader, .site-header) {
