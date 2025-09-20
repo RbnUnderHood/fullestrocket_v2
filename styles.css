@@ -1,5 +1,3 @@
-
-
 * {
   box-sizing: border-box;
 }
@@ -323,4 +321,129 @@ textarea:focus {
 }
 .more-metrics .grid--more {
   margin-top: 8px;
+}
+
+/* Actions row grid: Save · Export · Print (1–2–1)
+   - Middle track (Export) stops shrinking at ~275px (half of 550px viewport goal)
+   - Side tracks (Save/Print) can shrink further, but not below ~120px for readability */
+.actions-row {
+  display: grid;
+  /* Min widths (60 + 180 + 60) + 12px gap = 312px total */
+  grid-template-columns: minmax(60px, 1fr) minmax(180px, 2fr) minmax(60px, 1fr);
+  gap: 6px;
+  align-items: stretch;
+}
+
+/* Compact sizing for side buttons */
+.btn-sm {
+  padding: 10px 12px; /* ~44px height with line-height */
+  line-height: 1.1;
+  font-size: 0.95rem;
+}
+
+/* Hierarchy colors (no logic; visual only) */
+:root {
+  --green-strong: #2e9f4f; /* Cluckulate solid */
+  --green-light: #49b86b; /* Export lighter hue */
+  --border-soft: #dbe6db;
+  --text-muted: #6b776b;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+}
+.btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Primary (Cluckulate already uses this) */
+.btn-primary {
+  background: var(--green-strong);
+  color: #fff;
+  border-color: var(--green-strong);
+}
+
+/* Save: outlined secondary (always looks like a button) */
+.btn-secondary {
+  background: #eef2ee;
+  color: #394339;
+  border-color: var(--border-soft);
+}
+.btn-outline {
+  background: transparent;
+}
+
+/* Export: lighter green, secondary emphasis (not as strong as Cluckulate) */
+.btn-success-light {
+  color: #1f8e45;
+  background: linear-gradient(#ffffff, #ffffff) padding-box;
+  border-color: var(--green-light);
+}
+
+/* Print: ghost/outline */
+.btn-ghost {
+  background: #fafdf9;
+  color: var(--text-muted);
+  border: 1px dashed var(--border-soft);
+}
+
+/* Text wrap helpers */
+.btn .label {
+  display: inline-block;
+  text-wrap: balance;
+}
+/* Ensure these three action buttons stretch full width of their grid cells */
+#loggerSaveBtn,
+#exportBtn,
+#printBtn {
+  width: 100%;
+}
+/* Scaling rules: Export stops earlier; Save/Print can shrink further safely */
+/* Inside the grid, allow buttons to honor the track min widths (override generic 160px) */
+.post-actions .actions-row .btn {
+  min-width: 0;
+}
+
+/* When space is tight, reduce side button padding a bit */
+@media (max-width: 700px) {
+  #loggerSaveBtn.btn,
+  #printBtn.btn {
+    padding: 0.55rem 0.7rem;
+  }
+}
+
+/* When space is tight, let side buttons reduce padding to fit */
+@media (max-width: 900px) {
+  #loggerSaveBtn.btn,
+  #printBtn.btn {
+    padding: 0.6rem 0.75rem; /* tighter */
+  }
+}
+@media (max-width: 700px) {
+  #loggerSaveBtn.btn,
+  #printBtn.btn {
+    padding: 0.5rem 0.6rem; /* tightest */
+  }
+}
+/* Base rule for export label wrapping */
+#exportBtn .label {
+  display: inline-block;
+  text-wrap: balance;
+  line-height: 1.15;
+}
+@media (max-width: 400px) {
+  /* allow Export to wrap cleanly on tiny screens */
+  #exportBtn .label {
+    display: block;
+    line-height: 1.15;
+  }
 }

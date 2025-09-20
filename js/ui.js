@@ -569,8 +569,9 @@ function updatePlaceholders(units) {
 
 function attachListeners() {
   const calcBtn = byId("btnCalc");
-  const exportBtn = byId("btnExportSession");
-  const printBtn = byId("btnPrint");
+  // Support new IDs (#exportBtn, #printBtn) with fallback to legacy ones
+  const exportBtn = byId("exportBtn") || byId("btnExportSession");
+  const printBtn = byId("printBtn") || byId("btnPrint");
   // Feed prices toggle
   if (pricesEnabled && pricesBox) {
     pricesBox.hidden = !pricesEnabled.checked;
