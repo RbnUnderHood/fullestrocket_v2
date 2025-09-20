@@ -136,6 +136,7 @@
 
   window.addEventListener("metrics:updated", (e) => {
     const d = e.detail || {};
+    const derived = MathCore.derive(d);
     const {
       units,
       eggs,
@@ -152,9 +153,17 @@
     } = d;
 
     // Primary headline numbers
-    setText("aFcr", Number.isFinite(fcr) ? fcr.toFixed(2) : "—");
-    setText("aLay", Number.isFinite(layRate) ? Math.round(layRate) + "%" : "—");
-    setText("aCostEgg", Number.isFinite(cpe) ? "$" + cpe.toFixed(3) : "—");
+    const fcrToShow = Number.isFinite(derived.fcr) ? derived.fcr : fcr;
+    setText("aFcr", Number.isFinite(fcrToShow) ? fcrToShow.toFixed(2) : "—");
+    const layPct = Number.isFinite(derived.eggsPerBird)
+      ? derived.eggsPerBird * 100
+      : layRate;
+    setText("aLay", Number.isFinite(layPct) ? Math.round(layPct) + "%" : "—");
+    const cpeToShow = Number.isFinite(derived.cpe) ? derived.cpe : cpe;
+    setText(
+      "aCostEgg",
+      Number.isFinite(cpeToShow) ? "$" + cpeToShow.toFixed(3) : "—"
+    );
 
     // Hennput vs Eggput
     setText(
@@ -171,9 +180,14 @@
     );
 
     // Laying power
+    const eggsPerBirdOut = Number.isFinite(derived.eggsPerBird)
+      ? derived.eggsPerBird
+      : Number.isFinite(layRate)
+      ? layRate / 100
+      : NaN;
     setText(
       "aEggsPerBird",
-      Number.isFinite(layRate) ? (layRate / 100).toFixed(2) : "—"
+      Number.isFinite(eggsPerBirdOut) ? eggsPerBirdOut.toFixed(2) : "—"
     );
     setText(
       "aAvgEggW",
@@ -182,7 +196,11 @@
     setText("aEggsCount", Number.isFinite(eggs) ? String(eggs) : "—");
 
     // Egg-o-nomics
-    setText("aCostPerDozen", Number.isFinite(cpd) ? "$" + cpd.toFixed(2) : "—");
+    const cpdToShow = Number.isFinite(derived.cpd) ? derived.cpd : cpd;
+    setText(
+      "aCostPerDozen",
+      Number.isFinite(cpdToShow) ? "$" + cpdToShow.toFixed(2) : "—"
+    );
     let unitCost = null;
     if (
       Number.isFinite(bagPrice) &&
@@ -198,8 +216,11 @@
     }
     setText(
       "aUnitFeedCost",
-      Number.isFinite(unitCost)
-        ? `$${unitCost.toFixed(2)} / ${units === "imperial" ? "lb" : "kg"}`
+      Number.isFinite(derived.unitCost || unitCost)
+        ? `$${(Number.isFinite(derived.unitCost)
+            ? derived.unitCost
+            : unitCost
+          ).toFixed(2)} / ${units === "imperial" ? "lb" : "kg"}`
         : "—"
     );
     setText(
@@ -249,9 +270,13 @@
 
     // Visuals via CSS custom properties
     const worstFcr = 3.5;
-    const fcrScore = Number.isFinite(fcr)
+    const fcrScoreRaw = Number.isFinite(fcr)
       ? clamp01((worstFcr - Math.min(fcr, worstFcr)) / worstFcr)
       : 0;
+    const fcrScore =
+      derived && derived.scores && Number.isFinite(derived.scores.fcrScore)
+        ? derived.scores.fcrScore
+        : fcrScoreRaw;
     const thermo = document.querySelector("#farmAnalytics .a-thermo");
     if (thermo)
       thermo.style.setProperty("--thermo", (fcrScore * 100).toFixed(0) + "%");
@@ -261,9 +286,13 @@
       egg.style.setProperty("--pct", clamp01((Number(layRate) || 0) / 100));
 
     const maxCost = 0.5; // cap for scoring
-    const econScore = Number.isFinite(cpe)
+    const econScoreRaw = Number.isFinite(cpe)
       ? clamp01((maxCost - Math.min(cpe, maxCost)) / maxCost)
       : 0;
+    const econScore =
+      derived && derived.scores && Number.isFinite(derived.scores.econScore)
+        ? derived.scores.econScore
+        : econScoreRaw;
     const coins = document.querySelector("#farmAnalytics .a-coins");
     if (coins)
       coins.style.setProperty("--score", (econScore * 100).toFixed(0) + "%");
@@ -287,35 +316,41 @@
       });
     }
     // Hennput/Eggput chips: color by FCR band
-    const fcrBand = (function (v) {
-      if (!Number.isFinite(v)) return null;
-      if (v <= 2.1) return "good";
-      if (v <= 2.5) return "avg";
-      if (v <= 3.0) return "watch";
-      return "poor";
-    })(fcr);
+    const fcrBand =
+      (derived && derived.bands && derived.bands.fcr) ||
+      (function (v) {
+        if (!Number.isFinite(v)) return null;
+        if (v <= 2.1) return "good";
+        if (v <= 2.5) return "avg";
+        if (v <= 3.0) return "watch";
+        return "poor";
+      })(fcr);
     if (fcrBand)
       applyBand("#farmAnalytics .a-feed .substats > .metricRow", fcrBand);
 
     // Laying chips: color by layRate band
-    const layBand = (function (v) {
-      if (!Number.isFinite(v)) return null;
-      if (v >= 80) return "good";
-      if (v >= 60) return "avg";
-      if (v >= 40) return "watch";
-      return "poor";
-    })(layRate);
+    const layBand =
+      (derived && derived.bands && derived.bands.lay) ||
+      (function (v) {
+        if (!Number.isFinite(v)) return null;
+        if (v >= 80) return "good";
+        if (v >= 60) return "avg";
+        if (v >= 40) return "watch";
+        return "poor";
+      })(layRate);
     if (layBand)
       applyBand("#farmAnalytics .a-laying .substats > .metricRow", layBand);
 
     // Econ chips: color by cost per egg (cheaper is better)
-    const econBand = (function (c) {
-      if (!Number.isFinite(c)) return null;
-      if (c <= 0.12) return "good";
-      if (c <= 0.25) return "avg";
-      if (c <= 0.4) return "watch";
-      return "poor";
-    })(cpe);
+    const econBand =
+      (derived && derived.bands && derived.bands.econ) ||
+      (function (c) {
+        if (!Number.isFinite(c)) return null;
+        if (c <= 0.12) return "good";
+        if (c <= 0.25) return "avg";
+        if (c <= 0.4) return "watch";
+        return "poor";
+      })(cpe);
     if (econBand)
       applyBand("#farmAnalytics .a-econ .substats > .metricRow", econBand);
 
@@ -326,7 +361,9 @@
         d.loggerVisitIndex
       } for this visit (Logger entry: ${d.flock || "Unnamed"})`;
     } else if (d.loggerWarning && d.loggerWarning.type === "duplicate_today") {
-      banner = `Already logged for flock "${d.loggerWarning.flock}" today. Only one entry per flock per day.`;
+      banner = `Already logged flock "${d.loggerWarning.flock}" today. Only one entry per flock per day.`;
+    } else if (d.loggerWarning && d.loggerWarning.type === "missing_flock") {
+      banner = "Please enter a flock name before saving.";
     }
     const sessionNote = document.getElementById("sessionNote");
     if (sessionNote) {
@@ -345,7 +382,6 @@
 
     // Stage B test hooks (no DOM writes): expose math core + latest snapshot
     try {
-      const derived = MathCore.derive(d);
       const checks = plausibility({ ...d, ...derived });
       // Publish stable hooks for console QA
       window.__math =

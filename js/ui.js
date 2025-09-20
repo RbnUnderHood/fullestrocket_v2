@@ -190,6 +190,78 @@ function getHelpData(key) {
   }
 }
 
+// ---------------- Poultry Logger (Stage C) ----------------
+// Tiny helper module with localStorage/sessionStorage persistence
+const LoggerCore = (() => {
+  const LS_KEY = "cluckulator.logger";
+  const VS_KEY = "cluckulator.logger.visitIndex";
+
+  const todayKey = () => {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+
+  const load = () => {
+    try {
+      return JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+    } catch (_) {
+      return {};
+    }
+  };
+
+  const saveStore = (obj) => {
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(obj));
+    } catch (_) {}
+  };
+
+  const nextVisitIndex = () => {
+    let n = 0;
+    try {
+      n = Number(sessionStorage.getItem(VS_KEY)) || 0;
+    } catch (_) {}
+    n += 1;
+    try {
+      sessionStorage.setItem(VS_KEY, String(n));
+    } catch (_) {}
+    return n;
+  };
+
+  function saveEntry({ flock, snapshot }) {
+    const key = todayKey();
+    const name = (flock || "").trim();
+    if (!name) {
+      return { saved: false, warning: { type: "missing_flock" } };
+    }
+    const store = load();
+    const dayBucket = store[key] || {};
+    if (dayBucket[name]) {
+      return {
+        saved: false,
+        warning: { type: "duplicate_today", flock: name },
+      };
+    }
+    dayBucket[name] = {
+      at: Date.now(),
+      snapshot: snapshot && {
+        fcr: snapshot.fcr,
+        cpe: snapshot.cpe,
+        layRate: snapshot.layRate,
+        eggs: snapshot.eggs,
+        feedPerEggG: snapshot.feedPerEggG,
+      },
+    };
+    store[key] = dayBucket;
+    saveStore(store);
+    return { saved: true, visitIndex: nextVisitIndex(), flock: name };
+  }
+
+  return { saveEntry, todayKey, load };
+})();
+
 /* -------- Single popover element & handlers (no extra HTML needed) -------- */
 let helpEl;
 function ensureHelpPopover() {
@@ -405,6 +477,66 @@ function onUnitsChange() {
   setPlaceholders(u); // update placeholders on toggle
 }
 
+// Snapshot the latest inputs/state in the same shape used for analytics dispatch
+function collectInputs() {
+  // Mirror the detail payload built in onCalculate's dispatch
+  const units = currentUnits();
+  const birds = +inputs.birdCount.value || 0;
+  const eggs = +inputs.eggCount.value || 0;
+  const metric = toMetricUnits(units, {
+    feedConsumed: inputs.feedConsumed.value,
+    avgEggWeight: inputs.avgEggWeight.value,
+    bagWeight: inputs.bagWeight.value,
+    altAmount: altEnabled && altEnabled.checked ? altAmount.value : 0,
+    altPricePerUnit:
+      altEnabled && altEnabled.checked ? altPricePerUnit.value : "",
+  });
+  const { fcr, feedPerEggG } = computeFcr({
+    feedConsumedKg: metric.feedConsumedKg,
+    eggCount: eggs,
+    avgEggWeightG: metric.avgEggWeightG,
+  });
+  const cpe = computeCostPerEgg({
+    bagPrice: inputs.bagPrice.value,
+    bagWeightKg: metric.bagWeightKg,
+    eggCount: eggs,
+    feedConsumedKg: metric.feedConsumedKg,
+  });
+  const layRate = computeLayRate(eggs, birds);
+  const feedPerBird_g = computeFeedPerBirdG(metric.feedConsumedKg, birds);
+  const cpd = costPerDozen(cpe);
+  // Optional alt scenario
+  const { costPerEggAlt, savingsTotal, altSharePct } = computeAltCostScenario({
+    feedConsumedKg: metric.feedConsumedKg,
+    eggCount: eggs,
+    bagPrice: inputs.bagPrice.value,
+    bagWeightKg: metric.bagWeightKg,
+    altAmountKg: metric.altAmountKg,
+    altPricePerKg: metric.altPricePerKg,
+  });
+  const alt = {
+    costPerEggAlt: typeof costPerEggAlt !== "undefined" ? costPerEggAlt : null,
+    savingsTotal: typeof savingsTotal !== "undefined" ? savingsTotal : null,
+    altSharePct: typeof altSharePct !== "undefined" ? altSharePct : null,
+  };
+  return {
+    units,
+    eggs,
+    avgEggWeightG: metric.avgEggWeightG ?? null,
+    feedConsumedKg: metric.feedConsumedKg ?? null,
+    bagWeightKg: metric.bagWeightKg ?? null,
+    bagPrice: Number((inputs && inputs.bagPrice && inputs.bagPrice.value) || 0),
+    fcr,
+    feedPerEggG: typeof feedPerEggG !== "undefined" ? feedPerEggG : null,
+    layRate,
+    feedPerBird_g,
+    cpe,
+    cpd,
+    alt,
+    flock: (inputs.flockName.value || "").trim(),
+  };
+}
+
 function prefillAverageFeedPrice(units) {
   if (!pricesEnabled || !pricesEnabled.checked) return;
   const hasW = inputs.bagWeight.value !== "";
@@ -480,6 +612,55 @@ function attachListeners() {
       pricesBox.hidden = !pricesEnabled.checked;
     });
   }
+
+  // Wire Poultry Logger Save button (if present)
+  (function wireLoggerSave() {
+    const btn = document.getElementById("loggerSaveBtn");
+    if (!btn) return;
+    if (btn.__wired) return;
+    btn.__wired = true;
+    btn.addEventListener("click", () => {
+      const d = collectInputs();
+      const snapshot = {
+        fcr: d.fcr,
+        cpe: d.cpe,
+        layRate: d.layRate,
+        eggs: d.eggs,
+        feedPerEggG: d.feedPerEggG,
+      };
+      const result = LoggerCore.saveEntry({ flock: d.flock, snapshot });
+      const payload = {
+        ...d,
+        loggerSaved: !!result.saved,
+        loggerVisitIndex: result.visitIndex || null,
+        loggerWarning: result.warning || null,
+      };
+      try {
+        window.dispatchEvent(
+          new CustomEvent("metrics:updated", { detail: payload })
+        );
+      } catch (_) {}
+
+      // After success, update the local session note with a friendly message.
+      if (result && result.saved === true) {
+        try {
+          const store = LoggerCore.load && LoggerCore.load();
+          const today = LoggerCore.todayKey();
+          const todayBucket = (store && store[today]) || {};
+          const count = Object.keys(todayBucket).length;
+          const flockName = result.flock || d.flock || "Unnamed";
+          const el = document.getElementById("sessionNote");
+          if (el) {
+            el.textContent = `You have logged and saved ${count} flocks today, the last one was ${flockName}. Don’t forget to export!`;
+            el.hidden = false;
+            // Match the green styling used for loggerSaved banners
+            el.style.background = "#e6ffe6";
+            el.style.color = "#225c22";
+          }
+        } catch (_) {}
+      }
+    });
+  })();
 }
 
 function onPrint(e) {
@@ -824,13 +1005,7 @@ function onCalculate() {
     bagPrice_usd: +inputs.bagPrice.value || "",
     notes: (inputs.notes?.value || "").replace(/\s+/g, " ").trim(),
   };
-  sessionData.calcs.push(row);
-  refreshSessionCounter();
-  const n = sessionData.calcs.length;
-  sessionNote.hidden = false;
-  sessionNote.textContent = `Saved calculation #${n} for this visit${
-    row.flock ? ` (flock: ${row.flock})` : ""
-  }.`;
+  // No longer recording session rows on Calculate; Save handles logging.
 }
 
 function refreshSessionCounter() {
@@ -839,49 +1014,66 @@ function refreshSessionCounter() {
 }
 
 function exportSessionCsv() {
-  if (!sessionData.calcs.length) {
-    alert("No calculations this session yet. Do one, then export.");
+  // Export today's logs from LoggerCore store
+  const store = (LoggerCore.load && LoggerCore.load()) || {};
+  const today = LoggerCore.todayKey();
+  const bucket = store[today] || {};
+  const flocks = Object.keys(bucket);
+  if (!flocks.length) {
+    alert(
+      "No saved logs for today yet. Click Save after entering a flock name."
+    );
     return;
   }
 
+  // Define CSV columns (stable order)
   const header = [
-    "timestamp",
+    "date",
     "flock",
-    "units",
-    "birdCount",
-    "eggCount",
-    "avgEggWeight_input",
-    "feedConsumed_input",
-    "eggWeight_g",
-    "feedConsumed_kg",
-    "eggMass_kg",
+    "timestamp_ms",
     "fcr",
-    "feedPerEgg_g",
-    "costPerEgg_usd",
-    "bagWeight_input",
-    "bagPrice_usd",
-    "notes",
+    "cpe",
+    "layRate",
+    "eggs",
+    "feedPerEggG",
   ];
 
-  const lines = [header.join(",")];
-  sessionData.calcs.forEach((r) => {
-    const vals = header.map((k) => {
-      const v = r[k] ?? "";
-      return typeof v === "string" && /[\",\n]/.test(v)
-        ? `"${v.replace(/"/g, '""')}"`
-        : v;
+  const rows = [];
+  flocks.forEach((name) => {
+    const entry = bucket[name] || {};
+    const s = entry.snapshot || {};
+    rows.push({
+      date: today,
+      flock: name,
+      timestamp_ms: entry.at || "",
+      fcr: s.fcr ?? "",
+      cpe: s.cpe ?? "",
+      layRate: s.layRate ?? "",
+      eggs: s.eggs ?? "",
+      feedPerEggG: s.feedPerEggG ?? "",
     });
-    lines.push(vals.join(","));
   });
 
-  const blob = new Blob([lines.join("\n")], {
-    type: "text/csv;charset=utf-8;",
+  // Harden values and build CSV (with BOM and CRLF)
+  const escapeVal = (v) => {
+    if (v == null) return "";
+    let s = String(v);
+    // Excel formula injection guard
+    if (/^[=+\-@]/.test(s)) s = "'" + s;
+    if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  };
+  const lines = ["\uFEFF" + header.join(",")];
+  rows.forEach((r) => {
+    lines.push(header.map((k) => escapeVal(r[k])).join(","));
   });
+  const content = lines.join("\r\n");
+
+  const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  const date = new Date().toISOString().slice(0, 10);
   a.href = url;
-  a.download = `fcr_session_${date}.csv`;
+  a.download = `cluckulator_logs_${today}.csv`;
   document.body.appendChild(a);
   a.click();
   a.remove();
