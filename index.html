@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="css/components/alt-feed.css" />
     <link rel="stylesheet" href="css/components/density.css" />
     <link rel="stylesheet" href="css/components/analytics.css" />
+    <!-- Project overrides and actions-row grid -->
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
@@ -268,11 +270,28 @@
       </section>
 
       <div class="post-actions">
-        <button type="button" id="btnExportSession" class="btn block">
-          Export Today’s Log(s)
-        </button>
-        <button id="loggerSaveBtn">Save</button>
-        <button type="button" id="btnPrint" class="btn block">Print</button>
+        <div class="actions-row" data-role="actions-row">
+          <button
+            id="loggerSaveBtn"
+            class="btn btn-secondary btn-outline btn-sm"
+          >
+            <span class="label">Save</span>
+          </button>
+          <button
+            type="button"
+            id="exportBtn"
+            class="btn btn-success-light btn-outline"
+          >
+            <span class="label">Export Today’s Log(s)</span>
+          </button>
+          <button
+            type="button"
+            id="printBtn"
+            class="btn btn-ghost btn-outline btn-sm"
+          >
+            <span class="label">Print</span>
+          </button>
+        </div>
       </div>
 
       <!-- Simple ad placeholder spots (wire-ready for AdSense later) -->
