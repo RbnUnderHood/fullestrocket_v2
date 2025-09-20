@@ -25,7 +25,20 @@ function esc(s) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
+function setDefaultInputs() {
+  if (inputs.birdCount) inputs.birdCount.value = 12;
+  if (inputs.eggCount) inputs.eggCount.value = 10;
+  if (inputs.avgEggWeight) inputs.avgEggWeight.value = 60;
+  if (inputs.feedConsumed) inputs.feedConsumed.value = 1.2;
+  if (inputs.bagWeight) inputs.bagWeight.value = 22.68; // 50 lb in kg
+  if (inputs.bagPrice) inputs.bagPrice.value = 22.5;
+  if (inputs.altAmount) inputs.altAmount.value = 0.2;
+  if (inputs.altPricePerUnit) inputs.altPricePerUnit.value = 0.5;
+  if (inputs.flockName) inputs.flockName.value = "EggForceOne";
+}
+
 function autoFocusFirstField() {
+  setDefaultInputs();
   try {
     if (!inputs.birdCount.value) {
       // Prevent scroll jump; mobile browsers may still open keyboard (expected)
@@ -891,4 +904,18 @@ if (document.readyState !== "loading") {
   boot();
 } else {
   document.addEventListener("DOMContentLoaded", boot);
+}
+
+function saveEntry(today, flock, payload) {
+  const logger = readLogger();
+  if (!logger.byDay) logger.byDay = {};
+  if (!logger.byDay[today]) logger.byDay[today] = {};
+  if (!logger.byDay[today][flock]) {
+    logger.visitCounter = (logger.visitCounter || 0) + 1;
+    payload.loggerVisitIndex = logger.visitCounter;
+    logger.byDay[today][flock] = payload;
+    writeLogger(logger);
+    return logger.visitCounter;
+  }
+  return null;
 }

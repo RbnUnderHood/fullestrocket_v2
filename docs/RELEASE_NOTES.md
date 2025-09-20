@@ -3,10 +3,11 @@
 Release date: 2025-09-15  
 Version tag: v0.3.4
 
-1) Summary
-Cleanup-only batch: normalized docs to clean UTF-8 (no odd glyphs), consolidated docs under `docs/`, fixed stray character in `<head>`, centralized font tokens in `theme.css`, archived alternate tile CSS. No intentional visual changes.
+1. Summary
+   Cleanup-only batch: normalized docs to clean UTF-8 (no odd glyphs), consolidated docs under `docs/`, fixed stray character in `<head>`, centralized font tokens in `theme.css`, archived alternate tile CSS. No intentional visual changes.
 
-2) Changes
+2. Changes
+
 - Features:
   - Packaging script already present; reused for this release.
 - Fixes:
@@ -18,7 +19,8 @@ Cleanup-only batch: normalized docs to clean UTF-8 (no odd glyphs), consolidated
   - Centralized `--font-*` in `css/theme.css`; removed local font tokens from `css/components/density.css`.
   - Archived `css/components/results-fun.css` and `css/components/metric-bands.css` to `css/_archive/`.
 
-3) Files touched (owner map)
+3. Files touched (owner map)
+
 - css/theme.css — tokens in `:root` (owns spacing tokens now).
 - css/components/density.css — owns `.actions` and `.post-actions`; references centralized spacing tokens.
 - css/components/results.css — removed duplicate `.post-actions` rules (owner is density.css).
@@ -28,52 +30,74 @@ Cleanup-only batch: normalized docs to clean UTF-8 (no odd glyphs), consolidated
 - docs/SEND_TEMPLATE.md — message template for ZIP handoffs.
 - scripts/make_zip.ps1 — clean ZIP generator.
 
-4) Visual changes
+4. Visual changes
+
 - [x] None (cleanup only)
 - [ ] Yes (describe): n/a
 
-5) Tests performed (smoke)
+5. Tests performed (smoke)
+
 - [ ] No console errors in Chrome/Firefox/Safari.
 - [ ] Mobile 360–414px: inputs readable; buttons ≥44px; tiles wrap.
 - [ ] Help (i) opens/closes; ESC & click-away work.
 - [ ] Export/Print row behaves; no layout shift.
 - [ ] Keyboard focus visible; tab order sensible.
-Notes: Manual verification pending; expected no change.
+      Notes: Manual verification pending; expected no change.
 
-6) Known issues / TODO
+6. Known issues / TODO
+
 - Decide on default tile system (suggest `css/components/results-clean.css` for production) and archive alternates.
 - Finalize brand palette tokens; align tile band colors with chosen palette.
 
-7) Rollback plan
+7. Rollback plan
+
 - Revert to previous ZIP or tag. Confirm no console errors.
 
-8) Artifacts
-- Built CSS bundle: `dist/app.css` — [x] yes  [ ] no
+8. Artifacts
+
+- Built CSS bundle: `dist/app.css` — [x] yes [ ] no
 - Project ZIP: `releases/fcr-web-calculator-20250915-1052-clean.zip`
 
-9) Handoff → Codex (in VS Code)
+9. Handoff → Codex (in VS Code)
+
 - Change request: Move `--font-*` tokens to `css/theme.css` (no visual change).
   - Files to touch: `css/theme.css`, `css/components/density.css`.
   - Constraints: tokens only; no component overrides.
   - Acceptance: app renders identically; DevTools shows font tokens only in `:root`.
   - Test notes: refresh; compare headings/labels/metric values.
 
-10) Handoff → ChatGPT (project chat)
+10. Handoff → ChatGPT (project chat)
+
 - Decisions needed:
   - Final palette (Farm Fresh vs Field Green) and token values.
   - Export formats (CSV only vs CSV+JSON+pretty text).
   - Whether to ship a desktop sidebar ad container in MVP.
 
-
 ## 2025-09-15 21:12:17 — Batch A: Component Colorization (rebuild)
+
 - Scope: css/components/results-clean.css, css/components/forms.css
 - Replaced hex colors with theme tokens; fixed prior stray suffix issue.
 - Rebuilt dist/app.css.
 
 ---
+
 ## v0.3.4 — Docs consolidation + CSS archive hygiene
+
 - Consolidated all Markdown **into `/docs/`** (remove root duplicates).
 - Archived experimental tile systems under `css/_archive/` unless explicitly enabled.
 - Reconfirmed selector ownership (see `docs/SELECTOR_MAP.md`).
 - Centralized spacing/type tokens in `css/theme.css` (see `docs/CLEANUP_REPORT.md`).
 - Packaging rule: one source of truth per cycle (see `docs/COMMS.md` Packaging flow).
+
+## 2025-09-19 — Stage B – Math Core QA
+
+**Result:** PASS (NL)
+
+- MathCore exports stable API + QA helpers (`kgFromLb`, `lbFromKg`).
+- Console hooks verified: `window.__math.MathCore`, `window.__state.latest`.
+- No new listeners or DOM writes added.
+- Scope respected: math-only changes; layout untouched.
+
+Notes:
+
+- Keep converters available for onboarding QA; they’re non-invasive and console-only.
