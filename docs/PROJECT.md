@@ -133,10 +133,10 @@ styles.css                # reset + page shell only
 
 **Release plan:**
 
-1) Ensure tokens & ownership respected; run quick smoke tests.
-2) Build CSS: double‑click `build_css.bat` → confirm `dist/app.css`.
-3) Update `docs/RELEASE_NOTES.md`: changes + test checklist results.
-4) Package ZIP of the whole project and ship/upload.
+1. Ensure tokens & ownership respected; run quick smoke tests.
+2. Build CSS: double‑click `build_css.bat` → confirm `dist/app.css`.
+3. Update `docs/RELEASE_NOTES.md`: changes + test checklist results.
+4. Package ZIP of the whole project and ship/upload.
 
 ---
 
@@ -145,3 +145,18 @@ styles.css                # reset + page shell only
 - Codex (VS Code): implement small tickets that touch 1–2 files; keep to owner file(s).
 - ChatGPT (here): scope/theme decisions, cross‑file refactors, docs, UX guidance, release notes.
 - You can hand me ZIPs; I’ll return clean diffs/ZIPs with docs.
+
+---
+
+## 10) UI patterns (contracts)
+
+- Lower actions row
+
+  - Structure: existing `.post-actions > .actions-row` with three direct child buttons.
+  - IDs: `#loggerSaveBtn` (Save), `#exportBtn` (Export Today’s Log(s)), `#printBtn` (Print).
+  - Layout: grid owned by `styles.css` (`.actions-row`), tuned for small screens; see `docs/SELECTOR_MAP.md` → Project overrides.
+  - Behavior: Export/Print wired to new IDs with legacy fallbacks; Save shows emphasis (visual readiness) without disabling when unsavable.
+
+- Ad spacing
+  - Mobile ad: `div#adMobileTop` styles live in `css/components/ads.css`.
+  - Desktop placeholder: `aside.ad` spacing override in `styles.css` to equalize distance above/below the next card.

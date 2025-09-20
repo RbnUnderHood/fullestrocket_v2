@@ -702,7 +702,7 @@ function attachListeners() {
           const flockName = result.flock || d.flock || "Unnamed";
           const el = document.getElementById("sessionNote");
           if (el) {
-            el.textContent = `You have logged and saved ${count} flocks today, the last one was ${flockName}. Don’t forget to export!`;
+            el.textContent = `You have logged and saved ${count} flocks today, the last one was "${flockName}". Don’t forget to export!`;
             el.hidden = false;
             // Match the green styling used for loggerSaved banners
             el.style.background = "#e6ffe6";

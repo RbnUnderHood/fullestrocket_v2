@@ -1,7 +1,9 @@
+<!-- markdownlint-disable MD029 -->
+
 # RELEASE_NOTES.md — FCR Web Calculator (USA)
 
-Release date: 2025-09-15  
-Version tag: v0.3.4
+Release date: 2025-09-20  
+Version tag: v0.3.5
 
 1. Summary
    Cleanup-only batch: normalized docs to clean UTF-8 (no odd glyphs), consolidated docs under `docs/`, fixed stray character in `<head>`, centralized font tokens in `theme.css`, archived alternate tile CSS. No intentional visual changes.
@@ -56,7 +58,7 @@ Version tag: v0.3.4
 8. Artifacts
 
 - Built CSS bundle: `dist/app.css` — [x] yes [ ] no
-- Project ZIP: `releases/fcr-web-calculator-20250915-1052-clean.zip`
+- Project ZIP: `releases/fcr-web-calculator-20250920-2018-clean.zip`
 
 9. Handoff → Codex (in VS Code)
 
@@ -101,3 +103,38 @@ Version tag: v0.3.4
 Notes:
 
 - Keep converters available for onboarding QA; they’re non-invasive and console-only.
+
+---
+
+## 2025-09-20 — UI polish: actions row + spacing
+
+Scope: styles.css, index.html (structure unchanged), js/ui.js (wiring only), js/analytics.js (copy only)
+
+Highlights
+
+- Lower actions row converted to a 3‑track grid (Save · Export · Print) in `.actions-row`; supports narrow screens down to ~340px.
+- Export stops shrinking sooner than side buttons; side buttons reduce padding on small widths.
+- Added a small 6px breathing room under the actions row.
+- Equalized ad spacing: `aside.ad` now has top/bottom spacing that visually matches the next card (top = 10px + 6px from actions row; bottom = 16px).
+- Normalized button IDs: `#exportBtn`, `#printBtn` (Save remains `#loggerSaveBtn`).
+- Restored Export/Print handlers with backward‑compatibility for legacy IDs.
+- Save button now shows conditional emphasis (green only when savable); behavior unchanged—emphasis conveys readiness.
+- Success banner quotes the flock name (e.g., “Saved \"Layer A\" to today’s log”).
+- Banner: success message now quotes flock names, e.g., the last one was "EggForceOne".
+
+What did not change
+
+- Math/CSV export logic untouched.
+- DOM structure for the LOWER ACTIONS CARD stayed the same—no extra wrappers.
+
+Tests performed (smoke)
+
+- Resize 340–1280px: buttons remain in one row; labels wrap gracefully.
+- Export/Print buttons clickable; CSV and print sheet work as before.
+- After Calculate, Save shows emphasis when flock + derived values are present and not already saved today.
+- No console errors; print‑only stylesheet continues to hide non‑result UI.
+
+Known follow‑ups
+
+- If stricter gating is desired, toggle `disabled` on Save in `updateSaveButtonState` (currently visual‑only emphasis).
+- Consider moving `.actions-row` ownership into a dedicated component file if it graduates from project overrides.
