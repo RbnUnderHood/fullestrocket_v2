@@ -18,6 +18,7 @@ const sessionData = { startTime: Date.now(), calcs: [] };
 /* ---------------- Tiny helpers ---------------- */
 const $ = (sel) => document.querySelector(sel);
 const byId = (id) => document.getElementById(id);
+const $save = document.getElementById("loggerSaveBtn");
 function esc(s) {
   return String(s ?? "")
     .replace(/&/g, "&amp;")
@@ -67,6 +68,43 @@ function applyMoreDefaultForViewport() {
 
 // Store the last computed values so help popovers can be context-aware
 let lastMetrics = null;
+
+// --- Save button conditional emphasis helpers ---
+function todayKey() {
+  const d = new Date();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+function isSavedToday(flock) {
+  if (!flock) return false;
+  try {
+    const store = JSON.parse(
+      localStorage.getItem("cluckulator.logger") || "{}"
+    );
+    const tk = todayKey();
+    return !!(store[tk] && store[tk][flock]);
+  } catch (_) {
+    return false;
+  }
+}
+function updateSaveButtonState(inputs) {
+  const btn = $save;
+  if (!btn) return;
+  const flock = (inputs?.flock || "").trim();
+  const hasDerived = !!window.__state?.latest?.derived || !!lastMetrics;
+  // reset classes
+  btn.classList.remove("btn-primary");
+  btn.classList.add("btn-secondary", "btn-outline");
+  btn.disabled = false; // keep clickable; emphasis conveys readiness
+  if (!flock || !hasDerived) return; // not savable → stay outlined
+  if (!isSavedToday(flock)) {
+    btn.classList.remove("btn-secondary", "btn-outline");
+    btn.classList.add("btn-primary");
+  } else {
+    btn.classList.add("btn-secondary", "btn-outline");
+  }
+}
 
 function getHelpData(key) {
   const m = lastMetrics;
@@ -599,6 +637,18 @@ function attachListeners() {
   unitRadios.forEach((r) => r.addEventListener("change", onUnitsChange));
   if (printBtn) printBtn.addEventListener("click", onPrint);
 
+  // Update Save button state when flock name changes
+  const flockInput = inputs && inputs.flockName;
+  if (flockInput && typeof flockInput.addEventListener === "function") {
+    flockInput.addEventListener("input", () => {
+      try {
+        const latest = window.__state?.latest?.inputs || {};
+        const merged = { ...latest, flock: flockInput.value || "" };
+        updateSaveButtonState(merged);
+      } catch (_) {}
+    });
+  }
+
   // Alternative feed toggle (init + live)
   if (altEnabled && altBox) {
     altBox.hidden = !altEnabled.checked; // initialize on load
@@ -659,9 +709,17 @@ function attachListeners() {
             el.style.color = "#225c22";
           }
         } catch (_) {}
+        // Refresh Save button appearance after a save
+        try {
+          updateSaveButtonState({ flock: d.flock || "" });
+        } catch (_) {}
       }
     });
   })();
+  // Initialize Save button state once on load
+  try {
+    updateSaveButtonState({ flock: (inputs?.flockName?.value || "").trim() });
+  } catch (_) {}
 }
 
 function onPrint(e) {
@@ -939,6 +997,22 @@ function onCalculate() {
 
   // Tint "i" buttons red if attention warranted
   const infoFcr = tileFcr?.querySelector(".info");
+
+  // After analytics picks up the event and publishes __state.latest,
+  // schedule a microtask to refresh Save button state
+  queueMicrotask(() => {
+    try {
+      const latest = window.__state?.latest?.inputs || {};
+      const merged = {
+        ...latest,
+        flock:
+          inputs && inputs.flockName && inputs.flockName.value
+            ? inputs.flockName.value
+            : latest.flock || "",
+      };
+      updateSaveButtonState(merged);
+    } catch (_) {}
+  });
   const infoLay = tileLay?.querySelector(".info");
   const infoBird = tileFeedBird?.querySelector(".info");
   infoFcr?.classList.toggle(

@@ -357,9 +357,8 @@
     // ---- Poultry Logger banners ----
     let banner = "";
     if (d.loggerSaved === true && d.loggerVisitIndex) {
-      banner = `Saved calculation #${
-        d.loggerVisitIndex
-      } for this visit (Logger entry: ${d.flock || "Unnamed"})`;
+      const name = d.flock ? `"${d.flock}"` : "this flock";
+      banner = `Saved calculation #${d.loggerVisitIndex} for this visit (Logger entry: ${name})`;
     } else if (d.loggerWarning && d.loggerWarning.type === "duplicate_today") {
       banner = `Already logged flock "${d.loggerWarning.flock}" today. Only one entry per flock per day.`;
     } else if (d.loggerWarning && d.loggerWarning.type === "missing_flock") {

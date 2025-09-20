@@ -177,6 +177,12 @@ textarea:focus {
   padding: 24px;
   border-radius: 12px;
 }
+/* Equalized spacing for desktop ad spot only (do not affect mobile div#adMobileTop) */
+aside.ad {
+  /* Top space: 10px + 6px from .actions-row bottom margin = 16px total
+     Bottom space to next card collapses to 16px with the next section's margin */
+  margin: 10px 0 16px;
+}
 
 /* Summary key/value layout */
 .kv {
@@ -446,4 +452,9 @@ textarea:focus {
     display: block;
     line-height: 1.15;
   }
+}
+
+/* 6px breathing room below the actions row */
+.actions-row {
+  margin-bottom: 6px;
 }
