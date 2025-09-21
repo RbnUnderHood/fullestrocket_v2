@@ -5,8 +5,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-# Workspace root = location of this script's parent directory
-$root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+# Workspace root = directory containing this script
+$root = $PSScriptRoot
 Set-Location $root
 
 # Timestamped filename
@@ -17,10 +17,11 @@ $releases = Join-Path $root 'releases'
 if (-not (Test-Path $releases)) { New-Item -ItemType Directory -Path $releases | Out-Null }
 $zipPath = Join-Path $releases $name
 
-# Collect files, excluding .git and css/_archive (clean zip)
-$allFiles = Get-ChildItem -Recurse -File | Where-Object { 
+# Collect files within the workspace only, excluding .git, css/_archive, and releases (clean zip)
+$allFiles = Get-ChildItem -Path $root -Recurse -File | Where-Object {
   $_.FullName -notmatch "\\\.git\\" -and 
-  $_.FullName -notmatch "css\\\\_archive\\" 
+  $_.FullName -notmatch "css\\\\_archive\\" -and 
+  $_.FullName -notmatch "\\\\releases\\\\"
 }
 
 if (-not $IncludeDist) {
