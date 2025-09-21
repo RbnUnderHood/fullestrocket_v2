@@ -121,6 +121,9 @@ Highlights
 - Save button now shows conditional emphasis (green only when savable); behavior unchanged—emphasis conveys readiness.
 - Success banner quotes the flock name (e.g., “Saved \"Layer A\" to today’s log”).
 - Banner: success message now quotes flock names, e.g., the last one was "EggForceOne".
+- Save: On successful save, the button briefly shows “Saved! ✔️” with a success flash, then reverts.
+- Export: After CSV is generated, the button briefly shows “All logs exported ✅” with a light success tint, then reverts.
+- Infra: Added window.\_\_ui.swapBtnState helper (no new listeners/behavior changes).
 
 What did not change
 
@@ -138,3 +141,12 @@ Known follow‑ups
 
 - If stricter gating is desired, toggle `disabled` on Save in `updateSaveButtonState` (currently visual‑only emphasis).
 - Consider moving `.actions-row` ownership into a dedicated component file if it graduates from project overrides.
+
+---
+
+## 2025-09-20 — Save arming + sticky units
+
+Enhancements
+
+- Save arming: Save only turns green after a fresh Cluckulate for the current inputs (including flock). Any edit de‑arms until recalculated. Core CSV/logger/banner behavior unchanged.
+- Units sticky: Unit toggle persists in localStorage and restores on load. Changing units marks inputs as needing re‑Cluckulation.

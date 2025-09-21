@@ -371,6 +371,17 @@
         sessionNote.hidden = false;
         sessionNote.style.background = d.loggerSaved ? "#e6ffe6" : "#fffbe6";
         sessionNote.style.color = d.loggerSaved ? "#225c22" : "#8a5c00";
+        // flash Save button confirmation on successful save (no new listeners)
+        if (d.loggerSaved) {
+          try {
+            const btn = document.getElementById("loggerSaveBtn");
+            window.__ui?.swapBtnState(btn, {
+              text: "Saved! ✔️",
+              addClass: "btn-flash--ok",
+            });
+            // window.__ui.playUiSound('save'); // reserved for later
+          } catch (_) {}
+        }
       } else {
         sessionNote.textContent = "";
         sessionNote.hidden = true;

@@ -15,6 +15,15 @@ const SHOW_WARNINGS_CARD = false; // we’ll use tile info popovers instead
 /* ---------------- Session-only memory (no persistence) ---------------- */
 const sessionData = { startTime: Date.now(), calcs: [] };
 
+// ---------------- Boot-time global state (dirty flag for Save gating) ----------------
+window.__state = window.__state || {};
+// When true, Save must NOT arm; becomes false only immediately after a fresh Cluckulate
+if (typeof window.__state.needsRecalc === "undefined")
+  window.__state.needsRecalc = true;
+// Track the flock name used in the last calculation (trimmed)
+if (typeof window.__state.lastCalcFlock === "undefined")
+  window.__state.lastCalcFlock = "";
+
 /* ---------------- Tiny helpers ---------------- */
 const $ = (sel) => document.querySelector(sel);
 const byId = (id) => document.getElementById(id);
@@ -26,6 +35,187 @@ function esc(s) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
+// helper: temporary button state swap (text + class), then revert (no-op if missing)
+window.__ui = window.__ui || {};
+window.__ui.swapBtnState = function swapBtnState(
+  btn,
+  { text, addClass, duration = 1500 } = {}
+) {
+  if (!btn) return;
+  const originalHTML = btn.innerHTML;
+  const originalClass = addClass ? addClass : null;
+  const revert = () => {
+    if (originalClass) btn.classList.remove(originalClass);
+    btn.innerHTML = originalHTML;
+  };
+  if (addClass) btn.classList.add(addClass);
+  if (text) btn.innerHTML = text;
+  window.setTimeout(revert, duration);
+};
+
+// (optional future) tiny sound hook – not active yet
+window.__ui.playUiSound = function playUiSound(/* name */) {
+  // intentionally a no-op for now; wire later:
+  // const el = document.getElementById('uiSound-'+name); el?.play();
+};
+
+// ---- Conflict-proof, cancellable scroll to actions row ----
+(function () {
+  let raf = 0,
+    pendingTimer = 0,
+    cancelling = false;
+  const html = document.documentElement,
+    body = document.body;
+
+  function prefersReduced() {
+    return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  }
+  function actionsRow() {
+    return document.querySelector(".actions-row");
+  }
+
+  function addNoAnchor() {
+    html.classList.add("scrolling-prog");
+    body.classList.add("scrolling-prog");
+  }
+  function remNoAnchor() {
+    html.classList.remove("scrolling-prog");
+    body.classList.remove("scrolling-prog");
+  }
+
+  function now() {
+    return performance.now();
+  }
+  function easeInOutQuad(t) {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  }
+
+  function cancelScrollRuntime() {
+    cancelling = true;
+    if (raf) cancelAnimationFrame(raf), (raf = 0);
+    if (pendingTimer) clearTimeout(pendingTimer), (pendingTimer = 0);
+    remNoAnchor();
+    setTimeout(() => {
+      cancelling = false;
+    }, 0);
+  }
+
+  function onAnyUserIntentCancel() {
+    cancelScrollRuntime();
+    window.removeEventListener("wheel", onAnyUserIntentCancel, {
+      passive: true,
+    });
+    window.removeEventListener("touchstart", onAnyUserIntentCancel, {
+      passive: true,
+    });
+    window.removeEventListener("keydown", onAnyUserIntentCancel, true);
+  }
+
+  function toY(targetY, durMs) {
+    addNoAnchor();
+    const startY = window.scrollY || window.pageYOffset;
+    const dist = targetY - startY;
+    const startT = now();
+
+    const step = () => {
+      if (cancelling) return;
+      const t = Math.min(1, (now() - startT) / durMs);
+      const y = startY + dist * easeInOutQuad(t);
+      window.scrollTo(0, y);
+      if (t < 1) {
+        raf = requestAnimationFrame(step);
+      } else {
+        remNoAnchor();
+        raf = 0;
+      }
+    };
+    raf = requestAnimationFrame(step);
+  }
+
+  function computeTargetY(row, opts) {
+    const peek = opts?.peekPx ?? 24,
+      pad = opts?.paddingPx ?? 12;
+    // Read twice to resist late layout/image shifts:
+    const read = () => {
+      const rect = row.getBoundingClientRect();
+      const yNow = window.scrollY || window.pageYOffset;
+      const h = window.innerHeight || document.documentElement.clientHeight;
+      return Math.max(0, Math.round(rect.bottom + yNow + pad + peek - h));
+    };
+    let y = read();
+    return new Promise((r) => requestAnimationFrame(() => r(read() || y)));
+  }
+
+  window.__ui = window.__ui || {};
+  window.__ui.scrollActionsIntoView = function (opts) {
+    cancelScrollRuntime();
+    const delay = opts && typeof opts.delay === "number" ? opts.delay : 800;
+    const dur = opts && typeof opts.duration === "number" ? opts.duration : 450;
+
+    if (prefersReduced()) {
+      pendingTimer = setTimeout(() => {
+        const row = actionsRow();
+        if (!row) return;
+        computeTargetY(row, { peekPx: 24, paddingPx: 12 }).then((y) =>
+          window.scrollTo(0, y)
+        );
+      }, delay);
+      return;
+    }
+
+    window.addEventListener("wheel", onAnyUserIntentCancel, {
+      passive: true,
+      once: true,
+    });
+    window.addEventListener("touchstart", onAnyUserIntentCancel, {
+      passive: true,
+      once: true,
+    });
+    window.addEventListener("keydown", onAnyUserIntentCancel, true);
+
+    pendingTimer = setTimeout(() => {
+      pendingTimer = 0;
+      const row = actionsRow();
+      if (!row) {
+        onAnyUserIntentCancel();
+        return;
+      }
+      computeTargetY(row, { peekPx: 24, paddingPx: 12 }).then((y) =>
+        toY(y, dur)
+      );
+    }, delay);
+  };
+
+  window.__ui.cancelScrollActions = cancelScrollRuntime;
+})();
+
+// Helper: get the flock input element (robust selector list, first-hit wins)
+function getFlockEl() {
+  return (
+    document.querySelector("#flockInput") || // old
+    document.querySelector("#flockName") || // common alt
+    document.querySelector('input[name="flock"]') || // name-based
+    document.querySelector('[data-role="flock"]') || // data-role
+    null
+  );
+}
+function getFlockNameTrimmed() {
+  const el = getFlockEl();
+  return (el?.value || "").trim();
+}
+
+// Mark inputs as dirty → require fresh Cluckulate; proactively de‑arm Save UI
+function markDirty() {
+  try {
+    window.__state.needsRecalc = true;
+    const btn = document.getElementById("loggerSaveBtn");
+    if (btn) {
+      btn.classList.remove("btn-primary");
+      btn.classList.add("btn-secondary", "btn-outline");
+    }
+  } catch {}
+}
+
 function setDefaultInputs() {
   if (inputs.birdCount) inputs.birdCount.value = 12;
   if (inputs.eggCount) inputs.eggCount.value = 10;
@@ -92,13 +282,17 @@ function updateSaveButtonState(inputs) {
   const btn = $save;
   if (!btn) return;
   const flock = (inputs?.flock || "").trim();
+  const currentFlock = getFlockNameTrimmed();
   const hasDerived = !!window.__state?.latest?.derived || !!lastMetrics;
+  const isFreshCalc =
+    !window.__state?.needsRecalc &&
+    currentFlock === (window.__state?.lastCalcFlock || "");
   // reset classes
   btn.classList.remove("btn-primary");
   btn.classList.add("btn-secondary", "btn-outline");
   btn.disabled = false; // keep clickable; emphasis conveys readiness
-  if (!flock || !hasDerived) return; // not savable → stay outlined
-  if (!isSavedToday(flock)) {
+  if (!currentFlock || !hasDerived || !isFreshCalc) return; // not savable → stay outlined
+  if (!isSavedToday(currentFlock)) {
     btn.classList.remove("btn-secondary", "btn-outline");
     btn.classList.add("btn-primary");
   } else {
@@ -571,7 +765,7 @@ function collectInputs() {
     cpe,
     cpd,
     alt,
-    flock: (inputs.flockName.value || "").trim(),
+    flock: getFlockNameTrimmed(),
   };
 }
 
@@ -638,16 +832,39 @@ function attachListeners() {
   if (printBtn) printBtn.addEventListener("click", onPrint);
 
   // Update Save button state when flock name changes
-  const flockInput = inputs && inputs.flockName;
+  const flockInput = getFlockEl();
   if (flockInput && typeof flockInput.addEventListener === "function") {
     flockInput.addEventListener("input", () => {
       try {
         const latest = window.__state?.latest?.inputs || {};
-        const merged = { ...latest, flock: flockInput.value || "" };
+        const merged = { ...latest, flock: getFlockNameTrimmed() };
         updateSaveButtonState(merged);
       } catch (_) {}
     });
   }
+
+  // Mark dirty on any relevant input change (including flock)
+  [
+    "#birdCount",
+    "#eggCount",
+    "#avgEggWeight",
+    "#feedConsumed",
+    "#bagWeight",
+    "#bagPrice",
+    "#altAmount",
+    "#altPricePerUnit",
+    "#altName",
+    "#notes",
+  ].forEach((sel) => {
+    const el = document.querySelector(sel);
+    if (el) el.addEventListener("input", markDirty, { passive: true });
+  });
+  const flockEl = getFlockEl();
+  flockEl?.addEventListener("input", markDirty, { passive: true });
+  ["#pricesEnabled", "#notesEnabled", "#altEnabled"].forEach((sel) => {
+    const el = document.querySelector(sel);
+    if (el) el.addEventListener("change", markDirty, { passive: true });
+  });
 
   // Alternative feed toggle (init + live)
   if (altEnabled && altBox) {
@@ -718,7 +935,7 @@ function attachListeners() {
   })();
   // Initialize Save button state once on load
   try {
-    updateSaveButtonState({ flock: (inputs?.flockName?.value || "").trim() });
+    updateSaveButtonState({ flock: getFlockNameTrimmed() });
   } catch (_) {}
 }
 
@@ -788,9 +1005,7 @@ function buildInputSummary(units, birds, eggs) {
 
   const rows = [
     // Flock row only if provided
-    ...(inputs.flockName.value.trim()
-      ? [["Flock", inputs.flockName.value.trim()]]
-      : []),
+    ...(getFlockNameTrimmed() ? [["Flock", getFlockNameTrimmed()]] : []),
 
     ["Units", units === "imperial" ? "Imperial" : "Metric"],
     ["Birds", birds],
@@ -956,6 +1171,12 @@ function onCalculate() {
       feedPerBird: bandFeedPerBird(feedPerBird_g),
     },
   };
+
+  // On successful Cluckulate: mark clean and remember flock snapshot
+  try {
+    window.__state.needsRecalc = false;
+    window.__state.lastCalcFlock = getFlockNameTrimmed();
+  } catch {}
   // Broadcast metrics for the analytics cards
   try {
     window.dispatchEvent(
@@ -1005,10 +1226,7 @@ function onCalculate() {
       const latest = window.__state?.latest?.inputs || {};
       const merged = {
         ...latest,
-        flock:
-          inputs && inputs.flockName && inputs.flockName.value
-            ? inputs.flockName.value
-            : latest.flock || "",
+        flock: getFlockNameTrimmed() || latest.flock || "",
       };
       updateSaveButtonState(merged);
     } catch (_) {}
@@ -1053,6 +1271,11 @@ function onCalculate() {
   resultsBox.hidden = false;
   applyMoreDefaultForViewport(); // collapse on mobile, expand on desktop (unless user toggled)
 
+  // After metrics dispatch, guide focus to the actions row with a slight delay
+  try {
+    window.__ui?.scrollActionsIntoView({ delay: 800, duration: 450 });
+  } catch {}
+
   // spillover guidance
   const ratio = birds > 0 ? eggs / birds : 0;
   if (ratio > 1.3) {
@@ -1064,7 +1287,7 @@ function onCalculate() {
   // Save row + message
   const row = {
     timestamp: new Date().toISOString(),
-    flock: (inputs.flockName.value || "").trim(),
+    flock: getFlockNameTrimmed(),
     units,
     birdCount: birds,
     eggCount: eggs,
@@ -1153,6 +1376,15 @@ function exportSessionCsv() {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
+  // flash Export confirmation (light success tint)
+  try {
+    const exportBtnEl = document.querySelector("#btnExportSession, #exportBtn");
+    window.__ui?.swapBtnState(exportBtnEl, {
+      text: "All logs exported ✅",
+      addClass: "btn-flash--white",
+      duration: 3000,
+    });
+  } catch (_) {}
 }
 // SETTINGS TOGGLE (footer cog)
 document.addEventListener("click", (e) => {
@@ -1162,7 +1394,43 @@ document.addEventListener("click", (e) => {
   if (card) card.toggleAttribute("hidden");
 });
 /* boot once DOM is ready */
+// Persist unit toggle (localStorage) and restore on load
+function initUnitPersistence() {
+  const LS_KEY = "cluck.units"; // value: 'imperial' or 'metric'
+  const imperial = document.querySelector(
+    'input[name="units"][value="imperial"]'
+  );
+  const metric = document.querySelector('input[name="units"][value="metric"]');
+
+  // Apply stored value on boot
+  try {
+    const stored = localStorage.getItem(LS_KEY);
+    if ((stored === "imperial" || stored === "metric") && imperial && metric) {
+      if (stored === "imperial") imperial.checked = true;
+      if (stored === "metric") metric.checked = true;
+      // ensure UI updates
+      imperial.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  } catch {}
+
+  // Save on change (without duplicating onUnitsChange wiring above)
+  function persist(value) {
+    if (!value) return;
+    try {
+      localStorage.setItem(LS_KEY, value);
+    } catch {}
+    // changing units affects math → mark dirty so user re‑Cluckulates
+    markDirty();
+  }
+  imperial?.addEventListener(
+    "change",
+    () => imperial.checked && persist("imperial")
+  );
+  metric?.addEventListener("change", () => metric.checked && persist("metric"));
+}
+
 function boot() {
+  initUnitPersistence();
   setDefaultValues(currentUnits()); // sets labels + placeholders
   applyMoreDefaultForViewport();
   autoFocusFirstField && autoFocusFirstField();
@@ -1185,4 +1453,20 @@ function saveEntry(today, flock, payload) {
     return logger.visitCounter;
   }
   return null;
+}
+
+// QA helper: listen once for the next metrics update (dev only, no behavior change)
+if (!window.__tapOnce) {
+  window.__tapOnce = (() => {
+    let live = false;
+    return () => {
+      if (live) return "already listening";
+      live = true;
+      const fn = (e) => {
+        console.log("metrics:updated →", e.detail);
+      };
+      window.addEventListener("metrics:updated", fn, { once: true });
+      return "listening… now click Cluckulate or Save";
+    };
+  })();
 }

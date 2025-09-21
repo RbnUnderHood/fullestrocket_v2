@@ -348,21 +348,5 @@
 
     <script type="module" src="js/ui.js"></script>
     <script src="js/analytics.js" defer></script>
-    <script>
-      const btnCalc = document.getElementById("btnCalc");
-      const results = document.getElementById("results");
-      const analytics = document.getElementById("farmAnalytics");
-
-      function scrollToResultsSoon() {
-        // let ui.js update DOM, then scroll
-        setTimeout(() => {
-          const target = analytics || results;
-          if (target)
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 150);
-      }
-
-      btnCalc && btnCalc.addEventListener("click", scrollToResultsSoon);
-    </script>
   </body>
 </html>

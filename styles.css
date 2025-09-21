@@ -394,12 +394,40 @@ aside.ad {
   background: linear-gradient(#ffffff, #ffffff) padding-box;
   border-color: var(--green-light);
 }
+/* Default light green tint for Export button (overrides outline/gradient) */
+#btnExportSession.btn-success-light,
+#exportBtn.btn-success-light {
+  background: var(--ok-weak, rgba(46, 125, 50, 0.12));
+}
 
 /* Print: ghost/outline */
 .btn-ghost {
   background: #fafdf9;
   color: var(--text-muted);
   border: 1px dashed var(--border-soft);
+}
+
+/* Flash feedback variants (temporary state applied via JS) */
+.btn-flash--ok,
+.btn-flash--ok-weak {
+  transition: background-color 160ms ease, color 160ms ease,
+    border-color 160ms ease;
+}
+/* Save: strong success flash */
+#loggerSaveBtn.btn-flash--ok {
+  background-color: var(--ok-weak, rgba(46, 125, 50, 0.12));
+  color: inherit; /* keep original text for lighter flash */
+  border-color: var(--ok);
+}
+/* Export: very light success tint */
+#btnExportSession.btn-flash--ok-weak,
+#exportBtn.btn-flash--ok-weak {
+  background-color: var(--ok-weak, rgba(46, 125, 50, 0.12));
+}
+/* Export: flash white during confirmation */
+#btnExportSession.btn-flash--white,
+#exportBtn.btn-flash--white {
+  background-color: #ffffff;
 }
 
 /* Text wrap helpers */

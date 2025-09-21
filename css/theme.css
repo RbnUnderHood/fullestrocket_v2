@@ -12,6 +12,9 @@
   --border: #e7e2d9;
   --warn: #b45309;
   --ok: #15803d;
+  --on-ok: #ffffff; /* text on success */
+  /* Prefer color-mix for a light success tint; fallback provided below */
+  --ok-weak: color-mix(in srgb, var(--ok) 10%, transparent);
   --rooster-red: #c41e3a;
   --hen-brown: #8b4513;
   --chick-yellow: #ffd700;
@@ -41,6 +44,12 @@
   --app-max: 430px; /* comfortable modern-phone cap */
   --app-gutter: 16px; /* side padding/gutters */
 }
+/* Fallback for older browsers without color-mix */
+@supports not (color-mix(in srgb, white 10%, black)) {
+  :root {
+    --ok-weak: rgba(21, 128, 61, 0.12);
+  }
+}
 /* === DEBUG BADGE — remove later === */
 :is(header, #appHeader, .site-header) {
   position: relative;
@@ -57,4 +66,11 @@
   border: 1px solid var(--ok);
   border-radius: 999px;
   z-index: 9999;
+}
+
+/* Disable native smooth-scroll & scroll anchoring during our programmatic scroll */
+html.scrolling-prog,
+body.scrolling-prog {
+  scroll-behavior: auto !important;
+  overflow-anchor: none !important;
 }
