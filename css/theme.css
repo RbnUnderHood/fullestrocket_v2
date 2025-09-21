@@ -74,3 +74,45 @@ body.scrolling-prog {
   scroll-behavior: auto !important;
   overflow-anchor: none !important;
 }
+
+/* Sticky footer base layout */
+html, body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make main content take remaining height so footer sits at bottom on short pages */
+main, #content, .page, .app-main {
+  /* Use whichever selector matches your main content wrapper; keep the others harmless */
+  flex: 1 0 auto;
+}
+
+/* Footer naturally pushes to bottom via margin-top:auto on its own row */
+footer, .site-footer {
+  margin-top: auto;
+}
+
+/* Desktop-only guardrails so footer stays at bottom */
+@media (min-width: 770px) {
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  main, #content, .page, .app-main {
+    flex: 1 0 auto;
+    min-height: 0; /* avoid grid/flex overflow interactions */
+  }
+
+  footer, .site-footer {
+    position: static;        /* override any absolute/fixed that sneaked in */
+    margin-top: auto;        /* keeps it at bottom when content is short */
+    inset: auto auto auto;   /* neutralize stray inset shorthands if present */
+  }
+}

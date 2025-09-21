@@ -486,3 +486,122 @@ aside.ad {
 .actions-row {
   margin-bottom: 6px;
 }
+
+/* Desktop-only: 3 buttons fill the row evenly */
+@media (min-width: 1024px) {
+  /* Ensure the actions row occupies the full width when parent is a grid */
+  .post-actions .actions-row {
+    width: 100%;
+    flex: 1 1 100%;
+    grid-column: 1 / -1; /* span all columns of the parent grid */
+  }
+
+  .actions-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* three equal columns */
+    gap: var(--space-2, 6px); /* keep existing spacing (6px) */
+    align-items: stretch; /* equal heights */
+  }
+
+  /* Make buttons actually expand */
+  .actions-row .btn,
+  #loggerSaveBtn,
+  #btnExportSession,
+  #exportBtn,
+  #btnPrint,
+  #printBtn {
+    width: 100%;
+    max-width: none; /* neutralize any earlier caps */
+    min-width: 0;
+    flex: 1 1 auto; /* if a flex parent is present anywhere */
+    justify-content: center; /* center label text */
+  }
+
+  /* Defensive: if a stubborn rule wins elsewhere, force expansion */
+  .actions-row .btn {
+    width: 100% !important;
+    max-width: none !important;
+    flex: 1 1 auto !important;
+  }
+
+  /* Optional: upsize from btn-sm on desktop without touching mobile */
+  .actions-row .btn.btn-sm {
+    padding: var(--btn-pad-y-md, 0.625rem) var(--btn-pad-x-md, 0.875rem);
+    font-size: var(--btn-font-md, 1rem);
+    line-height: var(--btn-line-md, 1.25rem);
+    border-radius: var(--btn-radius, 10px);
+  }
+}
+
+/* Tablet guardrails: keep trio full-width row and ad below (768–1023px) */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  /* Some variants make .post-actions a grid; ensure the actions row fills it */
+  .post-actions {
+    display: block; /* neutralize legacy 2-col grid that caused half-width trio */
+  }
+  .post-actions .actions-row {
+    width: 100%;
+    grid-column: 1 / -1; /* if parent remains grid elsewhere, span full width */
+  }
+
+  /* Trio stays in one line, evenly sharing space */
+  .actions-row {
+    display: flex;
+    flex-wrap: nowrap;        /* prevent wrapping with any siblings */
+    gap: var(--space-2, 8px);
+    align-items: stretch;
+    width: 100%;
+  }
+  .actions-row .btn,
+  #loggerSaveBtn,
+  #btnExportSession,
+  #exportBtn,
+  #btnPrint,
+  #printBtn {
+    flex: 1 1 auto;
+    max-width: none;
+    min-width: 0;            /* allow equal shrink */
+  }
+
+  /* Ensure the ad sits below the trio, never alongside */
+  .ad {
+    display: block;
+    position: static !important;
+    float: none !important;
+    margin-block: var(--space-3, 12px);
+  }
+}
+
+/* Narrow tablet guardrails: fix 720–768px left-lean without touching mobile/desktop */
+@media (min-width: 721px) and (max-width: 767.98px) {
+  .post-actions {
+    display: block; /* separate rows: trio then ad */
+  }
+  .post-actions .actions-row {
+    width: 100%;
+    grid-column: 1 / -1;
+  }
+  .actions-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--space-2, 8px);
+    align-items: stretch;
+    width: 100%;
+  }
+  .actions-row .btn,
+  #loggerSaveBtn,
+  #btnExportSession,
+  #exportBtn,
+  #btnPrint,
+  #printBtn {
+    flex: 1 1 auto;
+    max-width: none;
+    min-width: 0;
+  }
+  .ad {
+    display: block;
+    position: static !important;
+    float: none !important;
+    margin-block: var(--space-3, 12px);
+  }
+}
