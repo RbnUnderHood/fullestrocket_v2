@@ -75,8 +75,89 @@ body.scrolling-prog {
   overflow-anchor: none !important;
 }
 
+/* ---- Switch UI for Feed prices (presentational only) ---- */
+.ui-toggle-wrap {
+  position: relative; /* keep label layout; only span is positioned */
+}
+
+/* leave native checkbox visible for now; if you prefer decorative-only, you can hide it:
+   .ui-toggle-wrap input[type="checkbox"] { appearance: none; width: 0; height: 0; margin-right: var(--space-2, 8px); } */
+
+.ui-toggle-wrap .ui-toggle {
+  --track-w: 38px;
+  --track-h: 22px;
+  --knob: 18px;
+  --pad: 2px;
+  --on: var(--ok, #15803d);
+  --off: var(--muted, #c8cfd6);
+  --bg: var(--card, #fff);
+
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: var(--space-2, 8px);
+
+  width: var(--track-w);
+  height: var(--track-h);
+  border-radius: calc(var(--track-h) / 2);
+  background: var(--off);
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+  transition: background-color 220ms ease, box-shadow 220ms ease;
+  will-change: background-color, transform;
+  transform: translateZ(0);
+}
+
+.ui-toggle-wrap .ui-toggle::after {
+  content: "";
+  position: absolute;
+  top: var(--pad);
+  left: var(--pad);
+  width: var(--knob);
+  height: var(--knob);
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  transition: transform 220ms cubic-bezier(.22,.61,.36,1), box-shadow 220ms ease;
+  will-change: transform;
+}
+
+/* ON state (mirrors :checked; also toggled via .is-on for resilience) */
+.ui-toggle-wrap input[type="checkbox"]:checked + .ui-toggle,
+.ui-toggle-wrap .ui-toggle.is-on {
+  background: var(--on);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+}
+.ui-toggle-wrap input[type="checkbox"]:checked + .ui-toggle::after,
+.ui-toggle-wrap .ui-toggle.is-on::after {
+  transform: translateX(calc(var(--track-w) - var(--knob) - (var(--pad) * 2))) scale(1.02);
+}
+
+/* Active press feedback on knob */
+.ui-toggle-wrap input[type="checkbox"]:active + .ui-toggle::after {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.28);
+  transform: translateX(0) scale(0.98);
+}
+.ui-toggle-wrap input[type="checkbox"]:checked:active + .ui-toggle::after {
+  transform: translateX(calc(var(--track-w) - var(--knob) - (var(--pad) * 2))) scale(0.98);
+}
+
+/* Keyboard focus ring on the real input, visually tied to the switch */
+.ui-toggle-wrap input[type="checkbox"]:focus-visible + .ui-toggle {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus-ring, rgba(0,128,255,.35));
+}
+
+/* Reduced motion: snap states, no bounce */
+@media (prefers-reduced-motion: reduce) {
+  .ui-toggle-wrap .ui-toggle,
+  .ui-toggle-wrap .ui-toggle::after {
+    transition: none !important;
+  }
+}
+
 /* Sticky footer base layout */
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -87,13 +168,17 @@ body {
 }
 
 /* Make main content take remaining height so footer sits at bottom on short pages */
-main, #content, .page, .app-main {
+main,
+#content,
+.page,
+.app-main {
   /* Use whichever selector matches your main content wrapper; keep the others harmless */
   flex: 1 0 auto;
 }
 
 /* Footer naturally pushes to bottom via margin-top:auto on its own row */
-footer, .site-footer {
+footer,
+.site-footer {
   margin-top: auto;
 }
 
@@ -105,14 +190,18 @@ footer, .site-footer {
     flex-direction: column;
   }
 
-  main, #content, .page, .app-main {
+  main,
+  #content,
+  .page,
+  .app-main {
     flex: 1 0 auto;
     min-height: 0; /* avoid grid/flex overflow interactions */
   }
 
-  footer, .site-footer {
-    position: static;        /* override any absolute/fixed that sneaked in */
-    margin-top: auto;        /* keeps it at bottom when content is short */
-    inset: auto auto auto;   /* neutralize stray inset shorthands if present */
+  footer,
+  .site-footer {
+    position: static; /* override any absolute/fixed that sneaked in */
+    margin-top: auto; /* keeps it at bottom when content is short */
+    inset: auto auto auto; /* neutralize stray inset shorthands if present */
   }
 }

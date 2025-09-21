@@ -59,6 +59,62 @@ window.__ui.playUiSound = function playUiSound(/* name */) {
   // const el = document.getElementById('uiSound-'+name); el?.play();
 };
 
+// ---- Toggle decorator: Feed prices → switch UI with "clu-chunk" feel ----
+(function(){
+  // Robust element resolver (first match wins)
+  function getPricesCheckbox(){
+    return (
+      // common ids
+      document.getElementById('pricesEnabled') ||
+      document.getElementById('feedPrices') ||
+      // name/data fallbacks
+      document.querySelector('input[type="checkbox"][name*="price"]') ||
+      document.querySelector('input[type="checkbox"][data-role="prices"]') ||
+      null
+    );
+  }
+
+  function getWrappingLabel(input){
+    // Prefer <label for="...">; fall back to nearest label ancestor
+    if (!input) return null;
+    const id = input.getAttribute('id');
+    let lab = id ? document.querySelector(`label[for="${id}"]`) : null;
+    if (!lab) lab = input.closest('label');
+    return lab;
+  }
+
+  function ensureToggleUI(input){
+    const label = getWrappingLabel(input);
+    if (!label) return;
+
+    // Mark once
+    if (label.classList.contains('ui-toggle-wrap')) return;
+    label.classList.add('ui-toggle-wrap');
+
+    // Create decorative span immediately after the checkbox for CSS targeting
+    const knob = document.createElement('span');
+    knob.className = 'ui-toggle';
+    // Keep it inert; the input remains the interactive control
+    knob.setAttribute('aria-hidden', 'true');
+
+    // Insert right after input so we can use input + .ui-toggle adjacent selectors
+    input.insertAdjacentElement('afterend', knob);
+
+    // Change hook: add/remove an "on" class for CSS (redundant to :checked, but handy)
+    const sync = () => {
+      knob.classList.toggle('is-on', input.checked);
+      // (later) play sound if desired:
+      // if (input.checked) window.__ui?.playUiSound?.('clunk-on'); else window.__ui?.playUiSound?.('clunk-off');
+    };
+    input.addEventListener('change', sync);
+    sync();
+  }
+
+  // Boot
+  const cb = getPricesCheckbox();
+  if (cb) ensureToggleUI(cb);
+})();
+
 // ---- Conflict-proof, cancellable scroll to actions row ----
 (function () {
   let raf = 0,
