@@ -216,6 +216,14 @@ aside.ad {
   #results {
     position: absolute;
     left: 0;
+
+    /* Tighten gap above Feed prices toggle on small screens (avoid margin-collapsing) */
+    @media (max-width: 480px) {
+      section.feed-prices .toggle-label,
+      section.feed-prices .ui-toggle-wrap {
+        margin-top: 0; /* neutralize the label's 4px top margin */
+      }
+    }
     top: 0;
     width: 100%;
   }
