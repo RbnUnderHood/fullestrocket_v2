@@ -198,6 +198,15 @@
   font-weight: 600;
   font-size: var(--text-sm, 0.95rem);
   color: var(--text-strong, #1b1f23);
+  /* Uniform two-line clamp to keep all tab headers same height */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-align: center;
+  line-height: 1.15;
+  min-block-size: calc(2 * 1em * 1.15 + 2 * var(--space-2, 8px));
 }
 
 .result-body {
@@ -314,12 +323,9 @@
 }
 /* Keep mobile ≤559px with 2 columns; from 560px up, use auto-fit with a safe min width */
 @media (min-width: 560px) {
-  /* Fallback: keep 2 columns until 680px viewport width */
-  .result-chip-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (min-width: 680px) {
-  /* Fallback: allow 3 columns at 680px+ */
-  .result-chip-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .result-chip-row {
+    grid-template-columns: repeat(auto-fit, minmax(164px, 1fr));
+  }
 }
 
 /* Container query: size chips by actual card width (overrides @media when supported) */
@@ -331,7 +337,7 @@
 @container (min-width: 560px) {
   .result-chip-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@container (min-width: 680px) {
+@container (min-width: 720px) {
   .result-chip-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
