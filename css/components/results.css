@@ -303,25 +303,46 @@
   line-height: 1.2;
 }
 
-/* Phone: remove inner mini-card chrome for a flatter look */
+/* Microcards on phones: structured mini-cards with light chrome */
 @media (max-width: 480px) {
   .mini-card {
-    border: none;
-    border-radius: 0;
-    background: transparent;
+    background: var(--surface-alt, #f7faf9);
+    border: 1px solid var(--border, #e2e6ea);
+    border-radius: 10px;
+    box-shadow: none;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 56px;
+    padding: 6px 8px;
   }
   .mini-tab {
     background: transparent;
-    border-bottom: none;
-    padding-top: 0;
-    padding-bottom: 0;
-    font-weight: 600;
-    text-align: left;
+    border: none;
+    padding: 0 0 2px 0;
+    font-size: 12.5px;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-align: center;
   }
   .mini-body {
-    padding-left: 0;
-    padding-right: 0;
-    text-align: left;
+    padding: 0;
+    text-align: center;
+  }
+  .mini-body .v,
+  .mini-body .value {
+    font-weight: 800;
+    font-size: clamp(13px, 3.3vw, 15px);
+  }
+  /* Laying: keep small inline pie */
+  .mini-body .mini-lay-top .egg.pieChart {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+  /* Hide bulky bars on very small screens */
+  .a-thermo,
+  .a-coins {
+    display: none !important;
   }
 }
 
@@ -548,63 +569,15 @@
 }
 
 /* 2) Make chip rows go 2-up earlier */
-@media (min-width: 400px) {
+@media (min-width: 360px) {
   .result-chip-row {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-@container (min-width: 400px) {
+@container (min-width: 360px) {
   .result-chip-row {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* === Pocket Card: replace mini-card boxes with a ledger on phones ===== */
-@media (max-width: 480px) {
-  /* Collapse mini-cards into clean rows */
-  .result-chip-row {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .mini-card {
-    display: block;
-    padding: 0;
-  }
-  .mini-tab {
-    padding: 0;
-    background: transparent;
-    border: 0;
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 600;
-    text-align: left;
-  }
-  .mini-body {
-    padding: 0;
-    text-align: left;
-  }
-  /* Visual divider between label and value using spacing only */
-  .mini-card .v,
-  .mini-card .value {
-    display: inline-block;
-    margin-top: 2px;
-    font-weight: 800;
-  }
-  /* Tighten the head value blocks */
-  .stat-primary {
-    font-size: clamp(18px, 6.8vw, 22px);
-  }
-  .stat-secondary {
-    font-size: 12px;
-  }
-  /* Hide bulky bars on very small screens; keep data in ledger */
-  .a-thermo,
-  .a-coins {
-    display: none !important;
-  }
-  /* Laying: small inline pie */
-  .mini-body .mini-lay-top .egg.pieChart {
-    inline-size: 18px;
-    block-size: 18px;
-  }
-}
+/* Headline sizes remain compact via existing rules; no ledger conversion */
