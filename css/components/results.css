@@ -327,9 +327,7 @@
 @media (min-width: 680px) {
   .result-chip-row { grid-template-columns: repeat(2, 1fr); }
 }
-@media (min-width: 960px) {
-  .result-chip-row { grid-template-columns: repeat(3, 1fr); }
-}
+/* Do not switch to 3 columns on large viewports; keep 2 columns for consistency */
 
 /* Container query: size chips by actual card width (overrides @media when supported) */
 @container (min-width: 420px) {
@@ -340,9 +338,7 @@
 @container (min-width: 680px) {
   .result-chip-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@container (min-width: 960px) {
-  .result-chip-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
+/* Do not switch to 3 columns on large cards; keep 2 columns */
 
 /* Defensive resets: ignore legacy chip rules inside mini-card */
 .mini-card .chip,
