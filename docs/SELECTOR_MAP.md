@@ -18,9 +18,13 @@ Purpose: one file “owns” a selector. Keep styles for a selector in its owner
 
 ## Results Area
 
-- `css/components/results.css`: `#results .kv` structure, `.k`, `.v`, `.post-actions` (temporary duplicate with density; see cleanup report).
-- `css/components/results-clean.css`: `#metricsGrid`, `#moreMetrics`, `.metric`, `.metric__value`, `.metric__label`, `.info` (pinned), band classes: `.band-excellent`, `.band-good`, `.band-average`, `.band-poor`, and `.btn.linklike.small`.
-- `css/components/results-fun.css`: alternate “fun grid” takeover under `#metricsGrid.metric-grid-scope` and `.fun-grid` (hover/tilt), same `.metric*` internals.
+- `css/components/results.css` (owner):
+  - Tabbed cards: `.result-card`, `.result-tab`, `.result-body`.
+  - Primary/secondary stat styles: `.stat-primary`, `.stat-secondary`, `.stat-chip`.
+  - Unified substat chips: `.mini-card`, `.mini-tab`, `.mini-body`, and grid `.result-chip-row`.
+  - Legacy `#results .kv` structure, `.k`, `.v`, `.post-actions` (temporary duplicate with density; see cleanup report).
+- `css/components/results-clean.css`: legacy metrics grid (`#metricsGrid`, `.metric*`), not active by default.
+- `css/components/results-fun.css`: alternate “fun grid” takeover (archived), same `.metric*` internals.
 - `css/components/metric-bands.css`: alternative full‑tile tint for `#results .metric`, band classes `.band-good|avg|watch|poor`.
 
 ## Help / Info

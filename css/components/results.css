@@ -290,7 +290,9 @@
     overflow: visible;
     text-overflow: clip;
   }
-  .mini-card { min-height: 62px; }
+  .mini-card {
+    min-height: 62px;
+  }
 }
 
 .mini-body {
@@ -325,18 +327,28 @@
 /* Viewport fallback (browsers without container queries):
    1 col < 680px, 2 cols 680–959px, 3 cols ≥ 960px */
 @media (min-width: 680px) {
-  .result-chip-row { grid-template-columns: repeat(2, 1fr); }
+  .result-chip-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 /* Do not switch to 3 columns on large viewports; keep 2 columns for consistency */
 
 /* Container query: size chips by actual card width (overrides @media when supported) */
 @container (min-width: 420px) {
   /* Allow label wrapping once the card is reasonably wide */
-  .mini-tab { white-space: normal; overflow: visible; text-overflow: clip; }
-  .mini-card { min-height: 60px; }
+  .mini-tab {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .mini-card {
+    min-height: 60px;
+  }
 }
 @container (min-width: 680px) {
-  .result-chip-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .result-chip-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 /* Do not switch to 3 columns on large cards; keep 2 columns */
 

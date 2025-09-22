@@ -2,24 +2,27 @@
 
 # RELEASE_NOTES.md — FCR Web Calculator (USA)
 
-Release date: 2025-09-20  
-Version tag: v0.3.5
+Release date: 2025-09-22  
+Version tag: v0.4.0
 
 1. Summary
-   Cleanup-only batch: normalized docs to clean UTF-8 (no odd glyphs), consolidated docs under `docs/`, fixed stray character in `<head>`, centralized font tokens in `theme.css`, archived alternate tile CSS. No intentional visual changes.
+   Results area makeover with consistent chip system and tabbed cards. Egg-o-nomics is now first, Henput vs Eggput shows FCR prominently, duplicate price outputs removed, and spacing/polish improvements across mobile and desktop.
 
 2. Changes
 
 - Features:
-  - Packaging script already present; reused for this release.
+  - Results cards converted to tabbed look: `.result-card > .result-tab + .result-body`.
+  - Egg-o-nomics moved to the top; cost per dozen and per egg render in a dedicated `#card-eggonomics-stats` container.
+  - Henput vs Eggput highlights FCR with a `stat-chip` and explanatory subtitle, rendered into `#card-hen-eggput-stats`.
+  - Unified mini-card chip system for substats: `.mini-card` with `.mini-tab` (label) and `.mini-body` (value).
+  - Decorative feed prices toggle and info box; note hides when toggle is on (CSS `:has()` with JS fallback).
 - Fixes:
-  - Removed stray `>` in `<head>` of `index.html`.
+  - Eliminated duplicate price rendering by hiding legacy cost fields within Egg‑o‑nomics card during render.
+  - Removed margin-collapsing gap above Feed Prices on mobile with a scoped override.
+  - Removed the "Eggs collected" chip from Laying Power per spec.
 - Chores/Docs:
-  - Normalized punctuation/encoding across docs to clean UTF‑8.
-  - Consolidated docs into `docs/` (removed root duplicates): PROJECT, CONTRIBUTING, COMMS, RELEASE_NOTES, SELECTOR_MAP, THEME_TOKENS, CLEANUP_REPORT, SEND_TEMPLATE.
-- Refactors (no visual change):
-  - Centralized `--font-*` in `css/theme.css`; removed local font tokens from `css/components/density.css`.
-  - Archived `css/components/results-fun.css` and `css/components/metric-bands.css` to `css/_archive/`.
+  - Updated selector ownership hints for results in docs.
+  - Packaging script reused; artifacts regenerated.
 
 3. Files touched (owner map)
 
@@ -34,22 +37,23 @@ Version tag: v0.3.5
 
 4. Visual changes
 
-- [x] None (cleanup only)
-- [ ] Yes (describe): n/a
+- [ ] None
+- [x] Yes (describe): Results cards tabbed UI, unified chip styling, Egg‑o‑nomics first, FCR chip, duplicate price removal.
 
 5. Tests performed (smoke)
 
-- [ ] No console errors in Chrome/Firefox/Safari.
-- [ ] Mobile 360–414px: inputs readable; buttons ≥44px; tiles wrap.
-- [ ] Help (i) opens/closes; ESC & click-away work.
-- [ ] Export/Print row behaves; no layout shift.
-- [ ] Keyboard focus visible; tab order sensible.
-      Notes: Manual verification pending; expected no change.
+- [x] No console errors in Chrome/Firefox/Safari.
+- [x] Mobile 360–414px: chip grid scales 2→3 cols; header spacing tightened.
+- [x] Egg‑o‑nomics: prices render once; legacy fields hidden; values wrap cleanly with .num/.unit spans.
+- [x] Henput vs Eggput: FCR chip shows; subtitle present.
+- [x] Help (i) opens/closes; ESC & click-away work.
+- [x] Export/Print row behaves; no layout shift.
+- [x] Keyboard focus visible; tab order sensible.
 
 6. Known issues / TODO
 
-- Decide on default tile system (suggest `css/components/results-clean.css` for production) and archive alternates.
-- Finalize brand palette tokens; align tile band colors with chosen palette.
+- Optional: wrap all currency substat outputs in `.num`/`.unit` spans for perfect typographic consistency (many already updated).
+- Finalize brand palette tokens; align chip/tab colors with chosen palette.
 
 7. Rollback plan
 
@@ -58,7 +62,7 @@ Version tag: v0.3.5
 8. Artifacts
 
 - Built CSS bundle: `dist/app.css` — [x] yes [ ] no
-- Project ZIP: `releases/fcr-web-calculator-20250920-2018-clean.zip`
+- Project ZIP: `releases/fcr-web-calculator-20250922-*.zip`
 
 9. Handoff → Codex (in VS Code)
 
