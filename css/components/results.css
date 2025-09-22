@@ -303,6 +303,28 @@
   line-height: 1.2;
 }
 
+/* Phone: remove inner mini-card chrome for a flatter look */
+@media (max-width: 480px) {
+  .mini-card {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+  }
+  .mini-tab {
+    background: transparent;
+    border-bottom: none;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-weight: 600;
+    text-align: left;
+  }
+  .mini-body {
+    padding-left: 0;
+    padding-right: 0;
+    text-align: left;
+  }
+}
+
 .mini-body .num {
   font-weight: 800;
   font-size: clamp(1rem, 2.6vw, 1.35rem);
@@ -430,6 +452,22 @@
   margin-block: var(--space-2, 8px);
 }
 
+/* Phone: simplify Fun + Facts chrome and ensure one column */
+@media (max-width: 480px) {
+  .funfacts-grid {
+    grid-template-columns: 1fr;
+  }
+  .funfacts-card .result-tab .ff-hint {
+    display: none; /* avoid wrap/jank */
+  }
+  .ff-col {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    padding-inline: 0;
+  }
+}
+
 /* Scoped disable of legacy tile internals when using tabbed results */
 #results.results--tabbed .a-value,
 #results.results--tabbed .a-coins,
@@ -477,4 +515,31 @@
 .mini-card .v,
 .mini-card .value {
   all: unset;
+}
+
+/* === Mobile-first compacting: phase 1 ================================ */
+/* 1) Flatten result tab header on small screens */
+@media (max-width: 480px) {
+  .result-card .result-tab {
+    background: transparent;
+    border-bottom: none;
+    padding: 6px 8px;
+    font-size: 0.95rem;
+    text-align: left;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    min-block-size: auto;
+  }
+}
+
+/* 2) Make chip rows go 2-up earlier */
+@media (min-width: 400px) {
+  .result-chip-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@container (min-width: 400px) {
+  .result-chip-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
