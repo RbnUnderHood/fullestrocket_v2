@@ -382,6 +382,16 @@
   justify-content: center;
   gap: 6px;
 }
+.mini-body .mini-lay-top #aLay {
+  font-size: var(--text-sm, 0.95rem);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.mini-body .mini-lay-top #aLay::before {
+  content: "HDP: ";
+  color: var(--text-muted, #5a6572);
+  font-weight: 600;
+}
 .mini-body .mini-lay-top .egg.pieChart {
   inline-size: 22px;
   block-size: 22px;
