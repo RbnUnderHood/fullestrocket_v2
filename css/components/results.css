@@ -214,6 +214,17 @@
   color: var(--text-muted, #5a6572);
 }
 
+/* Harmonize number/unit styling with mini-card chips */
+.stat-primary .num,
+.stat-secondary .num {
+  font-weight: 800;
+}
+.stat-primary .unit,
+.stat-secondary .unit {
+  margin-left: 2px;
+  opacity: 0.9;
+}
+
 .stat-chip {
   display: inline-block;
   padding: 4px 10px;
@@ -296,4 +307,21 @@
 .mini-card .stat {
   all: unset;
   display: contents;
+}
+
+/* Scoped disable of legacy tile internals when using tabbed results */
+#results.results--tabbed .a-value,
+#results.results--tabbed .a-coins,
+#results.results--tabbed .a-thermo,
+#results.results--tabbed .a-note,
+#results.results--tabbed .kv,
+#results.results--tabbed .metricRow,
+#results.results--tabbed .egg.pieChart {
+  display: none !important;
+}
+
+/* Ensure mini-card values don't inherit old pill/badge/button styles */
+.mini-card .v,
+.mini-card .value {
+  all: unset;
 }
