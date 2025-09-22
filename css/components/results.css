@@ -320,6 +320,11 @@
   display: none !important;
 }
 
+/* Under tabbed results, disable legacy substats grid shell so inner row controls layout */
+#results.results--tabbed .substats {
+  display: block !important;
+}
+
 /* Ensure mini-card values don't inherit old pill/badge/button styles */
 .mini-card .v,
 .mini-card .value {
