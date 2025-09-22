@@ -145,6 +145,13 @@
   function renderFunFacts(metrics) {
     const card = document.getElementById("funfactsCard");
     if (!card) return;
+    // Respect toggle state
+    const toggle = document.getElementById("funfactsToggle");
+    const enabled = toggle ? toggle.checked : false;
+    if (!enabled) {
+      card.hidden = true;
+      return;
+    }
     const eduLine = document.getElementById("ff-edu-line");
     const funLine = document.getElementById("ff-fun-line");
     const eduFoot = document.getElementById("ff-edu-foot");
@@ -534,6 +541,32 @@
 
     // ---- Fun + Facts (daily) ----
     try {
+      // Initialize Fun + Facts toggle once
+      const t = document.getElementById("funfactsToggle");
+      if (t && !t.__wired) {
+        const saved = localStorage.getItem("ff_enabled");
+        const isOn = saved === "1"; // default OFF if missing
+        t.checked = isOn;
+        t.addEventListener("change", () => {
+          localStorage.setItem("ff_enabled", t.checked ? "1" : "0");
+          const card = document.getElementById("funfactsCard");
+          if (card) card.hidden = !t.checked;
+          // re-render facts if turning on
+          if (t.checked) {
+            try {
+              const metrics = {
+                eggs: d.eggs,
+                avgEggWeightG: d.avgEggWeightG,
+                hdp: d.layRate,
+                flockSize: d.flockSize,
+                feedPerBird_g: d.feedPerBird_g,
+              };
+              renderFunFacts(metrics);
+            } catch (_) {}
+          }
+        });
+        t.__wired = true;
+      }
       const metrics = {
         eggs: d.eggs,
         avgEggWeightG: d.avgEggWeightG,

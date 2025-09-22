@@ -198,13 +198,14 @@
   font-weight: 600;
   font-size: var(--text-sm, 0.95rem);
   color: var(--text-strong, #1b1f23);
+  /* Center titles across breakpoints */
+  text-align: center;
   /* Uniform two-line clamp to keep all tab headers same height */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   overflow: hidden;
-  text-align: center;
   line-height: 1.15;
   min-block-size: calc(2 * 1em * 1.15 + 2 * var(--space-2, 8px));
 }
@@ -223,6 +224,13 @@
   margin-top: 4px;
   font-size: var(--text-sm, 0.95rem);
   color: var(--text-muted, #5a6572);
+}
+
+/* Add breathing room between head secondary line and mini-cards */
+.result-card .stat-secondary,
+.result-card .a-note {
+  display: block;
+  margin-bottom: 10px;
 }
 
 /* Harmonize number/unit styling with mini-card chips */
@@ -471,6 +479,26 @@
 }
 #funfactsCard {
   margin-block: var(--space-2, 8px);
+}
+
+/* Tiny Fun + Facts toggle row */
+.ff-toggle-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 4px 2px 6px;
+}
+.tiny-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.tiny-toggle input[type="checkbox"] {
+  inline-size: 28px;
+  block-size: 16px;
+  accent-color: var(--brand);
 }
 
 /* Phone: simplify Fun + Facts chrome and ensure one column */
