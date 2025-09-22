@@ -60,13 +60,13 @@ window.__ui.playUiSound = function playUiSound(/* name */) {
 };
 
 // ---- Toggle decorator: Feed prices → switch UI with "clu-chunk" feel ----
-(function(){
+(function () {
   // Robust element resolver (first match wins)
-  function getPricesCheckbox(){
+  function getPricesCheckbox() {
     return (
       // common ids
-      document.getElementById('pricesEnabled') ||
-      document.getElementById('feedPrices') ||
+      document.getElementById("pricesEnabled") ||
+      document.getElementById("feedPrices") ||
       // name/data fallbacks
       document.querySelector('input[type="checkbox"][name*="price"]') ||
       document.querySelector('input[type="checkbox"][data-role="prices"]') ||
@@ -74,39 +74,39 @@ window.__ui.playUiSound = function playUiSound(/* name */) {
     );
   }
 
-  function getWrappingLabel(input){
+  function getWrappingLabel(input) {
     // Prefer <label for="...">; fall back to nearest label ancestor
     if (!input) return null;
-    const id = input.getAttribute('id');
+    const id = input.getAttribute("id");
     let lab = id ? document.querySelector(`label[for="${id}"]`) : null;
-    if (!lab) lab = input.closest('label');
+    if (!lab) lab = input.closest("label");
     return lab;
   }
 
-  function ensureToggleUI(input){
+  function ensureToggleUI(input) {
     const label = getWrappingLabel(input);
     if (!label) return;
 
     // Mark once
-    if (label.classList.contains('ui-toggle-wrap')) return;
-    label.classList.add('ui-toggle-wrap');
+    if (label.classList.contains("ui-toggle-wrap")) return;
+    label.classList.add("ui-toggle-wrap");
 
     // Create decorative span immediately after the checkbox for CSS targeting
-    const knob = document.createElement('span');
-    knob.className = 'ui-toggle';
+    const knob = document.createElement("span");
+    knob.className = "ui-toggle";
     // Keep it inert; the input remains the interactive control
-    knob.setAttribute('aria-hidden', 'true');
+    knob.setAttribute("aria-hidden", "true");
 
     // Insert right after input so we can use input + .ui-toggle adjacent selectors
-    input.insertAdjacentElement('afterend', knob);
+    input.insertAdjacentElement("afterend", knob);
 
     // Change hook: add/remove an "on" class for CSS (redundant to :checked, but handy)
     const sync = () => {
-      knob.classList.toggle('is-on', input.checked);
+      knob.classList.toggle("is-on", input.checked);
       // (later) play sound if desired:
       // if (input.checked) window.__ui?.playUiSound?.('clunk-on'); else window.__ui?.playUiSound?.('clunk-off');
     };
-    input.addEventListener('change', sync);
+    input.addEventListener("change", sync);
     sync();
   }
 
@@ -863,9 +863,20 @@ function attachListeners() {
   // Feed prices toggle
   if (pricesEnabled && pricesBox) {
     pricesBox.hidden = !pricesEnabled.checked;
+    // Reflect state on container for CSS fallbacks (hide note when on)
+    const feedPricesSection = pricesEnabled.closest(".feed-prices");
+    if (feedPricesSection) {
+      feedPricesSection.classList.toggle("prices-on", !!pricesEnabled.checked);
+    }
     if (pricesEnabled.checked) prefillAverageFeedPrice(currentUnits());
     pricesEnabled.addEventListener("change", () => {
       pricesBox.hidden = !pricesEnabled.checked;
+      if (feedPricesSection) {
+        feedPricesSection.classList.toggle(
+          "prices-on",
+          !!pricesEnabled.checked
+        );
+      }
       if (pricesEnabled.checked) prefillAverageFeedPrice(currentUnits());
       else {
         inputs.bagWeight.value = "";

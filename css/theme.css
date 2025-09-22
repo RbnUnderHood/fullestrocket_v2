@@ -78,34 +78,31 @@ body.scrolling-prog {
 /* ---- Switch UI for Feed prices (presentational only) ---- */
 .ui-toggle-wrap {
   position: relative; /* keep label layout; only span is positioned */
+  margin-top: var(--space-1, 4px); /* tighter space above the toggle */
 }
 
-/* leave native checkbox visible for now; if you prefer decorative-only, you can hide it:
-   .ui-toggle-wrap input[type="checkbox"] { appearance: none; width: 0; height: 0; margin-right: var(--space-2, 8px); } */
-
+/* Hide the native box visually; keep it focusable and adjacent for CSS */
 .ui-toggle-wrap input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 0;
-  height: 0;
-  margin: 0;
   position: absolute;
-  opacity: 0; /* keep keyboard focusable; focus ring is shown on .ui-toggle */
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
 }
 
 .ui-toggle-wrap .ui-toggle {
-  --track-w: 26px;
-  --track-h: 14px;
-  --knob: 10px;
+  --track-w: 28px;
+  --track-h: 15px;
+  --knob: 11px;
   --pad: 2px;
   --on: var(--ok, #15803d);
-  --off: var(--muted, #ffcac3);
+  --off: var(--muted, #c8cfd6);
   --bg: var(--card, #fff);
 
   display: inline-block;
   vertical-align: middle;
-  margin-left: 0;
-  margin-right: var(--space-2, 8px);
+  margin-right: var(--space-2, 8px); /* space before the label text */
 
   width: var(--track-w);
   height: var(--track-h);
@@ -147,7 +144,7 @@ body.scrolling-prog {
 
 /* Active press feedback on knob */
 .ui-toggle-wrap input[type="checkbox"]:active + .ui-toggle::after {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   transform: translateX(0) scale(0.98);
 }
 .ui-toggle-wrap input[type="checkbox"]:checked:active + .ui-toggle::after {
@@ -156,8 +153,7 @@ body.scrolling-prog {
 }
 
 /* Keyboard focus ring on the real input, visually tied to the switch */
-.ui-toggle-wrap input[type="checkbox"]:focus-visible + .ui-toggle,
-.ui-toggle-wrap input[type="checkbox"]:focus + .ui-toggle {
+.ui-toggle-wrap input[type="checkbox"]:focus-visible + .ui-toggle {
   outline: none;
   box-shadow: 0 0 0 3px var(--focus-ring, rgba(0, 128, 255, 0.35));
 }
@@ -167,6 +163,43 @@ body.scrolling-prog {
   .ui-toggle-wrap .ui-toggle,
   .ui-toggle-wrap .ui-toggle::after {
     transition: none !important;
+  }
+}
+
+/* Info box for feed prices note */
+.info-box.feed-prices-note {
+  position: relative;
+  padding: var(--space-3, 2px) var(--space-3, 12px) var(--space-3, 12px)
+    calc(var(--space-3, 8px) + 5px);
+  margin-top: var(--space-2, 1px);
+  background-color: color-mix(in srgb, var(--warn) 8%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--warn) 25%, var(--tile-border));
+  border-radius: 8px;
+  font-size: var(--font-label, 13px);
+  line-height: 1.4;
+  color: var(--ink);
+  text-align: center;
+}
+
+/* Small info icon top-left */
+.info-box.feed-prices-note::before {
+  content: "ℹ";
+  position: absolute;
+  top: var(--space-2, 5px);
+  left: var(--space-2, 5px);
+  font-size: 1.1em;
+  color: var(--brand);
+}
+
+/* Hide the note when Feed prices are toggled on */
+.feed-prices.prices-on .feed-prices-note {
+  display: none !important;
+}
+
+/* Pure CSS (no JS) in browsers that support :has() */
+@supports selector(:has(*)) {
+  .feed-prices .field:has(#pricesEnabled:checked) .feed-prices-note {
+    display: none;
   }
 }
 
