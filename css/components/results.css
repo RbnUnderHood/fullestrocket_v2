@@ -374,7 +374,7 @@
 /* Mini-card: compact laying block inside Egg-o-nomics */
 .mini-body.mini-laying {
   display: grid;
-  gap: 4px;
+  gap: 2px;
 }
 .mini-body .mini-lay-top {
   display: inline-flex;
@@ -386,10 +386,7 @@
   inline-size: 22px;
   block-size: 22px;
 }
-.mini-body .lay-hdp {
-  font-size: var(--text-xs, 0.82rem);
-  color: var(--text-muted, #5a6572);
-}
+/* removed finer HDP text line */
 
 /* Under tabbed results, disable legacy substats grid shell so inner row controls layout */
 #results.results--tabbed .substats {
