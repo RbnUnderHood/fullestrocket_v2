@@ -254,7 +254,9 @@
   box-sizing: border-box;
 }
 
-.mini-card * { box-sizing: inherit; }
+.mini-card * {
+  box-sizing: inherit;
+}
 
 .mini-tab {
   background: var(--tab-bg);
@@ -264,11 +266,20 @@
   font-weight: 600;
   font-size: var(--text-xs, 0.8rem);
   line-height: 1.15;
-  letter-spacing: .01em;
+  letter-spacing: 0.01em;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media (min-width: 560px) {
+  .mini-tab {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .mini-card { min-height: 62px; }
 }
 
 .mini-body {
@@ -286,10 +297,12 @@
 .mini-body .unit {
   margin-left: 2px;
   font-weight: 600;
-  opacity: .85;
-  font-size: clamp(.85rem, 1.8vw, .95rem);
+  opacity: 0.85;
+  font-size: clamp(0.85rem, 1.8vw, 0.95rem);
 }
-.mini-body .unit:empty { display: none; }
+.mini-body .unit:empty {
+  display: none;
+}
 
 .result-chip-row {
   display: grid;
@@ -297,8 +310,11 @@
   grid-template-columns: 1fr 1fr;
   align-items: stretch;
 }
-@media (min-width: 640px) {
-  .result-chip-row { grid-template-columns: repeat(3, 1fr); }
+/* Keep mobile ≤559px with 2 columns; from 560px up, use auto-fit with a safe min width */
+@media (min-width: 560px) {
+  .result-chip-row {
+    grid-template-columns: repeat(auto-fit, minmax(164px, 1fr));
+  }
 }
 
 /* Defensive resets: ignore legacy chip rules inside mini-card */
