@@ -878,10 +878,6 @@ function attachListeners() {
         );
       }
       if (pricesEnabled.checked) prefillAverageFeedPrice(currentUnits());
-      else {
-        inputs.bagWeight.value = "";
-        inputs.bagPrice.value = "";
-      }
     });
   }
 
@@ -1129,6 +1125,24 @@ function onCalculate() {
   const birds = +inputs.birdCount.value || 0;
   const eggs = +inputs.eggCount.value || 0;
 
+  // Safety: ensure reasonable defaults for bag weight/price even if Feed prices UI is off
+  // Only fill if empty; respects user-entered values.
+  try {
+    const hasW = inputs.bagWeight.value !== "";
+    const hasP = inputs.bagPrice.value !== "";
+    if (!hasW || !hasP) {
+      if (units === "imperial") {
+        if (!hasW) inputs.bagWeight.value = DEF_BAG_LB;
+        if (!hasP)
+          inputs.bagPrice.value = (DEF_BAG_LB * AVG_PRICE_PER_LB).toFixed(2);
+      } else {
+        if (!hasW) inputs.bagWeight.value = DEF_BAG_KG;
+        if (!hasP)
+          inputs.bagPrice.value = (DEF_BAG_KG * AVG_PRICE_PER_KG).toFixed(2);
+      }
+    }
+  } catch (_) {}
+
   buildInputSummary(units, birds, eggs);
 
   const metric = toMetricUnits(units, {
@@ -1247,12 +1261,20 @@ function onCalculate() {
       const pDozen = typeof cpe === "number" ? cpe * 12 : null;
       const stats = eggonomicsBody.querySelector("#card-eggonomics-stats");
       if (stats) {
-        stats.innerHTML = `<div class="stat-primary">${
-          pDozen || pDozen === 0 ? `$${pDozen.toFixed(2)}` : "—"
-        } / dozen</div>
-        <div class="stat-secondary">${
-          pEgg || pEgg === 0 ? `$${pEgg.toFixed(3)}` : "—"
-        } per egg</div>`;
+        const dozenMarkup =
+          pDozen || pDozen === 0
+            ? `<span class="num">$${pDozen.toFixed(
+                2
+              )}</span> <span class="unit">/ dozen</span>`
+            : "—";
+        const eggMarkup =
+          pEgg || pEgg === 0
+            ? `<span class="num">$${pEgg.toFixed(
+                3
+              )}</span> <span class="unit">per egg</span>`
+            : "—";
+        stats.innerHTML = `<div class="stat-primary">${dozenMarkup}</div>
+        <div class="stat-secondary">${eggMarkup}</div>`;
       }
 
       // Hide legacy fields in this card to avoid duplicate displays
