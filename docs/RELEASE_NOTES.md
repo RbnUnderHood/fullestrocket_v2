@@ -11,6 +11,7 @@ Version tag: v0.4.0
 2. Changes
 
 - Features:
+  - More analytics: Fun + Facts card shows one educational and one playful stat daily; deterministic rotation; compact two‑up layout; no refresh.
   - Results cards converted to tabbed look: `.result-card > .result-tab + .result-body`.
   - Egg-o-nomics moved to the top; cost per dozen and per egg render in a dedicated `#card-eggonomics-stats` container.
   - Henput vs Eggput highlights FCR with a `stat-chip` and explanatory subtitle, rendered into `#card-hen-eggput-stats`.

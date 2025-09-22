@@ -1308,6 +1308,7 @@ function onCalculate() {
       new CustomEvent("metrics:updated", {
         detail: {
           units, // "metric" | "imperial"
+          flockSize: birds,
           eggs, // total eggs in the session if available
           avgEggWeightG: (metric && metric.avgEggWeightG) ?? null,
           feedConsumedKg: (metric && metric.feedConsumedKg) ?? null,

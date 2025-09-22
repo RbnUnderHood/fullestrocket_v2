@@ -2,6 +2,184 @@
 // Only the event-listener IIFE remains. No code before or after this point.
 
 (function () {
+  // ---- Fun + Facts (helpers) ----
+  function dayOfYear(d = new Date()) {
+    const start = new Date(d.getFullYear(), 0, 0);
+    const diff =
+      d - start + (start.getTimezoneOffset() - d.getTimezoneOffset()) * 60000;
+    return Math.floor(diff / 86400000);
+  }
+  function strongNum(n, unit = "") {
+    if (n == null || Number.isNaN(n)) return "—";
+    return `<span class="num">${n}</span>${
+      unit ? ` <span class="unit">${unit}</span>` : ""
+    }`;
+  }
+
+  const EDU_POOL = [
+    {
+      key: "bagDays",
+      line: (N) => `At this rate, a 50 lb feed bag lasts ${strongNum(N, "days")}.`,
+      foot: "Assumes current feed rate.",
+    },
+    {
+      key: "cartons",
+      line: (N) => `You’ll fill about ${strongNum(N)} egg cartons this month.`,
+      foot: "12 eggs per carton.",
+    },
+    {
+      key: "yearDozens",
+      line: (N) => `If pace holds, that’s ${strongNum(N)} dozen per year.`,
+      foot: "Projection from current lay rate.",
+    },
+    {
+      key: "householdPct",
+      line: (N) => `Covers ~${strongNum(N, "%")} of a U.S. household’s yearly eggs.`,
+      foot: "Assumes ~750 eggs/household/year.",
+    },
+    {
+      key: "omeletsWeek",
+      line: (N) => `This week’s eggs equal ${strongNum(N)} omelets.`,
+      foot: "2 eggs per omelet.",
+    },
+  ];
+  const FUN_POOL = [
+    {
+      key: "cakes",
+      line: (N) => `Enough eggs this week for ${strongNum(N)} cakes 🎂.`,
+      foot: "3 eggs per cake.",
+    },
+    {
+      key: "childMass",
+      line: (N) => `Egg mass ≈ a ${strongNum(N)}-year-old child 🧒.`,
+      foot: "Fun equivalence; illustrative only.",
+    },
+    {
+      key: "rabbit",
+      line: () => `This week’s egg mass ≈ a rabbit’s weight 🐇.`,
+      foot: "Assumes ~2 kg rabbit.",
+    },
+    {
+      key: "breakfasts",
+      line: (N) => `Eggs for ${strongNum(N)} full English breakfasts 🍳.`,
+      foot: "2 eggs per plate.",
+    },
+    {
+      key: "basketballs",
+      line: (N) => `Today’s egg mass ≈ ${strongNum(N)} basketballs 🏀.`,
+      foot: "1 ball ≈ 624 g.",
+    },
+  ];
+
+  function computeFacts(metrics) {
+    const out = {};
+    const eggsPerDay =
+      metrics.eggsPerDay != null
+        ? metrics.eggsPerDay
+        : metrics.hdp != null && metrics.flockSize != null
+        ? (metrics.hdp / 100) * metrics.flockSize
+        : metrics.eggs != null
+        ? metrics.eggs
+        : null;
+
+    const eggsPerWeek = eggsPerDay != null ? eggsPerDay * 7 : null;
+    const eggsPerMonth = eggsPerDay != null ? eggsPerDay * 30 : null;
+    const dozensPerYear = eggsPerDay != null ? Math.round((eggsPerDay * 365) / 12) : null;
+    const cartonsPerMonth = eggsPerMonth != null ? Math.round(eggsPerMonth / 12) : null;
+
+    // Feed rate
+    const feedPerBirdGPerDay = metrics.feedPerBirdGPerDay ?? metrics.feedPerBird_g ?? null;
+    const feedGPerDay =
+      metrics.feedGPerDay != null
+        ? metrics.feedGPerDay
+        : feedPerBirdGPerDay != null && metrics.flockSize != null
+        ? feedPerBirdGPerDay * metrics.flockSize
+        : null;
+    const lbPerDay = feedGPerDay != null ? feedGPerDay / 453.592 : null;
+    const bagDays = lbPerDay ? Math.max(1, Math.round(50 / lbPerDay)) : null;
+
+    // Household coverage
+    const eggsPerYear = eggsPerDay != null ? Math.round(eggsPerDay * 365) : null;
+    const householdPct =
+      eggsPerYear != null ? Math.min(999, Math.round((eggsPerYear / 750) * 100)) : null;
+
+    // Fun equivalents
+    const omeletsWeek = eggsPerWeek != null ? Math.max(0, Math.round(eggsPerWeek / 2)) : null;
+    const cakes = eggsPerWeek != null ? Math.max(0, Math.round(eggsPerWeek / 3)) : null;
+
+    const gPerEgg = metrics.avgEggWeightG ?? 60;
+    const weekEggMassG = eggsPerWeek != null ? Math.round(eggsPerWeek * gPerEgg) : null;
+    const childYears =
+      weekEggMassG != null ? Math.max(1, Math.min(12, Math.round(weekEggMassG / 8000))) : null;
+    const breakfasts = eggsPerWeek != null ? Math.max(0, Math.round(eggsPerWeek / 2)) : null;
+    const basketballs =
+      metrics.eggsToday != null
+        ? Math.max(0, Math.round((metrics.eggsToday * gPerEgg) / 624))
+        : eggsPerDay != null
+        ? Math.max(0, Math.round((eggsPerDay * gPerEgg) / 624))
+        : null;
+
+    out.bagDays = bagDays;
+    out.cartons = cartonsPerMonth;
+    out.yearDozens = dozensPerYear;
+    out.householdPct = householdPct;
+    out.omeletsWeek = omeletsWeek;
+
+    out.cakes = cakes;
+    out.childMass = childYears;
+    out.rabbit = weekEggMassG != null ? 1 : null;
+    out.breakfasts = breakfasts;
+    out.basketballs = basketballs;
+    return out;
+  }
+
+  function pickDailyPair(facts) {
+    const d = dayOfYear();
+    const eduIdx = d % EDU_POOL.length;
+    const funIdx = d % FUN_POOL.length;
+    const edu = EDU_POOL[eduIdx];
+    const fun = FUN_POOL[funIdx];
+    return { edu, fun, eduVal: facts[edu.key], funVal: facts[fun.key] };
+  }
+
+  function renderFunFacts(metrics) {
+    const card = document.getElementById("funfactsCard");
+    if (!card) return;
+    const eduLine = document.getElementById("ff-edu-line");
+    const funLine = document.getElementById("ff-fun-line");
+    const eduFoot = document.getElementById("ff-edu-foot");
+    const funFoot = document.getElementById("ff-fun-foot");
+    if (!eduLine || !funLine || !eduFoot || !funFoot) return;
+
+    const facts = computeFacts(metrics || {});
+    const { edu, fun, eduVal, funVal } = pickDailyPair(facts);
+    const hasEdu = eduVal != null && eduVal !== undefined;
+    const hasFun = funVal != null && funVal !== undefined;
+
+    if (!hasEdu && !hasFun) {
+      eduLine.textContent = "Log today’s feed & eggs to unlock daily facts.";
+      eduFoot.textContent = "";
+      funLine.textContent = "";
+      funFoot.textContent = "";
+      card.hidden = false;
+      return;
+    }
+    if (hasEdu) {
+      eduLine.innerHTML = edu.line(eduVal);
+      eduFoot.textContent = edu.foot || "";
+    } else {
+      eduLine.textContent = "More data needed.";
+      eduFoot.textContent = "";
+    }
+    if (hasFun) {
+      funLine.innerHTML = fun.line(funVal);
+      funFoot.textContent = fun.foot || "";
+    } else {
+      funLine.textContent = "More data needed.";
+      funFoot.textContent = "";
+    }
+    card.hidden = false;
+  }
   function setText(id, text) {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
@@ -353,6 +531,18 @@
       })(cpe);
     if (econBand)
       applyBand("#farmAnalytics .a-econ .substats > .metricRow", econBand);
+
+    // ---- Fun + Facts (daily) ----
+    try {
+      const metrics = {
+        eggs: d.eggs,
+        avgEggWeightG: d.avgEggWeightG,
+        hdp: d.layRate,
+        flockSize: d.flockSize,
+        feedPerBird_g: d.feedPerBird_g,
+      };
+      renderFunFacts(metrics);
+    } catch (_) {}
 
     // ---- Poultry Logger banners ----
     let banner = "";

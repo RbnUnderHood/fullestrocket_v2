@@ -360,6 +360,76 @@
   display: contents;
 }
 
+/* Fun + Facts card */
+.funfacts-card .result-tab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  font-size: var(--text-sm, 0.95rem);
+}
+.funfacts-card .ff-hint {
+  color: var(--text-muted, #5a6572);
+  font-weight: 500;
+  font-size: var(--text-xs, 0.8rem);
+}
+
+.funfacts-grid {
+  display: grid;
+  gap: var(--space-2, 8px);
+  grid-template-columns: 1fr; /* stack on phones */
+  align-items: start;
+}
+@media (min-width: 640px) {
+  .funfacts-grid {
+    grid-template-columns: 1fr 1fr; /* two-up on tablet+ */
+  }
+}
+
+.ff-col {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border-muted, #e2e6ea);
+  border-radius: var(--radius-md, 10px);
+  padding: var(--space-2, 8px) var(--space-3, 12px);
+}
+
+.ff-col-head {
+  margin: 0 0 4px 0;
+  font-weight: 700;
+  font-size: var(--text-sm, 0.95rem);
+  color: var(--text-strong, #111);
+  text-wrap: balance;
+}
+
+.ff-line {
+  margin: 0;
+  font-size: var(--text-sm, 0.95rem);
+  line-height: 1.25;
+  color: var(--text-strong, #111);
+}
+.ff-line .num {
+  font-weight: 800;
+}
+.ff-line .unit {
+  font-weight: 600;
+  opacity: 0.9;
+  margin-left: 2px;
+}
+
+.ff-foot {
+  margin: 4px 0 0 0;
+  font-size: var(--text-xs, 0.8rem);
+  color: var(--text-muted, #5a6572);
+}
+
+/* Compact outer shell to keep total height low on phones */
+#funfactsCard .result-body {
+  padding: var(--space-2, 8px);
+}
+#funfactsCard {
+  margin-block: var(--space-2, 8px);
+}
+
 /* Scoped disable of legacy tile internals when using tabbed results */
 #results.results--tabbed .a-value,
 #results.results--tabbed .a-coins,
