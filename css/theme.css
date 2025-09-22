@@ -257,12 +257,12 @@ footer,
 /* Card title bar: two cells (left/right) with bold + fine lines */
 .card-titlebar {
   display: grid;
-  grid-template-columns: 1fr 1fr;       /* side-by-side even on small screens */
-  justify-items: center;                /* center the title cells */
+  grid-template-columns: 1fr 1fr; /* side-by-side even on small screens */
+  justify-items: center; /* center the title cells */
   gap: var(--space-2, 8px);
   align-items: start;
   padding: var(--space-2, 8px) var(--space-3, 12px) var(--space-1, 4px);
-  margin: 0;                            /* prevent extra push on small screens */
+  margin: 0; /* prevent extra push on small screens */
 }
 
 /* Desktop/tablet: two columns */
@@ -271,13 +271,13 @@ footer,
     grid-template-columns: 1fr 1fr;
     gap: var(--space-3, 12px);
     padding: var(--space-3, 12px) var(--space-4, 16px) var(--space-2, 8px);
-    justify-items: center;              /* keep cells centered horizontally */
+    justify-items: center; /* keep cells centered horizontally */
   }
 }
 
 .titlecell {
   min-width: 0;
-  text-align: center;                   /* center text inside each cell */
+  text-align: center; /* center text inside each cell */
 }
 
 .titlecell-bold {
@@ -312,4 +312,38 @@ footer,
   .titlecell--right {
     padding-left: var(--space-3, 12px);
   }
+}
+
+/* Single, centered title variant */
+.card-titlebar--single {
+  display: grid;
+  grid-template-columns: 1fr;     /* always single column */
+  justify-items: center;
+  text-align: center;
+  gap: var(--space-1, 4px);
+  padding: var(--space-3, 12px) var(--space-4, 16px) var(--space-2, 8px);
+  margin: 0;
+  /* remove any inherited divider lines from previous variant */
+  border: 0;
+}
+
+.card-titlebar--single .title-main {
+  font-weight: 700;
+  font-size: var(--text-lg, 1.125rem);
+  line-height: 1.25;
+  color: var(--text-strong, #111);
+}
+
+.card-titlebar--single .title-sub {
+  font-size: var(--text-sm, 0.9rem);
+  line-height: 1.25;
+  color: var(--text-muted, #5a6572);
+}
+
+/* Defensive: neutralize legacy two-column rules if they still apply elsewhere */
+.card-titlebar--single .titlecell,
+.card-titlebar--single .titlecell--left,
+.card-titlebar--single .titlecell--right,
+.card-titlebar--single .titlecell--left::after {
+  all: unset;
 }
