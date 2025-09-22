@@ -288,7 +288,7 @@
     if (thermo)
       thermo.style.setProperty("--thermo", (fcrScore * 100).toFixed(0) + "%");
 
-    const egg = document.querySelector("#farmAnalytics .pieChart");
+  const egg = document.querySelector("#farmAnalytics .pieChart");
     if (egg)
       egg.style.setProperty("--pct", clamp01((Number(layRate) || 0) / 100));
 

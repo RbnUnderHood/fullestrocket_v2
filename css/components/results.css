@@ -371,26 +371,23 @@
   display: none !important;
 }
 
-/* Laying card: show only percentage, pie, and HDP label */
-#results.results--tabbed .result-card.a-laying .a-value {
-  display: block !important; /* show lay percentage */
+/* Mini-card: compact laying block inside Egg-o-nomics */
+.mini-body.mini-laying {
+  display: grid;
+  gap: 4px;
 }
-#results.results--tabbed .result-card.a-laying .metricRow .pieChart {
-  display: block !important; /* ensure pie is visible */
+.mini-body .mini-lay-top {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
-#results.results--tabbed .result-card.a-laying .metricRow {
-  display: block !important; /* keep the visual row for pie */
+.mini-body .mini-lay-top .egg.pieChart {
+  inline-size: 22px;
+  block-size: 22px;
 }
-#results.results--tabbed .result-card.a-laying .a-note,
-#results.results--tabbed .result-card.a-laying .substats .result-chip-row {
-  display: none !important; /* hide other chips and note on Laying */
-}
-
-/* HDP text under the main percent */
-#results.results--tabbed .result-card.a-laying #aHdp {
-  margin-top: 4px;
-  text-align: center;
-  font-size: var(--text-sm, 0.95rem);
+.mini-body .lay-hdp {
+  font-size: var(--text-xs, 0.82rem);
   color: var(--text-muted, #5a6572);
 }
 
