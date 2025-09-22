@@ -314,9 +314,12 @@
 }
 /* Keep mobile ≤559px with 2 columns; from 560px up, use auto-fit with a safe min width */
 @media (min-width: 560px) {
-  .result-chip-row {
-    grid-template-columns: repeat(auto-fit, minmax(164px, 1fr));
-  }
+  /* Fallback: keep 2 columns until 680px viewport width */
+  .result-chip-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 680px) {
+  /* Fallback: allow 3 columns at 680px+ */
+  .result-chip-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 /* Container query: size chips by actual card width (overrides @media when supported) */
@@ -328,7 +331,7 @@
 @container (min-width: 560px) {
   .result-chip-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@container (min-width: 720px) {
+@container (min-width: 680px) {
   .result-chip-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
