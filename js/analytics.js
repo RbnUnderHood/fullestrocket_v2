@@ -159,6 +159,13 @@
       ? derived.eggsPerBird * 100
       : layRate;
     setText("aLay", Number.isFinite(layPct) ? Math.round(layPct) + "%" : "—");
+    // Explicit HDP (Hen-Day Production) display
+    if (document.getElementById("aHdp")) {
+      setText(
+        "aHdp",
+        Number.isFinite(layPct) ? `HDP: ${layPct.toFixed(1)}%` : "—"
+      );
+    }
     const cpeToShow = Number.isFinite(derived.cpe) ? derived.cpe : cpe;
     setText(
       "aCostEgg",
