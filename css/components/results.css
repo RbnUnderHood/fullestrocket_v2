@@ -223,3 +223,77 @@
   font-weight: 600;
   font-size: var(--text-sm, 0.9rem);
 }
+
+/* === Unified mini-card chip === */
+.mini-card {
+  --card-pad-x: var(--space-2, 8px);
+  --card-pad-y: var(--space-2, 8px);
+  --tab-bg: var(--surface-alt, #f7faf9);
+  --tab-fg: var(--text-muted, #5a6572);
+  --body-fg: var(--text-strong, #111);
+  --border: var(--border-muted, #e2e6ea);
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 10px);
+  overflow: hidden;
+  min-height: 56px;
+  box-sizing: border-box;
+}
+
+.mini-card * { box-sizing: inherit; }
+
+.mini-tab {
+  background: var(--tab-bg);
+  color: var(--tab-fg);
+  border-bottom: 1px solid var(--border);
+  padding: 4px var(--card-pad-x);
+  font-weight: 600;
+  font-size: var(--text-xs, 0.8rem);
+  line-height: 1.15;
+  letter-spacing: .01em;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-body {
+  padding: 6px var(--card-pad-x);
+  text-align: center;
+  color: var(--body-fg);
+  transform: none !important;
+  line-height: 1.2;
+}
+
+.mini-body .num {
+  font-weight: 800;
+  font-size: clamp(1rem, 2.6vw, 1.35rem);
+}
+.mini-body .unit {
+  margin-left: 2px;
+  font-weight: 600;
+  opacity: .85;
+  font-size: clamp(.85rem, 1.8vw, .95rem);
+}
+.mini-body .unit:empty { display: none; }
+
+.result-chip-row {
+  display: grid;
+  gap: var(--space-2, 8px);
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+}
+@media (min-width: 640px) {
+  .result-chip-row { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Defensive resets: ignore legacy chip rules inside mini-card */
+.mini-card .chip,
+.mini-card .badge,
+.mini-card .stat {
+  all: unset;
+  display: contents;
+}
