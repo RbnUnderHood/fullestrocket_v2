@@ -180,3 +180,46 @@
 }
 
 /* ======================================================================== */
+
+/* === Tabbed results card look ========================================== */
+.result-card {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border-muted, #e2e6ea);
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+}
+
+.result-tab {
+  background: var(--surface-alt, #f7faf9);
+  border-bottom: 1px solid var(--border-muted, #e2e6ea);
+  padding: var(--space-2, 8px) var(--space-3, 12px);
+  font-weight: 600;
+  font-size: var(--text-sm, 0.95rem);
+  color: var(--text-strong, #1b1f23);
+}
+
+.result-body {
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+}
+
+.stat-primary {
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-strong, #111);
+}
+.stat-secondary {
+  margin-top: 4px;
+  font-size: var(--text-sm, 0.95rem);
+  color: var(--text-muted, #5a6572);
+}
+
+.stat-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--ok-weak, rgba(46, 125, 50, 0.12));
+  color: var(--ok, #2e7d32);
+  font-weight: 600;
+  font-size: var(--text-sm, 0.9rem);
+}

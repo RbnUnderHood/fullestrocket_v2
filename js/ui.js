@@ -1245,29 +1245,29 @@ function onCalculate() {
     if (eggonomicsBody) {
       const pEgg = cpe;
       const pDozen = typeof cpe === "number" ? cpe * 12 : null;
-      const stats = eggonomicsBody.querySelector('#card-eggonomics-stats');
+      const stats = eggonomicsBody.querySelector("#card-eggonomics-stats");
       if (stats) {
         stats.innerHTML = `<div class="stat-primary">${
-          pDozen || pDozen === 0 ? `$${pDozen.toFixed(2)}` : '—'
+          pDozen || pDozen === 0 ? `$${pDozen.toFixed(2)}` : "—"
         } / dozen</div>
         <div class="stat-secondary">${
-          pEgg || pEgg === 0 ? `$${pEgg.toFixed(3)}` : '—'
+          pEgg || pEgg === 0 ? `$${pEgg.toFixed(3)}` : "—"
         } per egg</div>`;
       }
 
       // Hide legacy fields in this card to avoid duplicate displays
-      const legacyCostEgg = eggonomicsBody.querySelector('#aCostEgg');
+      const legacyCostEgg = eggonomicsBody.querySelector("#aCostEgg");
       if (legacyCostEgg) legacyCostEgg.hidden = true;
       const legacyCpdRow = eggonomicsBody
-        .querySelector('#aCostPerDozen')
-        ?.closest('.metricRow');
+        .querySelector("#aCostPerDozen")
+        ?.closest(".metricRow");
       if (legacyCpdRow) legacyCpdRow.hidden = true;
     }
 
     const henEggBody = document.getElementById("card-hen-eggput");
     if (henEggBody) {
-      const fcrText = fcr != null && isFinite(fcr) ? fcr.toFixed(2) : '—';
-      const stats = henEggBody.querySelector('#card-hen-eggput-stats');
+      const fcrText = fcr != null && isFinite(fcr) ? fcr.toFixed(2) : "—";
+      const stats = henEggBody.querySelector("#card-hen-eggput-stats");
       if (stats) {
         stats.innerHTML = `<div class="stat-primary"><span class="stat-chip">FCR ${fcrText}</span></div>
         <div class="stat-secondary">Feed Conversion Ratio (kg feed per kg egg mass)</div>`;

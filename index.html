@@ -197,69 +197,78 @@
           <div id="printable" class="printable">
             <h3 class="section-heading">Cluckulation Evaluation</h3>
             <section id="farmAnalytics" class="analytics">
-              <div class="resultCard a-feed">
-                <div class="a-label">HENNPUT vs. EGGPUT</div>
-                <div class="a-value" id="aFcr">—</div>
-                <div class="a-thermo" aria-hidden="true"><span></span></div>
-                <div class="a-note" id="aFcrNote">—</div>
-                <div class="substats">
-                  <div class="metricRow chip chip--ledger">
-                    <span class="k label">Feed / egg</span
-                    ><span class="v value" id="aFeedPerEgg">—</span>
-                  </div>
-                  <div class="metricRow chip chip--ledger">
-                    <span class="k label">Feed / dozen</span
-                    ><span class="v value" id="aFeedPerDozen">—</span>
-                  </div>
-                  <div class="metricRow chip chip--ledger">
-                    <span class="k label">Feed / bird</span
-                    ><span class="v value" id="aFeedPerBird">—</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="resultCard a-laying">
-                <div class="a-head">
-                  <div class="a-label">LAYING POWER</div>
-                  <div class="a-value" id="aLay">—</div>
-                </div>
-                <div class="a-note" id="aLayNote">—</div>
-                <div class="substats">
-                  <div class="metricRow chip chip--ledger">
-                    <span class="k label">Eggs / bird</span
-                    ><span class="v value" id="aEggsPerBird">—</span>
-                  </div>
-                  <div class="metricRow chip chip--ledger chip--visual">
-                    <div class="egg pieChart" aria-hidden="true"></div>
-                  </div>
-                  <div class="metricRow chip chip--ledger">
-                    <span class="k label">Avg egg weight</span
-                    ><span class="v value" id="aAvgEggW">—</span>
-                  </div>
-                  <div class="metricRow chip chip--ledger">
-                    <span class="k label">Eggs collected</span
-                    ><span class="v value" id="aEggsCount">—</span>
+              <!-- Egg-o-nomics first -->
+              <div class="resultCard result-card a-econ">
+                <div class="result-tab">Egg-o-nomics</div>
+                <div class="result-body" id="card-eggonomics">
+                  <div id="card-eggonomics-stats"></div>
+                  <div class="a-value" id="aCostEgg">—</div>
+                  <div class="a-coins" aria-hidden="true"></div>
+                  <div class="a-note" id="aCostNote">—</div>
+                  <div class="substats">
+                    <div class="metricRow chip chip--ledger">
+                      <span class="k label">Cost / dozen</span
+                      ><span class="v value" id="aCostPerDozen">—</span>
+                    </div>
+                    <div class="metricRow chip chip--ledger">
+                      <span class="k label">Feed unit cost</span
+                      ><span class="v value" id="aUnitFeedCost">—</span>
+                    </div>
+                    <div class="metricRow chip chip--ledger">
+                      <span class="k label">Savings (period)</span
+                      ><span class="v value" id="aSavings">—</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div class="resultCard a-econ">
-                <div class="a-label">EGG-O-NOMICS</div>
-                <div class="a-value" id="aCostEgg">—</div>
-                <div class="a-coins" aria-hidden="true"></div>
-                <div class="a-note" id="aCostNote">—</div>
-                <div class="substats">
-                  <div class="metricRow chip chip--ledger">
-                    <span class="k label">Cost / dozen</span
-                    ><span class="v value" id="aCostPerDozen">—</span>
+              <div class="resultCard result-card a-feed">
+                <div class="result-tab">Henput vs Eggput</div>
+                <div class="result-body" id="card-hen-eggput">
+                  <div id="card-hen-eggput-stats"></div>
+                  <div class="a-value" id="aFcr">—</div>
+                  <div class="a-thermo" aria-hidden="true"><span></span></div>
+                  <div class="a-note" id="aFcrNote">—</div>
+                  <div class="substats">
+                    <div class="metricRow chip chip--ledger">
+                      <span class="k label">Feed / egg</span
+                      ><span class="v value" id="aFeedPerEgg">—</span>
+                    </div>
+                    <div class="metricRow chip chip--ledger">
+                      <span class="k label">Feed / dozen</span
+                      ><span class="v value" id="aFeedPerDozen">—</span>
+                    </div>
+                    <div class="metricRow chip chip--ledger">
+                      <span class="k label">Feed / bird</span
+                      ><span class="v value" id="aFeedPerBird">—</span>
+                    </div>
                   </div>
-                  <div class="metricRow chip chip--ledger">
-                    <span class="k label">Feed unit cost</span
-                    ><span class="v value" id="aUnitFeedCost">—</span>
+                </div>
+              </div>
+
+              <div class="resultCard result-card a-laying">
+                <div class="result-tab">Laying power</div>
+                <div class="result-body" id="card-laying">
+                  <div class="a-head">
+                    <div class="a-value" id="aLay">—</div>
                   </div>
-                  <div class="metricRow chip chip--ledger">
-                    <span class="k label">Savings (period)</span
-                    ><span class="v value" id="aSavings">—</span>
+                  <div class="a-note" id="aLayNote">—</div>
+                  <div class="substats">
+                    <div class="metricRow chip chip--ledger">
+                      <span class="k label">Eggs / bird</span
+                      ><span class="v value" id="aEggsPerBird">—</span>
+                    </div>
+                    <div class="metricRow chip chip--ledger chip--visual">
+                      <div class="egg pieChart" aria-hidden="true"></div>
+                    </div>
+                    <div class="metricRow chip chip--ledger">
+                      <span class="k label">Avg egg weight</span
+                      ><span class="v value" id="aAvgEggW">—</span>
+                    </div>
+                    <div class="metricRow chip chip--ledger">
+                      <span class="k label">Eggs collected</span
+                      ><span class="v value" id="aEggsCount">—</span>
+                    </div>
                   </div>
                 </div>
               </div>
