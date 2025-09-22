@@ -158,10 +158,7 @@
     const layPct = Number.isFinite(derived.eggsPerBird)
       ? derived.eggsPerBird * 100
       : layRate;
-    setText(
-      "aLay",
-      Number.isFinite(layPct) ? `HDP: ${Math.round(layPct)}%` : "—"
-    );
+    setText("aLay", Number.isFinite(layPct) ? `${Math.round(layPct)}%` : "—");
     const cpeToShow = Number.isFinite(derived.cpe) ? derived.cpe : cpe;
     setText(
       "aCostEgg",
@@ -284,7 +281,7 @@
     if (thermo)
       thermo.style.setProperty("--thermo", (fcrScore * 100).toFixed(0) + "%");
 
-  const egg = document.querySelector("#farmAnalytics .pieChart");
+    const egg = document.querySelector("#farmAnalytics .pieChart");
     if (egg)
       egg.style.setProperty("--pct", clamp01((Number(layRate) || 0) / 100));
 
