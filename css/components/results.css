@@ -520,15 +520,30 @@
 /* === Mobile-first compacting: phase 1 ================================ */
 /* 1) Flatten result tab header on small screens */
 @media (max-width: 480px) {
+  /* Pocket Card header: keep structure but compact */
+  .result-card {
+    background: var(--surface, #fff);
+    border: 1px solid var(--border, #e2e6ea);
+    border-radius: 12px;
+    overflow: hidden;
+  }
   .result-card .result-tab {
-    background: transparent;
-    border-bottom: none;
-    padding: 6px 8px;
+    background: color-mix(in srgb, var(--bg, #fff) 60%, var(--border) 40%);
+    border-bottom: 1px solid var(--border, #e2e6ea);
+    padding: 8px 10px;
     font-size: 0.95rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
     text-align: left;
     -webkit-line-clamp: 1;
     line-clamp: 1;
     min-block-size: auto;
+  }
+  .result-card .result-body {
+    padding: 10px 12px;
   }
 }
 
@@ -541,5 +556,55 @@
 @container (min-width: 400px) {
   .result-chip-row {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* === Pocket Card: replace mini-card boxes with a ledger on phones ===== */
+@media (max-width: 480px) {
+  /* Collapse mini-cards into clean rows */
+  .result-chip-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .mini-card {
+    display: block;
+    padding: 0;
+  }
+  .mini-tab {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+    text-align: left;
+  }
+  .mini-body {
+    padding: 0;
+    text-align: left;
+  }
+  /* Visual divider between label and value using spacing only */
+  .mini-card .v,
+  .mini-card .value {
+    display: inline-block;
+    margin-top: 2px;
+    font-weight: 800;
+  }
+  /* Tighten the head value blocks */
+  .stat-primary {
+    font-size: clamp(18px, 6.8vw, 22px);
+  }
+  .stat-secondary {
+    font-size: 12px;
+  }
+  /* Hide bulky bars on very small screens; keep data in ledger */
+  .a-thermo,
+  .a-coins {
+    display: none !important;
+  }
+  /* Laying: small inline pie */
+  .mini-body .mini-lay-top .egg.pieChart {
+    inline-size: 18px;
+    block-size: 18px;
   }
 }
