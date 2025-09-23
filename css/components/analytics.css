@@ -7,7 +7,7 @@
 }
 @media (min-width: 560px) {
   #farmAnalytics.analytics {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 #farmAnalytics .resultCard {
@@ -404,13 +404,28 @@ details.eval > *:not(summary) {
 }
 
 /* --- Center the LAYING POWER header (label + % together) --- */
-.resultCard .a-head { display:flex; align-items:baseline; justify-content:center; gap:8px; }
-.resultCard .a-head .a-label { font-weight:700; color:var(--ink); }
-.resultCard .a-head .a-value { font-variant-numeric: tabular-nums; font-weight:800; }
+.resultCard .a-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+}
+.resultCard .a-head .a-label {
+  font-weight: 700;
+  color: var(--ink);
+}
+.resultCard .a-head .a-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
 
 /* --- Visual chip: use ledger body size, no top strip --- */
-.resultCard .substats > .chip--visual { padding-top: 6px; }
-.resultCard .substats > .chip--visual::before { display:none; }
+.resultCard .substats > .chip--visual {
+  padding-top: 6px;
+}
+.resultCard .substats > .chip--visual::before {
+  display: none;
+}
 
 /* Pie chart visual: conic ring + mask, sized like a chip’s inner content */
 .resultCard .substats .chip--visual .pieChart {
@@ -418,8 +433,15 @@ details.eval > *:not(summary) {
   block-size: 28px;
   border-radius: 50%;
   margin-inline: auto;
-  background: conic-gradient(var(--brand) calc(var(--pct, 0) * 1turn), var(--border) 0);
-  -webkit-mask: radial-gradient(circle 54% at 50% 50%, transparent 52%, black 53%);
+  background: conic-gradient(
+    var(--brand) calc(var(--pct, 0) * 1turn),
+    var(--border) 0
+  );
+  -webkit-mask: radial-gradient(
+    circle 54% at 50% 50%,
+    transparent 52%,
+    black 53%
+  );
   mask: radial-gradient(circle 54% at 50% 50%, transparent 52%, black 53%);
 }
 
@@ -432,7 +454,6 @@ details.eval > *:not(summary) {
 }
 .resultCard .substats > .metricRow.metricRow--neutral {
   background: var(--card);
-}
 }
 
 /* Ledger variant (fix strip overlap; ensure text is above the strip) */

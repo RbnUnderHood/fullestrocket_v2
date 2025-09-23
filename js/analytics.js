@@ -19,7 +19,8 @@
   const EDU_POOL = [
     {
       key: "bagDays",
-      line: (N) => `At this rate, a 50 lb feed bag lasts ${strongNum(N, "days")}.`,
+      line: (N) =>
+        `At this rate, a 50 lb feed bag lasts ${strongNum(N, "days")}.`,
       foot: "Assumes current feed rate.",
     },
     {
@@ -34,7 +35,8 @@
     },
     {
       key: "householdPct",
-      line: (N) => `Covers ~${strongNum(N, "%")} of a U.S. household’s yearly eggs.`,
+      line: (N) =>
+        `Covers ~${strongNum(N, "%")} of a U.S. household’s yearly eggs.`,
       foot: "Assumes ~750 eggs/household/year.",
     },
     {
@@ -84,11 +86,14 @@
 
     const eggsPerWeek = eggsPerDay != null ? eggsPerDay * 7 : null;
     const eggsPerMonth = eggsPerDay != null ? eggsPerDay * 30 : null;
-    const dozensPerYear = eggsPerDay != null ? Math.round((eggsPerDay * 365) / 12) : null;
-    const cartonsPerMonth = eggsPerMonth != null ? Math.round(eggsPerMonth / 12) : null;
+    const dozensPerYear =
+      eggsPerDay != null ? Math.round((eggsPerDay * 365) / 12) : null;
+    const cartonsPerMonth =
+      eggsPerMonth != null ? Math.round(eggsPerMonth / 12) : null;
 
     // Feed rate
-    const feedPerBirdGPerDay = metrics.feedPerBirdGPerDay ?? metrics.feedPerBird_g ?? null;
+    const feedPerBirdGPerDay =
+      metrics.feedPerBirdGPerDay ?? metrics.feedPerBird_g ?? null;
     const feedGPerDay =
       metrics.feedGPerDay != null
         ? metrics.feedGPerDay
@@ -99,19 +104,28 @@
     const bagDays = lbPerDay ? Math.max(1, Math.round(50 / lbPerDay)) : null;
 
     // Household coverage
-    const eggsPerYear = eggsPerDay != null ? Math.round(eggsPerDay * 365) : null;
+    const eggsPerYear =
+      eggsPerDay != null ? Math.round(eggsPerDay * 365) : null;
     const householdPct =
-      eggsPerYear != null ? Math.min(999, Math.round((eggsPerYear / 750) * 100)) : null;
+      eggsPerYear != null
+        ? Math.min(999, Math.round((eggsPerYear / 750) * 100))
+        : null;
 
     // Fun equivalents
-    const omeletsWeek = eggsPerWeek != null ? Math.max(0, Math.round(eggsPerWeek / 2)) : null;
-    const cakes = eggsPerWeek != null ? Math.max(0, Math.round(eggsPerWeek / 3)) : null;
+    const omeletsWeek =
+      eggsPerWeek != null ? Math.max(0, Math.round(eggsPerWeek / 2)) : null;
+    const cakes =
+      eggsPerWeek != null ? Math.max(0, Math.round(eggsPerWeek / 3)) : null;
 
     const gPerEgg = metrics.avgEggWeightG ?? 60;
-    const weekEggMassG = eggsPerWeek != null ? Math.round(eggsPerWeek * gPerEgg) : null;
+    const weekEggMassG =
+      eggsPerWeek != null ? Math.round(eggsPerWeek * gPerEgg) : null;
     const childYears =
-      weekEggMassG != null ? Math.max(1, Math.min(12, Math.round(weekEggMassG / 8000))) : null;
-    const breakfasts = eggsPerWeek != null ? Math.max(0, Math.round(eggsPerWeek / 2)) : null;
+      weekEggMassG != null
+        ? Math.max(1, Math.min(12, Math.round(weekEggMassG / 8000)))
+        : null;
+    const breakfasts =
+      eggsPerWeek != null ? Math.max(0, Math.round(eggsPerWeek / 2)) : null;
     const basketballs =
       metrics.eggsToday != null
         ? Math.max(0, Math.round((metrics.eggsToday * gPerEgg) / 624))
