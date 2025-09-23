@@ -489,6 +489,13 @@
   margin: 2px 0;
 }
 
+/* Reduce result card vertical gaps on small screens for higher density */
+@media (max-width: 480px) {
+  .analytics .resultCard {
+    margin-bottom: 2px;
+  }
+}
+
 /* Phone: simplify Fun + Facts chrome and ensure one column */
 @media (max-width: 480px) {
   .funfacts-grid {
